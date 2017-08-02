@@ -166,7 +166,7 @@ Page({
 
         console.log(this.data.locationInfo, 'this.data.locationInfo')
         //请求地区热门车型
-        // this.getHotModel(true)
+        this.getHotModel(true)
       }
     })
 
@@ -425,7 +425,7 @@ Page({
       }
     })
   },
-    //请求地区热门车型
+  //请求地区热门车型
   getHotModel(clear){
     this.alert('成功')
     wx.request({
@@ -438,22 +438,22 @@ Page({
 
           if(clear){
               //循环最外层标签
-              this.data.modelList.forEach((ele, index) => {
+              let modelList = this.data.modelList;
+                modelList.forEach((ele, index) => {
                   //如果数据的内容不为空
-                  if (this.data.modelList[index].list.length > 0) {
-                    this.data.modelList[index].list.forEach((key, keyNum) => {
-                          //循环总列表
-                      this.data.modelList[index].list[keyNum].forEach((data, number) => {
-                              //重置热门地区和报价
-                          let modelList = this.data.modelList;
+                  if (modelList[index].list.length > 0) {
+                    modelList[index].list.forEach((key, keyNum) => {
+                      //循环总列表
+                      modelList[index].list[keyNum].forEach((data, number) => {
+                          //重置热门地区和报价
                           modelList[index].list[keyNum][number].hotLocation = ''
                           modelList[index].list[keyNum][number].hotPrice = ''
-                          this.setData({
-                            modelList: modelList
-                          })
                         })
                     })
                   }
+              })
+              this.setData({
+                modelList: modelList
               })
             }
 
@@ -461,14 +461,14 @@ Page({
             if (this.data.hotModelList.length) {
                 this.data.hotModelList.forEach((hot, i) => {
                     //循环最外层标签
-                    this.data.modelList.forEach((ele, index) => {
-                        //如果数据的内容不为空
-                        if (this.data.modelList[index].list.length > 0) {
-                            this.data.modelList[index].list.forEach((key, keyNum) => {
+                    let modelList = this.data.modelList;
+                    modelList.forEach((ele, index) => {
+                      //如果数据的内容不为空
+                      if (modelList[index].list.length > 0) {
+                        modelList[index].list.forEach((key, keyNum) => {
                                 //循环总列表
-                                this.data.modelList[index].list[keyNum].forEach((data, number) => {
-                                    
-                                    console.log('wocao')
+                                modelList[index].list[keyNum].forEach((data, number) => {
+
                                     //如果id相等
                                     if (data.F_ProductId == hot.productId) {
                                         console.log('xiangdeng')
@@ -476,42 +476,26 @@ Page({
                                         if (hot.hot == 1) {
                                             unit = '';
                                             //是热门
-                                            let modelList = this.data.modelList;
                                             modelList[index].list[keyNum][number].hotLocation = '[' + this.data.locationInfo.cityname.split('市')[0] + '热门]'
-                                            this.setData({
-                                              modelList:modelList
-                                            })
                                         }
 
                                         //赋值价格
-                                        let modelList = this.data.modelList;
                                         modelList[index].list[keyNum][number].hotPrice =  hot.price + unit;
-                                        this.setData({
-                                            modelList:modelList
-                                        })
 
                                         // 保存去除掉的一个
                                         let hotprice = this.data.modelList[index].list[keyNum].splice(number, '1')[0];
 
-                                        console.log(hotprice,'hotpricehotprice')
-                                        
-                                        //重新获取最新modelList，然后去掉价格和热门
-                                        let modelList1 = this.data.modelList;
-                                        modelList1[index].list[keyNum].splice(number, '1')
-                                        
                                         //重新把带价格的推到最上层
-                                        modelList1[index].list[keyNum].unshift(hotprice)
-                                        
-                                        //更新最新状态
-                                        this.setData({
-                                          modelList:modelList1
-                                        })
-                                        
-
+                                        modelList[index].list[keyNum].unshift(hotprice)
                                     }
                                 })
                             })
                         }
+                    })
+
+                    //更新最新状态
+                    this.setData({
+                      modelList: modelList
                     })
                 })
             }
@@ -520,67 +504,6 @@ Page({
          }
       }
     })
-
-      //请求地区热门车型
-      // this.getData(this.ajaxUrl() + '/index.php?r=weex/series/district-price&subCateId=' +  this.seriesInfo.F_SubCategoryId + '&seriesId=' + this.seriesInfo.F_SeriesId + '&proId=' + this.seriesInfo.proid + '&provinceId=' + this.locationInfo.provinceId + '&cityId=' + this.locationInfo.cityId,(res) => {
-      //     if(res.ok){
-      //         this.hotModelList = res.data;
-
-      //         if(clear){
-      //             //循环最外层标签
-      //             this.modelList.forEach((ele, index) => {
-      //                 //如果数据的内容不为空
-      //                 if (this.modelList[index].list.length > 0) {
-      //                     this.modelList[index].list.forEach((key, keyNum) => {
-      //                         //循环总列表
-      //                         this.modelList[index].list[keyNum].forEach((data, number) => {
-      //                             //重置热门地区和报价
-      //                             this.$set(this.modelList[index].list[keyNum][number], 'hotLocation', '');
-      //                             this.$set(this.modelList[index].list[keyNum][number], 'hotPrice', '');
-      //                         })
-      //                     })
-      //                 }
-      //             })
-      //         }
-
-      //         //循环热门车型报价
-      //         if (this.hotModelList) {
-      //             this.hotModelList.forEach((hot, i) => {
-      //                 //循环最外层标签
-      //                 this.modelList.forEach((ele, index) => {
-      //                     //如果数据的内容不为空
-      //                     if (this.modelList[index].list.length > 0) {
-      //                         this.modelList[index].list.forEach((key, keyNum) => {
-      //                             //循环总列表
-      //                             this.modelList[index].list[keyNum].forEach((data, number) => {
-
-      //                                 //如果id相等
-      //                                 if (data.F_ProductId == hot.productId) {
-
-      //                                     let unit = '起';
-
-      //                                     if (hot.hot == 1) {
-      //                                         unit = '';
-      //                                         //是热门
-      //                                         this.$set(this.modelList[index].list[keyNum][number], 'hotLocation', '[' + this.locationInfo.cityName.split('市')[0] + '热门]');
-      //                                     }
-
-      //                                     //赋值价格
-      //                                     this.$set(this.modelList[index].list[keyNum][number], 'hotPrice', hot.price + unit);
-
-      //                                     let hotprice = this.modelList[index].list[keyNum].splice(number, '1')[0];
-
-      //                                     this.modelList[index].list[keyNum].unshift(hotprice)
-
-      //                                 }
-      //                             })
-      //                         })
-      //                     }
-      //                 })
-      //             })
-      //         }
-      //     }
-      // });
   },
   //请求经销商列表
   getDealer(){
@@ -772,6 +695,9 @@ Page({
       key: 'myDate',
       data: date,
     })
+    
+    //请求地区热门车型
+    this.getHotModel(true)
   },
   //取消更换新地区
   okSwitchLocation(){
@@ -788,10 +714,11 @@ Page({
       resetLocationPop:false
     })
   },
-  alert(text){
+  alert(text,image){
     wx.showToast({
       title: text,
       icon: 'success',
+      image: image,
       duration: 2000
     })
   },
@@ -908,7 +835,11 @@ Page({
               console.log(this.data.compareTask)
               //最多对比两项
               if (compareTask[this.data.seriesId].length >= 2){
-                this.alert('最多对比两项')
+                // this.alert('只能对比两款车型')
+                this.setData({
+                  errText: '只能对比两款车型',
+                  errPop: true
+                })
               }else{
                 //添加对比的id
                 compareTask[this.data.seriesId].push(productId)
@@ -959,7 +890,6 @@ Page({
             key: 'compareTask',
             data: compareTask,
           })
-
         }
       }
     })
@@ -993,6 +923,9 @@ Page({
       key: 'seriesInfo',
       data: item.info,
     })
+
+    //请求地区热门车型
+    this.getHotModel(true)
   },
   //点击对比按钮进入对比页面
   goCompare() {
@@ -1101,16 +1034,20 @@ Page({
       data: this.data.locationInfo
     })
 
-    console.log(this.data.locationInfo)
+    //请求地区热门车型
+    this.getHotModel(true)
 
     wx.request({
       url: 'https://product.360che.com/index.php?r=app/series/city-list&provinceId=' + this.data.locationInfo.provincesn,
       success: (res) => {
         if (res.errMsg == 'request:ok') {
-          console.log(res, 'aaa')
+          let cityList = [];
+          if(res.data !== null){
+            cityList = res.data.data
+          }
           //给城市列表赋值  显示城市列表
           this.setData({
-            cityList: res.data.data,
+            cityList: cityList,
             cityListPop: true
           })
         }
@@ -1140,6 +1077,8 @@ Page({
       data: this.data.locationInfo
     })
 
+    //请求地区热门车型
+    this.getHotModel(true)
 
     if (this.data.myRegion.citysn == e.currentTarget.dataset.citysn) return ;
 
@@ -1162,9 +1101,6 @@ Page({
       searchResultPop:false,
     })
 
-    //请求经销商数据
-    this.getDealer();
-
     //存储已选择的城市
     wx.setStorage({
       key: "locationInfo",
@@ -1176,6 +1112,9 @@ Page({
 
     //返回询底价页面
     // wx.navigateBack()
+
+    //请求地区热门车型
+    this.getHotModel(true)
   },
   //隐藏选择城市列表弹层
   cityPopHide() {

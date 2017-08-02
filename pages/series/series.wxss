@@ -119,3 +119,10 @@ page{
 .compare-visible{
   right:0;
 }
+.mask-wrapper{
+  height:100%;
+  width:100%;
+}
+.mask-content{
+  height:125%;
+}

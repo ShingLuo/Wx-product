@@ -1,6 +1,6 @@
 <!--导航-->
 <template name="picture">
-  <view class="picture">
+  <view class="picture" data-url="../modelPhoto/modelPhoto" bindtap="goUrl">
       <view class="picture-list">
         <image wx:if="{{truckImageData.imgSrc}}" src="{{truckImageData.imgSrc}}"></image>
         <view  wx:if="{{truckImageData.notImg}}"  class="not-img">

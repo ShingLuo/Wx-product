@@ -29,6 +29,8 @@ Page({
     examineSimliarData:{},
     //存储所选的筛选条件
     optionCondition:{},
+    //地区热门列表
+    hotModelList:[],
     // 经销商列表
     dealerList:[],
     //其他人还关注列表
@@ -56,7 +58,7 @@ Page({
     footerPriceShow:false,
 
     //是否显示选择地区
-    selectLocationPop: true,
+    selectLocationPop: false,
 
     //导航列表
     indexNav: [],
@@ -78,35 +80,9 @@ Page({
   },
 
   onShow:function(options){
-    // wx.getStorage({
-    //   key:"locationInfo",
-    //   complete:res => {
-    //     if(res.data){
-    //       this.setData({
-    //         locationInfo: res.data
-    //       })
-    //     }
-    //     //重新请求经销商数据
-    //     this.getDealer();
-    //   } 
-    // })
+
   },
   onLoad: function (options) {
-
-    //获取已选择地区
-    wx.getStorage({
-      key: 'locationInfo',
-      complete: res =>  {
-        if (res.data) {
-          //设置选中地区
-          this.setData({
-            locationInfo: res.data
-          })
-        }
-        //请求经销商数据
-        this.getDealer();
-      },
-    })
 
     // 获取车型车系信息
     wx.getStorage({
@@ -128,6 +104,7 @@ Page({
           
           //请求换车型信息
           this.switchModel();
+
       },
     })
 
@@ -154,6 +131,21 @@ Page({
           //对比的状态
           compareState: compareState
         })
+      },
+    })
+
+    // 获取已选择地区
+    wx.getStorage({
+      key: 'locationInfo',
+      complete: res => {
+        if (res.data) {
+          //设置选中地区
+          this.setData({
+            locationInfo: res.data
+          })
+        }
+        //请求经销商数据
+        this.getDealer();
       },
     })
 
@@ -259,7 +251,7 @@ Page({
         if (ele.errMsg == 'request:ok') {
           // 标题
           wx.setNavigationBarTitle({
-            title: ele.data.proInfo.simName
+            title: ele.data.proInfo.F_ProductName
           })
 
           // 卡车图片信息
@@ -322,8 +314,11 @@ Page({
             footerPriceShow = true;
           }
 
-          //存储该车型是否是停售
-          wx.setStorage('footerPriceShow', footerPriceShow)
+          // //存储该车型是否是停售
+          wx.setStorage({
+            key: 'footerPriceShow',
+            data: footerPriceShow,
+          })
 
           this.setData({
             // 标题名称
@@ -343,6 +338,9 @@ Page({
             //是否显示询底价
             footerPriceShow: footerPriceShow
           })
+
+          //调取热门地区车型
+          this.getHotModel();
 
             if(loading){
               this.setData({
@@ -563,20 +561,56 @@ Page({
       }
     })
   },
+  //请求地区热门车型
+  getHotModel() {
+    this.alert('成功')
+    console.log(this.data.examineSimliarData.content,'examineSimliarData.content')
+    wx.request({
+      url: app.ajaxurl + 'index.php?r=weex/series/district-price&subCateId=' + this.data.seriesId + '&seriesId=' + this.data.productData.F_SeriesId + '&proId=' + this.data.productData.F_ProductId + '&provinceId=' + this.data.locationInfo.provincesn + '&cityId=' + this.data.locationInfo.citysn,
+      success: res => {
+        if (res.errMsg == 'request:ok') {
+          this.setData({
+            hotModelList: res.data
+          })
+          let examineSimliarData = this.data.examineSimliarData;
+
+          examineSimliarData.content.forEach((ele, index) => {
+
+            //重置热门地区和报价
+            ele.hotLocation = '';
+            ele.hotPrice = ''
+
+            //循环热门车型报价
+            if (this.data.hotModelList.length) {
+              this.data.hotModelList.forEach((hot, i) => {
+                //如果id相等
+                if (ele.F_ProductId == hot.productId) {
+                  //赋值价格
+                  ele.hotPrice = hot.price;
+                  //是热门
+                  if (hot.hot && hot.hot == 1) {
+                    ele.hotLocation = '[' + this.data.locationInfo.cityname.split('市')[0] + '热门]'
+                  }
+                  let hotprice = examineSimliarData.content.splice(index, '1')[0];
+                  examineSimliarData.content.unshift(hotprice)
+                }
+              })
+            }
+          });
+
+          this.setData({
+            examineSimliarData: examineSimliarData
+          })
+
+        }
+      }
+    })
+  },
   // 点击选择城市
   goSelectLocation(){
     this.setData({
       selectLocationPop: !this.data.selectLocationPop
     })
-    // wx.setStorage({
-    //   key: 'locationInfo',
-    //   data: this.data.locationInfo,
-    //   complete: function() {
-    //     wx.navigateTo({
-    //       url: '../location/location'
-    //     })
-    //   }
-    // })
   },
   //点击 加入 || 取消对比
   compare(e) {
@@ -807,7 +841,7 @@ Page({
       },
     })
   },
-  //触摸导航列表
+  // 触摸导航列表
   indexNav(e) {
     // console.log(e)
     console.log(e.target.dataset.index)
@@ -859,14 +893,14 @@ Page({
     this.setData({
       locationInfo: locationInfo
     })
-    console.log(this.data.locationInfo)
     //存储已选择的城市
     wx.setStorage({
       key: "locationInfo",
       data: this.data.locationInfo
     })
 
-    console.log(this.data.locationInfo)
+    //请求地区热门车型
+    this.getHotModel()
 
     wx.request({
       url: 'https://product.360che.com/index.php?r=app/series/city-list&provinceId=' + this.data.locationInfo.provincesn,
@@ -881,7 +915,6 @@ Page({
         }
       }
     })
-    console.log(this.data.locationInfo)
   },
   //选择城市弹窗
   selectCity(e) {
@@ -898,6 +931,9 @@ Page({
 
     //请求经销商数据
     this.getDealer();
+
+    //请求地区热门车型
+    this.getHotModel()
 
     //存储已选择的城市
     wx.setStorage({
@@ -929,6 +965,9 @@ Page({
 
     //请求经销商数据
     this.getDealer();
+
+    //请求地区热门车型
+    this.getHotModel()
 
     //存储已选择的城市
     wx.setStorage({

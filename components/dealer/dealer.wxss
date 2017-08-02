@@ -62,7 +62,7 @@
 .vip:before{
   content: '';
   position: absolute;
-  top: 0;
+  top: 6rpx;
   left: 0;
   width: 28rpx;
   height: 28rpx;

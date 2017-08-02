@@ -102,8 +102,13 @@
   <!--询底价按钮-->
   <view class="footer-price" bindtap="goFooterPrice" data-productid="{{askProId}}">
     <text class="foot-price-text">询底价</text>
-    <text class="number">已有</text>
-    <text class="number">{{askPriceNum}}</text>
-    <text class="number">人询价</text>
+    <view wx:if="{{askPriceNum > 100}}">
+      <text class="number">已有</text>
+      <text class="number">{{askPriceNum}}</text>
+      <text class="number">人询价</text>
+    </view>
+    <view wx:else>
+      <text class="number">已有100人+询底价</text>
+    </view>
   </view>
 </view>

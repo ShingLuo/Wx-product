@@ -35,9 +35,14 @@
     </view>
     <view class="footer-price" bindtap="goFooterPrice" data-productId="{{footerInfo.ProductId}}">
         <text class="foot-price-text">询底价</text>
-        <text class="number">已有</text>
-        <text class="number">{{footerInfo.askTotal}}</text>
-        <text class="number">人询价</text>
+        <view wx:if="{{footerInfo.askTotal > 100}}">
+          <text class="number">已有</text>
+          <text class="number">{{footerInfo.askTotal}}</text>
+          <text class="number">人询价</text>
+        </view>
+        <view wx:else>
+          <text class="number">已有100人+询底价</text>
+        </view>
     </view>
   </view>
     <!--错误提示-->
@@ -55,23 +60,23 @@
   <view class="{{compareNumber > 0 ? 'compare-number compare-visible' : 'compare-number'}}" bindtap="goCompare">对比({{compareNumber}})</view>
   <!--换地区提示-->
   <view wx:if="{{resetLocationPop}}" class="err-pop">
-      <view class="err-content">
-          <view class="err-text">
-            <view>
-              <text>您当前所在的城市是</text>
-              <text class="highlight"> {{myRegion.cityname}}</text>
-            </view>
-            <text>是否切换</text>
-          </view>
-          <view class="switch-location-buttons">
-            <view class="cancel" bindtap="okSwitchLocation">
-              <text>取消</text>
-            </view>
-            <view class="ok" bindtap="cancelSwitchLocation">
-              <text>确定</text>
-            </view> 
-          </view> 
+    <view class="err-content">
+      <view class="err-text">
+        <view>
+          <text>您当前所在的城市是</text>
+          <text class="highlight"> {{myRegion.cityname}}</text>
+        </view>
+        <text>是否切换</text>
       </view>
+      <view class="switch-location-buttons">
+        <view class="cancel" bindtap="okSwitchLocation">
+          <text>取消</text>
+        </view>
+        <view class="ok" bindtap="cancelSwitchLocation">
+          <text>确定</text>
+        </view> 
+      </view> 
+  </view>
   </view>
   <!-- 选择地区弹层 -->
   <template is="selectLocation" data="{{selectLocationPop,locationInfo,selectLocation,myRegion,indexNav,hotLocation,locationList,cityList,cityListPop,navInfo,navInfoShow,searchResultData,searchResultPop}}"/>

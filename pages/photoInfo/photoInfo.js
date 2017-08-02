@@ -27,8 +27,23 @@ Page({
     forNum:0,
     //看图模式
     simpleModel:false,
+    //是否显示询底价按钮
+    priceButton:false,
   },
   onLoad: function (options) {
+
+    //获取来源
+    wx.getStorage({
+      key: 'photoSource',
+      success: res => {
+        console.log(res,'res')
+        this.setData({
+          priceButton:true,
+        })
+
+        wx.removeStorage({key: 'photoSource'})
+      },
+    })
 
     // 获取图片页面的tab头部标题
     wx.getStorage({

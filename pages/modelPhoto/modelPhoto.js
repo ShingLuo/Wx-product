@@ -202,7 +202,13 @@ Page({
             //没有图片内容
             noImg:false,
             getImgData: res.data.getImgData,
+            //设置询底价数量
+            askPriceNum: res.data.askPriceNum,
+            //询底价车型
+            priceProductId: res.data.recommendId,
           })
+
+          console.log(this.data.proName)
 
           //如果是推荐，给推荐车型id赋值
             this.setData({

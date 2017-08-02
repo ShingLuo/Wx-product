@@ -1,5 +1,5 @@
 <template name="switchModel">
-  <view class="switch-model" wx:if="{{switchModelPop}}">
+  <view class="switch-model {{switchModelPop ? 'visible' : ''}}">
     <view class="switch-title">
       <text class="back" bindtap="back">回</text>
       <text>换车型</text>

@@ -32,7 +32,7 @@ Page({
     errText:'',
 
     //是否显示选择地区
-    selectLocationPop: true,
+    selectLocationPop: false,
 
     //导航列表
     indexNav: [],

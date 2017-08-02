@@ -240,7 +240,6 @@ Page({
     if (this.data.photoData.typeId == 0 || this.data.noImg){
       return 
     }
-    this.alert('成功')
 
     if (!this.data.loadData){
       //设置显示loading
@@ -248,6 +247,8 @@ Page({
         loading:true,
         loadData:true
       })
+
+      this.alert('成功')
       
       //加载更多数据
       wx.request({
@@ -263,17 +264,17 @@ Page({
             this.setData({
               photoData: photoData
             })
-            console.log(this.data.photoData)
+            this.setData({
+              loading: false,
+              loadData: false
+            })
           }else{
             this.setData({
-              noImg:true
+              // noImg:true
+              loadData: true,
+              loading: false,
             })
           }
-
-          this.setData({
-            loading:false,
-            loadData:false
-          })
         }
       })
     }
@@ -295,8 +296,14 @@ Page({
       key: 'imgInfoData',
       data: item,
       success:res => {
-        wx.navigateTo({
-          url: '../photoInfo/photoInfo',
+        wx.setStorage({
+          key: 'photoSource',
+          data: 'seriesPhoto',
+          success: () => {
+            wx.navigateTo({
+              url: '../photoInfo/photoInfo',
+            })
+          }
         })
       }
     })

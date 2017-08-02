@@ -25,7 +25,7 @@
         <text class="price-text" wx:if="{{imgList[index] && imgList[index].price}}">{{imgList[index].price > 0 ? imgList[index].price + '万' : '暂无'}}</text>
          <text wx:else>暂无</text> 
       </view>
-      <view class="footer-price" wx:if="{{imgList[index] && imgList[index].isMake != 4}}" data-productid="{{imgList[index].F_ProductId}}" catchtap="goFooterPrice">
+      <view class="footer-price" wx:if="{{priceButton && imgList[index] && imgList[index].isMake != 4}}" data-productid="{{imgList[index].F_ProductId}}" catchtap="goFooterPrice">
         <text>询底价</text>
       </view>
     </view>

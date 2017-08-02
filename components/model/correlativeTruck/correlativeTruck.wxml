@@ -19,7 +19,7 @@
     </view>
     <!--筛选内容-->
     <view class="model-list">
-      <view class="truck-info" wx:for="{{examineSimliarData.content}}"  data-item="{{item}}" bindtap="goSwitchModel" wx:if="{{item.show && item.F_ProductId != ProductId}}">
+      <view class="truck-info" wx:for="{{examineSimliarData.content}}"  data-item="{{item}}" bindtap="goSwitchModel" wx:if="{{item.show && item.F_ProductId != productId}}">
         <view class="title">
             <text wx:if="{{item.hotLocation}}" class="truck-name-tag">{{item.hotLocation}}</text>
             <text class="truck-name-text">{{item.F_ProductName}}</text>

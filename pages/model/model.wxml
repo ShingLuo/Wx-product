@@ -39,7 +39,7 @@
       <template is="parameterConfig" data="{{parameterConfig,parameterData}}"/>
       <!--相近车型可选配置-->
       <view id="examineSimilar"></view>
-      <template is="correlativeTruck" wx:if="{{gatherTotal > 1}}" data="{{correlativeTruck,examineSimliarData,optionCondition,compareState}}"/>
+      <template is="correlativeTruck" wx:if="{{gatherTotal > 1}}" data="{{correlativeTruck,productId,examineSimliarData,optionCondition,compareState}}"/>
       <!--经销商推荐列表-->
       <template is="dealer" data="{{dealer,dealerList,locationInfo}}"/>
       <!--看过该车的人还关注-->

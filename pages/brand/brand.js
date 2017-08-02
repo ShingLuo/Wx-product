@@ -59,15 +59,47 @@ Page({
     wx.removeStorage({ key: 'selectProduct' })
     wx.removeStorage({ key: 'compareNumber' })
 
+    wx.removeStorage({ key: 'productData' })
+
     wx.setNavigationBarTitle({
       title: '品牌选车'
     })
     // 请求品牌列表数据
+
+    wx.getStorage({
+      key: 'brandData',
+      success: res => {
+        this.setData({
+          recommendList: res.recommend,
+          brandList: res.brandList,
+          indexNav: res.letter,
+          otherBrandList: res.otherBrandList,
+        })
+
+        let time = setTimeout(() => {
+          this.setData({
+            moreShow: true
+          })
+          clearTimeout(time)
+        }, 2000)   
+
+        //请求品牌数据
+        this.getBrandData()    
+      },
+      fail:error => {
+        //请求品牌数据
+        this.getBrandData()
+      }
+    })
+
+  },
+  //请求品牌数据
+  getBrandData(){
     wx.request({
       url: app.ajaxurl + 'index.php?r=api/gethotbrandlist&haveGroup=1&noIndex=1',
       data: {},
       success: (res) => {
-        if (res.errMsg == 'request:ok'){
+        if (res.errMsg == 'request:ok') {
           this.setData({
             recommendList: res.data.recommend,
             brandList: res.data.brandList,
@@ -77,10 +109,15 @@ Page({
 
           let time = setTimeout(() => {
             this.setData({
-              moreShow:true
+              moreShow: true
             })
             clearTimeout(time)
-          },2000)
+          }, 2000)
+
+          wx.setStorage({
+            key: 'brandData',
+            data: res.data,
+          })
         }
       },
     })

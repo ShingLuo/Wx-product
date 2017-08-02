@@ -1,9 +1,9 @@
 <!--pages/seriesPhoto/seriesPhoto.wxml-->
 <import src="../../components/jointly/switchModel/switchModel.wxml"/>
-<view class="{{footerPriceShow ? 'not-price container' : 'container'}}">
+<view class="{{footerPriceShow ? 'container' : 'container not-price'}}">
   <scroll-view scroll-y="true" style="height:100%" bindscrolltolower="loadData">
     <view class="model-title" wx:if="{{!notSwitchModel && !isRecommend}}">
-      <text class="model-title-text">{{allName}}</text>
+      <text class="model-title-text">{{proName}}</text>
       <text class="switch-model-button" bindtap="changeTruck">换车型</text>
     </view>
     <view class="recommend" wx:if="{{isRecommend}}">
@@ -48,7 +48,7 @@
   <!--换车型弹层-->
   <template is="switchModel" data="{{switchModel,switchModelPop,switchModelData}}"/>  
   <!--询底价按钮-->
-  <view class="footer-price" wx:if="{{!footerPriceShow}}" data-productId="{{priceProductId}}" bindtap="goFooterPrice">
+  <view class="footer-price" wx:if="{{footerPriceShow}}" data-productId="{{priceProductId}}" bindtap="goFooterPrice">
     <text class="foot-price-text">询底价</text>
     <view wx:if="{{askPriceNum > 100}}">
       <text class="number">已有</text>
