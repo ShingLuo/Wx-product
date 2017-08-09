@@ -24,10 +24,10 @@
           <text class="sell-type">{{item.F_IsStopMake == 1 ? '' : (item.F_IsStopMake == 4 ? '停售' : '未上市')}}</text>
         </view>
       </view>
-    </view>
-    <view wx:if="{{!switchModelData.priceList.length}}" class="empty">
+      <view wx:if="{{!item.list.length}}" class="empty">
         <text>无</text>
         <text class="empty-text">很遗憾~ 没有相关内容~</text>
+      </view>
     </view>
   </view>
 </template>

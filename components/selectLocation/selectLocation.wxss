@@ -232,7 +232,7 @@
     background-color:#EFEFF4;
 }
 .search-model{
-    height:100%;
+    min-height:101%;
     padding:0 30rpx;
     background-color:#fff;
 }

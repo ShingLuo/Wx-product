@@ -1,6 +1,7 @@
 /* pages/photoInfo/photoInfo.wxss */
 page{
   height: 100%;
+  overflow: hidden;
 }
 .photo-info{
   position: relative;

@@ -60,6 +60,8 @@ Page({
     wx.removeStorage({ key: 'compareNumber' })
 
     wx.removeStorage({ key: 'productData' })
+    wx.removeStorage({ key: 'brandData' })
+
 
     wx.setNavigationBarTitle({
       title: '品牌选车'
@@ -114,10 +116,10 @@ Page({
             clearTimeout(time)
           }, 2000)
 
-          wx.setStorage({
-            key: 'brandData',
-            data: res.data,
-          })
+          // wx.setStorage({
+          //   key: 'brandData',
+          //   data: res.data,
+          // })
         }
       },
     })

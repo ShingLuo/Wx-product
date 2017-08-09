@@ -73,9 +73,10 @@ page{
   position: absolute;
   top: 0;
   right: 0;
-  font-size: 46rpx;
-  width: 46rpx;
-  height: 46rpx;
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  line-height:30px;
   overflow: hidden;
   color: #ccc;
   font-family: "detail";

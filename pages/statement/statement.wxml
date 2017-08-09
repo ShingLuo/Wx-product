@@ -1,5 +1,5 @@
-<!--pages/statement/statement.wxml-->
-<view class="statement">
+
+<view class="statement-wrapper">
     <view class="statement-model">  
         <view class="statement-header">  
             <text>用户须知</text>

@@ -1,5 +1,6 @@
 <!--index.wxml-->
 <import src="../../components/selectLocation/selectLocation.wxml"/>
+ <import src="../../components/footerPrice/statement/statement.wxml"/> 
 <view class="container">
   <scroll-view  scroll-y="true">
     <!--车型图片-->
@@ -33,7 +34,7 @@
       </view>
       <view wx:if="{{dealerData.length}}" wx:for="{{dealerData}}" class="dealer-list" data-index="{{index}}" data-ShopId="{{item.ShopId}}" bindtap="selectDealer">
         <view class="select-dealer">
-            <image wx:if="{{dealerSelected[index]}}" class="seleceed-dealer" style="width:36rpx;height:36rpx" src="{{dealerSelected[index]?'https://s.kcimg.cn/wap/images/detail/checked.png':''}}"></image>
+            <image wx:if="{{dealerSelected[index]}}" class="seleceed-dealer" src="{{dealerSelected[index]?'https://s.kcimg.cn/wap/images/detail/checked.png':''}}"></image>
         </view>
         <view class="dealer-info">
           <view class="dealer-name">
@@ -104,6 +105,9 @@
   </view>
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
-  </view>-->  <!-- 选择地区弹层 -->
-  <template is="selectLocation" data="{{selectLocationPop,locationInfo,selectLocation,myRegion,indexNav,hotLocation,locationList,cityList,cityListPop,navInfo,navInfoShow,searchResultData,searchResultPop}}"/>
+  <!--车型列表-->
+  <template is="statement" data="{{statement,statementPop}}"/>   
+  <!-- </view>   -->
+  <!-- 选择地区弹层 -->
+  <template is="selectLocation" data="{{selectLocationPop,searchContent,locationInfo,selectLocation,myRegion,indexNav,hotLocation,locationList,cityList,cityListPop,navInfo,navInfoShow,searchResultData,searchResultPop}}"/>
 </view>

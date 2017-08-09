@@ -50,7 +50,6 @@ page{
   border-bottom: 2rpx solid #e5e5e5;
 }
 .truck-model-text{
-  display: block;
   line-height: 40rpx;
   font-size: 28rpx;
 }
@@ -120,7 +119,6 @@ page{
     font-family: "detail";
     content: "\52a0";
     margin-right: 6rpx;
-    vertical-align: middle;
   }
   .footer-price{
     width: 268rpx;

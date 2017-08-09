@@ -1,5 +1,6 @@
 <!--pages/photoInfo/photoInfo.wxml-->
 <view class="container">
+<scroll-view scroll-y="false" style="height:100%">
   <view class="photo-info">
     <view class="options" hidden="{{simpleModel}}">
       <view class="option" wx:for="{{tagName}}" data-typeId="{{item.id}}" bindtap="switchTab">
@@ -25,9 +26,10 @@
         <text class="price-text" wx:if="{{imgList[index] && imgList[index].price}}">{{imgList[index].price > 0 ? imgList[index].price + '万' : '暂无'}}</text>
          <text wx:else>暂无</text> 
       </view>
-      <view class="footer-price" wx:if="{{priceButton && imgList[index] && imgList[index].isMake != 4}}" data-productid="{{imgList[index].F_ProductId}}" catchtap="goFooterPrice">
+      <view class="footer-price" wx:if="{{priceButton && imgList[index] && imgList[index].isMake != 4}}" data-productid="{{imgList[index].F_ProductId}}" catchtap="goFooterPrice" id="footerPrice">
         <text>询底价</text>
       </view>
     </view>
   </view>
+</scroll-view>
 </view>

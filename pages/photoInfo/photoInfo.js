@@ -141,8 +141,7 @@ Page({
           // if (this.index >= this.total) {
           //   this.index = -(this.total - 1)
           // }
-
-        this.alert('chengg')
+          
         if (this.data.forNum > 1){
           console.log(this.data.forNum)
           this.setData({

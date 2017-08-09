@@ -23,7 +23,7 @@
           </view>
           <view class="dealer-action">
             <text class="contact" wx:if="{{item.phone}}" data-phone="{{item.phone}}" bindtap="makePhone">联系经销商</text>
-            <text class="dealer-foot-price" data-dealerInfo="{{item}}" catchtap="goFooterPrice">询底价</text>
+            <text class="dealer-foot-price" data-dealerInfo="{{item}}" catchtap="goFooterPrice" id="footerPrice">询底价</text>
           </view>
         </view>
       </view>

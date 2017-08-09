@@ -70,7 +70,6 @@ Page({
         wx.getStorage({
           key: 'compareData',
           success: ele => {
-            this.alert('shabi')
             let compareData = ele.data;
             let ajaxUrl = app.ajaxurl + 'index.php?r=weex/series/filtrate&subId=' + seriesInfo.F_SubCategoryId;
             //查看是否还有车型id

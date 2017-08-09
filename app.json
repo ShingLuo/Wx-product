@@ -1,21 +1,22 @@
 {
   "pages":[
     "pages/brand/brand",
-    "pages/model/model",
-    "pages/series/series",
-    "pages/seriesPhoto/seriesPhoto",
-    "pages/modelConfig/modelConfig",
-    "pages/seriesConfig/seriesConfig",
+    "pages/index/index",
     "pages/modelPhoto/modelPhoto",
     "pages/footerPrice/footerPrice",
+    "pages/model/model",
+    "pages/series/series",
+    "pages/success/success",
+    "pages/seriesConfig/seriesConfig",
     "pages/photoInfo/photoInfo",
+    "pages/seriesPhoto/seriesPhoto",
+    "pages/modelConfig/modelConfig",
     "pages/contrast/contrast",
     "pages/addProduct/addProduct",
     "pages/selectProduct/selectProduct",
     "pages/location/location",
     "pages/logs/logs",
-    "pages/statement/statement",
-    "pages/success/success"
+    "pages/statement/statement"
   ],
   "window":{
     "backgroundTextStyle":"light",

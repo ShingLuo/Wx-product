@@ -1,5 +1,6 @@
 /**index.wxss**/
 @import "../../components/selectLocation/selectLocation.wxss";
+ @import "../../components/footerPrice/statement/statement.wxss"; 
 .container{
     padding-bottom:100rpx;
 }
@@ -96,6 +97,8 @@
 .select-dealer{
   width:36rpx;
   height:36rpx;
+  line-height:36rpx;
+  vertical-align: middle;
   border:1px solid #D8D8D8;
   box-sizing: border-box;
 }

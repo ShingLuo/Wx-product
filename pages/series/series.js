@@ -53,7 +53,9 @@ Page({
 
     //导航列表
     indexNav: [],
-    //定位常用地区
+    //搜索内容
+    searchContent:'',
+    //定位常用地区S
     hotLocation: [],
     //地区列表
     locationList: [],
@@ -84,17 +86,18 @@ Page({
     this.getCompareTask();
   },
   onLoad: function (options) {
-    //查看是否是转发过来的
-    if (options.seriesInfo) {
-      let seriesInfo = JSON.parse(options.seriesInfo);
 
-      this.setData({
-        //车系信息
-        seriesInfo: seriesInfo,
-        //车系id
-        seriesId: seriesInfo.F_SubCategoryId,
-      })
-      console.log(JSON.stringify(this.data.seriesInfo))
+    // 来源为分享的 更新数据
+    app.updateDataForShare(options, this, () => {
+      //转发进来
+      // let seriesInfo = JSON.parse(options.seriesInfo);
+      // this.setData({
+      //   //车系信息
+      //   seriesInfo: seriesInfo,
+      //   //车系id
+      //   seriesId: seriesInfo.F_SubCategoryId,
+      // })
+
       //请求标题信息 && 图片信息
       this.getSeriesInfo();
 
@@ -109,8 +112,8 @@ Page({
 
       //定位当前地区
       this.getLocation();
-
-    }else{
+    }, () => {
+      //正常进入页面
       //读取保存的品牌 && 车系信息
       wx.getStorage({
         key: 'seriesInfo',
@@ -149,7 +152,7 @@ Page({
           })
         }
       })
-    }
+    })
 
     wx.getStorage({
       key: "locationInfo",
@@ -240,6 +243,7 @@ Page({
           wx.setNavigationBarTitle({
             title: res.data.h1
           })
+          app.globalData.shareTitle = res.data.h1
 
           // 卡车图片信息
           let truckImageData = {};
@@ -297,7 +301,7 @@ Page({
   //请求车型列表信息
   getProductLidt(){
     wx.request({
-      url: app.ajaxurl + 'index.php?r=weex/series/price&subCateId=' + this.data.seriesInfo.F_SubCategoryId + '&seriesId=' + this.data.seriesInfo.F_SeriesId + '&proId=' + this.data.seriesInfo.proid,
+      url: app.ajaxurl + 'index.php?r=weex/series/price&subCateId=' + this.data.seriesInfo.F_SubCategoryId + '&seriesId=' + this.data.seriesInfo.F_SeriesId ,
       success: (res) => {
         if (res.errMsg == 'request:ok') {
           this.setData({
@@ -427,7 +431,6 @@ Page({
   },
   //请求地区热门车型
   getHotModel(clear){
-    this.alert('成功')
     wx.request({
       url: app.ajaxurl + 'index.php?r=weex/series/district-price&subCateId=' + this.data.seriesId + '&seriesId=' + this.data.seriesInfo.F_SeriesId + '&proId=' + this.data.seriesInfo.proid + '&provinceId=' + this.data.locationInfo.provincesn + '&cityId=' + this.data.locationInfo.citysn ,
       success:res => {
@@ -568,7 +571,6 @@ Page({
                 data: myRegion
               })
 
-              console.log(this.data.myRegion,'this.data.myRegion')
               //获取有没有存储时间
               wx.getStorage({
                 key: 'myDate',
@@ -580,11 +582,6 @@ Page({
                     wx.getStorage({
                       key: 'locationInfo',
                       success: ele => {
-                        wx.showToast({
-                          title: '成功',
-                          icon: 'success',
-                          duration: 2000
-                        })
                         //设置之前选择的地区
                         this.setData({
                           locationInfo: ele.data
@@ -653,17 +650,22 @@ Page({
   // 点击选择城市
   goSelectLocation() {
     this.setData({
-      selectLocationPop: !this.data.selectLocationPop
+      selectLocationPop: true
     })
-    // wx.setStorage({
-    //   key: 'locationInfo',
-    //   data: this.data.locationInfo,
-    //   complete: function () {
-    //     wx.navigateTo({
-    //       url: '../location/location'
-    //     })
-    //   }
-    // })
+  },
+  backSelectLocation(){
+    this.setData({
+      //选择城市
+      cityListPop: false,
+      //关闭选择地区弹层
+      selectLocationPop: false,
+      //取消搜索状态
+      searchResultPop:false,
+      //删除搜索内容
+      searchContent: '',
+      //清空搜索结果
+      searchResultData: []
+    })
   },
   //存储定位城市数据
   setMyRegion() {
@@ -806,7 +808,7 @@ Page({
           let compareTask = ele.data; 
           let compareState = this.data.compareState;
           //如果有车系id存储
-          if (ele.data[this.data.seriesId]) {
+          if (compareTask[this.data.seriesId]) {
             if (this.data.compareState[productId]) {  //取消
               //循环已保存的数组 && 删除掉
               compareTask[this.data.seriesId].forEach((ele, index) => {
@@ -863,6 +865,27 @@ Page({
                 })
               }
             }
+          }else{
+            compareTask[this.data.seriesId] = [];
+            compareTask[this.data.seriesId].push(productId);
+
+            //加入对比
+            let compareState = this.data.compareState;
+            compareState[productId] = '已加入';
+
+            // 状态更新
+            this.setData({
+              //添加对比的数量
+              compareNumber: this.data.compareNumber += 1,
+              //加入对比
+              compareState: compareState,
+            })
+
+            // 数据存储
+            wx.setStorage({
+              key: 'compareTask',
+              data: compareTask,
+            })
           }
 
         } else {
@@ -993,7 +1016,15 @@ Page({
   //搜索框获取焦点
   searching() {
     this.setData({
-      searchResultPop: !this.data.searchResultPop
+      searchResultPop: true
+    })
+  },
+  //取消搜索
+  cancelSearch(){
+    this.setData({
+      searchResultPop:false,
+      searchContent: '',
+      searchResultData: []
     })
   },
   //清空输入框内容
@@ -1005,8 +1036,9 @@ Page({
   searchResult(e) {
     console.log(e.detail.value)
     wx.request({
-      url: 'https://product.360che.com/index.php?r=weex/series/get-search-region&value=' + e.detail.value,
+      url: 'https://product.360che.com/index.php?r=weex/series/get-search-region&value=' + encodeURIComponent(e.detail.value),
       success: (res) => {
+        console.log(res)
         if (res.errMsg == 'request:ok' && res.data.info == 'ok') {
           console.log(res.data, 'res.data')
           this.setData({
@@ -1099,6 +1131,10 @@ Page({
       selectLocationPop: false,
       //关闭搜素结果列表
       searchResultPop:false,
+      //删除搜索内容
+      searchContent: '',
+      //清空搜索结果
+      searchResultData: []
     })
 
     //存储已选择的城市
@@ -1180,19 +1216,6 @@ Page({
   },
   //转发
   onShareAppMessage: function (res) {
-    if (res.from === 'button') {
-      // 来自页面内转发按钮
-      console.log(res.target)
-    }
-    return {
-      title: '品牌选车',
-      path: 'pages/series/series?seriesInfo=' + JSON.stringify(this.data.seriesInfo),
-      success: function (res) {
-        // 转发成功
-      },
-      fail: function (res) {
-        // 转发失败
-      }
-    }
+    return app.shareCurrentPage(['seriesInfo'], this)
   }
 })

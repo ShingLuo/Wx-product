@@ -69,7 +69,7 @@
       <text bindtap="goUrl" data-url="../modelPhoto/modelPhoto">图片</text>
       <text class="{{compareState[productId] ? '' : 'compare-join'}}" data-productId="{{productId}}" bindtap="compare">{{compareState[productId] ? compareState[productId] : '对比'}}</text>
     </view>
-    <view class="footer-price" wx:if="{{footerPriceShow}}" bindtap="goFooterPrice" data-productId="{{productId}}">
+    <view class="footer-price" wx:if="{{footerPriceShow}}" bindtap="goFooterPrice" data-productId="{{productId}}" id="footerPrice">
       <text class="foot-price-text">询底价</text>
       <view wx:if="{{askTotal > 100}}">
         <text class="number">已有</text>
@@ -81,6 +81,17 @@
       </view>
     </view>
   </view>
+      <!--错误提示-->
+  <view wx:if="{{errPop}}" class="err-pop">
+      <view class="err-content">
+          <view class="err-text">
+            <text>{{errText}}</text>
+          </view>
+          <view class="err-button" bindtap="closeErrPop">
+            <text>确定</text>
+          </view> 
+      </view>
+  </view>
   <!-- 选择地区弹层 -->
-  <template is="selectLocation" data="{{selectLocationPop,locationInfo,selectLocation,myRegion,indexNav,hotLocation,locationList,cityList,cityListPop,navInfo,navInfoShow,searchResultData,searchResultPop}}"/>
+  <template is="selectLocation" data="{{selectLocationPop,searchContent,locationInfo,selectLocation,myRegion,indexNav,hotLocation,locationList,cityList,cityListPop,navInfo,navInfoShow,searchResultData,searchResultPop}}"/>
 </view>

@@ -36,6 +36,7 @@ Page({
       url:'https://product.360che.com/index.php?r=api/getcompeteproduct&productId=' + submitData.truckid,
       data:{},
       success:(res) => {
+        console.log(res)
         if(res.errMsg == 'request:ok'){
           this.setData({
             modelList:res.data.data
@@ -58,9 +59,10 @@ Page({
 
     //请求推荐经销商列表
     wx.request({
-      url:'https://dealer-api.360che.com/Dealer/getDealerList.aspx?productid=' + productId + '&provincesn=' + this.data.locationInfo.provincesn + '&citysn=' + this.data.locationInfo.citysn,
+      url:'https://dealer-api.360che.com/inquiryprice/Dealer/getDealerList.aspx?productid=' + productId + '&provincesn=' + this.data.locationInfo.provincesn + '&citysn=' + this.data.locationInfo.citysn + '&type=1',
       data:submitData,
-      success:(res) => {
+      success:res => {
+        console.log(res)
         let arr = [];
         if(res.errMsg == 'request:ok' && res.data.length){
             for(var i = 0 ; i < res.data.length ; i++){
@@ -76,6 +78,7 @@ Page({
           url:'https://dealer-api.360che.com/inquiryprice/Dealer/submitClues.aspx?',
           data:submitData,
           success:(res) => {
+            console.log(submitData)
           
             //隐藏加载
             this.cancelLoading()

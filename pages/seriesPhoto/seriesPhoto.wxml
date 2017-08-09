@@ -42,7 +42,7 @@
   <!--换车型弹层-->
   <template is="switchModel" data="{{switchModel,switchModelPop,switchModelData,modelAll}}"/>  
   <!--询底价按钮-->
-  <view class="footer-price" bindtap="goFooterPrice" data-productid="{{askProId}}">
+  <view class="footer-price" bindtap="goFooterPrice" data-productid="{{askProId}}" id="footerPrice">
     <text class="foot-price-text">询底价</text>
     <view wx:if="{{askPriceNum > 100}}">
       <text class="number">已有</text>

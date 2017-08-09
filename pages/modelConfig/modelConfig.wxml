@@ -58,12 +58,12 @@
         <view class="content">
             <text wx:if="{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice && configData.lowPrice[0].F_BigPrice != 0 && configData.lowPrice[0].F_BigPrice != 'kong'}}">{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice}}万</text>
             <text wx:if="{{configData.lowPrice[0] && !configData.lowPrice[0].F_BigPrice && configData.lowPrice[0].F_BigPrice != 'kong'}}">暂无报价</text>
-            <text class="footer-price-text"  wx:if="{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice != 'kong'}}" data-productId="{{configData.products[0].F_ProductId}}" bindtap="goFooterPrice">询价</text>
+            <text class="footer-price-text"  wx:if="{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice != 'kong'}}" data-productId="{{configData.products[0].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">询价</text>
         </view>
         <view class="content">
             <text wx:if="{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice && configData.lowPrice[1].F_BigPrice != 0 && configData.lowPrice[1].F_BigPrice != 'kong'}}">{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice}}万</text>
             <text wx:if="{{configData.lowPrice[1] && !configData.lowPrice[1].F_BigPrice && configData.lowPrice[1].F_BigPrice != 'kong'}}">暂无报价</text>
-            <text class="footer-price-text" wx:if="{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice != 'kong'}}" data-productId="{{configData.products[1].F_ProductId}}" bindtap="goFooterPrice">询价</text>
+            <text class="footer-price-text" wx:if="{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice != 'kong'}}" data-productId="{{configData.products[1].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">询价</text>
         </view>
       </view>
     </view>
@@ -100,7 +100,7 @@
     </view>
   </view>
   <!--询底价按钮-->
-  <view class="footer-price" wx:if="{{footerPriceShow}}" data-productId="{{productId}}" bindtap="goFooterPrice">
+  <view class="footer-price" wx:if="{{footerPriceShow}}" data-productId="{{productId}}" bindtap="goFooterPrice" id="footerPrice">
     <text class="foot-price-text">询底价</text>
     <view wx:if="{{askPriceNum > 100}}">
       <text class="number">已有</text>

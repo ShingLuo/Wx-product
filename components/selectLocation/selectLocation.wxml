@@ -1,16 +1,16 @@
 <template name="selectLocation">
   <view class="select-location {{selectLocationPop ? 'visible' : ''}}">
-    <scroll-view class="location-wrapper" scroll-y="true" scroll-into-view="{{navInfo}}" scroll-with-animation="true">
+    <scroll-view class="location-wrapper" scroll-y="{{!searchResultPop}}" scroll-into-view="{{navInfo}}" scroll-with-animation="true">
         <view class="switch-title">
-          <text class="back" bindtap="goSelectLocation">回</text>
+          <text class="back" bindtap="backSelectLocation">回</text>
           <text>选择地区</text>
         </view>
         <view class="search">
             <view class="search-box">
-              <input type="text" bindfocus="searching" placeholder="请输入城市名称或首字母查询" bindinput="searchResult" bindblur="clearContent"/>
+              <input type="text" bindfocus="searching" value="{{searchContent}}" placeholder="请输入城市名称或首字母查询" bindinput="searchResult" bindblur="clearContent"/>
               <text class="icon">搜</text>
             </view>
-            <view class="cancel-search" wx:if="{{searchResultPop}}" bindtap="searching">
+            <view class="cancel-search" wx:if="{{searchResultPop}}" bindtap="cancelSearch">
                 <text class="cancel-search-text">取消</text>
             </view>
         </view>

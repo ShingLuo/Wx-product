@@ -43,7 +43,7 @@ Page({
 
         //设置选中地区
         this.setData({
-          locationInfo:JSON.parse(res.data)
+          locationInfo:res.data
         })
         //删除缓存
         wx.removeStorage({
@@ -116,10 +116,10 @@ Page({
     //调取当前所在地区
       //查看之前是否存储过
       wx.getStorage({
-        key: 'my_region',
+        key: 'myRegion',
         success: (res) => {
             // 如果存储过
-            let data = JSON.parse(res.data);
+            let data = res.data;
             let time = new Date().getTime()
 
             //获取当前时间是否大于之前存储时间的6小时 ？ 重新获取 ： 否则读取缓存数据
@@ -226,9 +226,9 @@ Page({
             data:{},
             success:(res) => {
               if(res.errMsg == 'request:ok'){
-                let my_region = {};
-                my_region.time = new Date().getTime();
-                my_region.data = res.data;
+                let myRegion = {};
+                myRegion.time = new Date().getTime();
+                myRegion.data = res.data;
                 
                 this.setData({
                    locationInfo:res.data
@@ -238,44 +238,45 @@ Page({
 
                 //存储定位城市
                 wx.setStorage({
-                  key:"my_region",
-                  data:JSON.stringify(my_region)
+                  key:"myRegion",
+                  data: myRegion
                 })
 
                 //存储常用定位地区列表
-                wx.getStorage({
-                  key: 'hotLocation',
-                  success: function(res){
-                    let data = JSON.parse(res.data);
-                    if(data[0].citysn != my_region.data.citysn){
-                      data.shift();
-                      data.unshift(my_region.data);
-                      wx.setStorage({
-                        key:"hotLocation",
-                        data:JSON.stringify(arr)
-                      })
-                    }
-                  },
-                  fail: function() {
-                    let arr = [];
-                    arr.push(my_region.data)
-                    wx.setStorage({
-                      key:"hotLocation",
-                      data:JSON.stringify(arr)
-                    })
-                  }
-                })
+                // wx.getStorage({
+                //   key: 'hotLocation',
+                //   success: function(res){
+                //     let data = res.data;
+                //     if (data[0].citysn != myRegion.data.citysn){
+                //       data.shift();
+                //       data.unshift(myRegion.data);
+                //       wx.setStorage({
+                //         key:"hotLocation",
+                //         data:arr
+                //       })
+                //     }
+                //   },
+                //   fail: function() {
+                //     let arr = [];
+                //     arr.push(myRegion.data)
+                //     wx.setStorage({
+                //       key:"hotLocation",
+                //       data:arr
+                //     })
+                //   }
+                // })
               }
             }
           })
         }
       })
   },
+  
   //跳转到选择地区
   goSelectLocation(){
     wx.setStorage({
       key: 'locationInfo',
-      data: JSON.stringify(this.data.locationInfo),
+      data: this.data.locationInfo,
       complete: function() {
         wx.navigateTo({
           url: '../location/location'

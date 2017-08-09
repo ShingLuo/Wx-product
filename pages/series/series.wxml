@@ -33,7 +33,7 @@
       <text bindtap="goUrl" data-url="../seriesConfig/seriesConfig">配置</text>
       <text bindtap="goUrl" data-url="../seriesPhoto/seriesPhoto">图片</text>
     </view>
-    <view class="footer-price" bindtap="goFooterPrice" data-productId="{{footerInfo.ProductId}}">
+    <view class="footer-price" bindtap="goFooterPrice" data-productId="{{footerInfo.ProductId}}" id="footerPrice">
         <text class="foot-price-text">询底价</text>
         <view wx:if="{{footerInfo.askTotal > 100}}">
           <text class="number">已有</text>
@@ -79,5 +79,5 @@
   </view>
   </view>
   <!-- 选择地区弹层 -->
-  <template is="selectLocation" data="{{selectLocationPop,locationInfo,selectLocation,myRegion,indexNav,hotLocation,locationList,cityList,cityListPop,navInfo,navInfoShow,searchResultData,searchResultPop}}"/>
+  <template is="selectLocation" data="{{searchContent,selectLocationPop,locationInfo,selectLocation,myRegion,indexNav,hotLocation,locationList,cityList,cityListPop,navInfo,navInfoShow,searchResultData,searchResultPop}}"/>
 </view>

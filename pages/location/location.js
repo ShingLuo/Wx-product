@@ -84,8 +84,9 @@ Page({
     wx.getStorage({
       key: 'myRegion',
       success: (res) => {
+        console.log(res.data,'res.data')
         this.setData({
-          myRegion: res.data
+          myRegion: res.data.data
         })
         console.log(this.data.myRegion, 'hotLocationhotLocationhotLocationhotLocation')
       }

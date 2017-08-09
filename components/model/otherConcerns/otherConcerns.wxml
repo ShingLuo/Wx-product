@@ -14,7 +14,7 @@
         </view>
         <view class="truck-price">
         <text class="price-text">{{item.price ? item.price : item.F_Price == 0 ? '暂无报价' : item.F_Price + '万'}}</text>
-          <text class="ask-price" data-productId="{{item.F_ProductId}}" catchtap="goFooterPrice">询底价</text>
+          <text class="ask-price" data-productId="{{item.F_ProductId}}" catchtap="goFooterPrice" id="footerPrice">询底价</text>
         </view>
       </view>
     </view>

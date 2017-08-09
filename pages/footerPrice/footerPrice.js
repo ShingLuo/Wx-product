@@ -30,12 +30,17 @@ Page({
     //错误弹层是否显示和提示
     errPop:false,
     errText:'',
+    
+    //个人信息保护声明
+    statementPop:false,
 
     //是否显示选择地区
     selectLocationPop: false,
 
     //导航列表
     indexNav: [],
+    //搜索内容
+    searchContent:'',
     //定位常用地区
     hotLocation: [],
     //地区列表
@@ -394,22 +399,25 @@ Page({
     //     }
     //   })
   },
-  //跳转到选择地区
-  goSelectLocation(){
+  // 点击选择城市
+  goSelectLocation() {
     this.setData({
-      selectLocationPop: !this.data.selectLocationPop
+      selectLocationPop: true
     })
-    // wx.setStorage({
-    //   key: 'locationInfo',
-    //   data: this.data.locationInfo,
-      // complete: function() {
-        // wx.navigateTo({
-        //   url: '../location/location'
-        // })
-    //   }
-    // })
-
-
+  },
+  backSelectLocation() {
+    this.setData({
+      //选择城市
+      cityListPop: false,
+      //关闭选择地区弹层
+      selectLocationPop: false,
+      //取消搜索状态
+      searchResultPop: false,
+      //删除搜索内容
+      searchContent: '',
+      //清空搜索结果
+      searchResultData: []
+    })
   },
   //输入姓名
   importName(e){
@@ -531,7 +539,7 @@ Page({
         app.globalData.hideLoading();
         if(res.errMsg == 'request:ok'){
           if(res.data.isok == 1){
-            wx.navigateTo({
+            wx.redirectTo({
               url: '../success/success?submitData=' + JSON.stringify(submitData) + '&locationInfo=' + JSON.stringify(this.data.locationInfo)
             })
           }else{
@@ -597,8 +605,11 @@ Page({
   },
   //跳转到个人信息声明保护页
   goStatement(){
-    wx.navigateTo({
-      url: '../statement/statement'
+    // wx.navigateTo({
+    //   url: '../statement/statement'
+    // })
+    this.setData({
+      statementPop: !this.data.statementPop,
     })
   },
 //触摸导航列表
@@ -619,7 +630,15 @@ Page({
   //搜索框获取焦点
   searching() {
     this.setData({
-      searchResultPop: !this.data.searchResultPop
+      searchResultPop: true
+    })
+  },
+  //取消搜索
+  cancelSearch() {
+    this.setData({
+      searchResultPop: false,
+      searchContent: '',
+      searchResultData: []
     })
   },
   //清空输入框内容
@@ -631,7 +650,7 @@ Page({
   searchResult(e) {
     console.log(e.detail.value)
     wx.request({
-      url: 'https://product.360che.com/index.php?r=weex/series/get-search-region&value=' + e.detail.value,
+      url: 'https://product.360che.com/index.php?r=weex/series/get-search-region&value=' + encodeURIComponent(e.detail.value),
       success: (res) => {
         if (res.errMsg == 'request:ok' && res.data.info == 'ok') {
           console.log(res.data, 'res.data')
@@ -666,10 +685,13 @@ Page({
       url: 'https://product.360che.com/index.php?r=app/series/city-list&provinceId=' + this.data.locationInfo.provincesn,
       success: (res) => {
         if (res.errMsg == 'request:ok') {
-          console.log(res, 'aaa')
+          let cityList = [];
+          if (res.data !== null) {
+            cityList = res.data.data
+          }
           //给城市列表赋值  显示城市列表
           this.setData({
-            cityList: res.data.data,
+            cityList: cityList,
             cityListPop: true
           })
         }
@@ -700,7 +722,7 @@ Page({
     })
 
 
-    if (this.data.myRegion.citysn == e.currentTarget.dataset.citysn) return;
+    if (this.data.myRegion && this.data.myRegion.citysn == e.currentTarget.dataset.citysn) return;
 
     //存储常用地区
     this.storageLocation();
@@ -719,6 +741,10 @@ Page({
       selectLocationPop: false,
       //关闭搜素结果列表
       searchResultPop: false,
+      //删除搜索内容
+      searchContent: '',
+      //清空搜索结果
+      searchResultData: []
     })
 
     //请求经销商数据
@@ -798,4 +824,10 @@ Page({
       },
     })
   },
+  //打电话
+  dial(e) {
+    wx.makePhoneCall({
+      phoneNumber: e.target.dataset.phone
+    })
+  }
 })

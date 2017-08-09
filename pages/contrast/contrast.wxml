@@ -15,7 +15,7 @@
         <view class="name-wrapper">
           <text class="name-text">{{configData.products[0].F_ProductName}}</text>
         </view>
-        <view class="foot-price" data-productId="{{configData.products[0].F_ProductId}}" bindtap="goFooterPrice">
+        <view class="foot-price" data-productId="{{configData.products[0].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">
           <text>询底价</text>
         </view>
       </view> 
@@ -29,7 +29,7 @@
         <view class="name-wrapper">
           <text class="name-text">{{configData.products[1].F_ProductName}}</text>
         </view>
-        <view class="foot-price" data-productId="{{configData.products[1].F_ProductId}}" bindtap="goFooterPrice">
+        <view class="foot-price" data-productId="{{configData.products[1].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">
           <text>询底价</text>
         </view>
       </view>
