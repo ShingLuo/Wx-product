@@ -40,7 +40,7 @@
           <text class="number">{{footerInfo.askTotal}}</text>
           <text class="number">人询价</text>
         </view>
-        <view wx:else>
+        <view wx:if="{{footerInfo.askTotal && footerInfo.askTotal < 100}}">
           <text class="number">已有100人+询底价</text>
         </view>
     </view>

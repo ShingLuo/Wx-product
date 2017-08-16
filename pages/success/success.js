@@ -33,7 +33,7 @@ Page({
     
     //请求经销商
     wx.request({
-      url:'https://product.360che.com/index.php?r=api/getcompeteproduct&productId=' + submitData.truckid,
+      url: 'https://product.360che.com/index.php?r=api/getcompeteproduct&productId=' + submitData.truckid + '&isW=1',
       data:{},
       success:(res) => {
         console.log(res)

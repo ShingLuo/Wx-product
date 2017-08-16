@@ -32,6 +32,16 @@ Page({
       title: '选择地区'
     })
 
+    //判断hotLocation如果length大于5的话 && 清空缓存 
+    wx.getStorage({
+      key: 'hotLocation',
+      success: res => {
+        if(res.data.length > 6){
+          wx.removeStorage({key: 'hotLocation'})
+        }
+      },
+    })
+
     wx.getStorage({
       key: 'locationInfo',
       success: (res) => {

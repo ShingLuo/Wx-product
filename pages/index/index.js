@@ -7,7 +7,7 @@ Page({
     motto: 'Hello World',
     userInfo: {},
     //车型id
-    productId:'16525',
+    productId: '16525',//
     //定义发送请求的url公共域名
     ajaxUrl : 'https://dealer-api.360che.com/inquiryprice/',
     truckInfo:{},
@@ -29,6 +29,15 @@ Page({
     },
     errPop:false,
     errText:'',
+    //换车型弹层是否显示
+    switchModelPop: false,
+    //换车型弹层数据
+    switchModelData: {},
+    //车型信息
+    productInfo: {},
+    // 姓名和电话输入框状态和内容
+    nameFocus: true,
+    phoneFocus: false,
   },
   //事件处理函数
   bindViewTap: function() {
@@ -57,6 +66,11 @@ Page({
   // 页面初始化
   onLoad: function (options) {
 
+    //设置标题
+    wx.setNavigationBarTitle({
+      title: '询底价'
+    })
+
     if(options.productId){
       this.setData({
         productId:options.productId
@@ -65,14 +79,14 @@ Page({
     // wx.navigateTo({
     //   url: '../location/location'
     // })
-    var that = this
+    // var that = this
     //调用应用实例的方法获取全局数据
-    app.getUserInfo(function(userInfo){
-      //更新数据
-      that.setData({
-        userInfo:userInfo
-      })
-    })
+    // app.getUserInfo(function(userInfo){
+    //   //更新数据
+    //   that.setData({
+    //     userInfo:userInfo
+    //   })
+    // })
     
     //删除保留的选择地区
     // wx.getStorage({
@@ -94,6 +108,7 @@ Page({
           this.setData({
             truckInfo:res.data
           })
+          this.switchModel();
         }
       }
     })
@@ -105,7 +120,6 @@ Page({
       success:(res) => {
          
         if(res.errMsg == 'request:ok'){
-           console.log(res.data.data[this.data.productId],'res')
           this.setData({
              parameterData:res.data.data[this.data.productId]
           })
@@ -126,11 +140,21 @@ Page({
             if(((time - data.time)/1000/60/60) > 6){
               this.getLocation();
             }else{
-              this.setData({
-                locationInfo:data.data
+              wx.getStorage({
+                key: 'locationInfo',
+                complete: res => {
+                  if (res.data) {
+                    //设置选中地区
+                    this.setData({
+                      locationInfo: res.data
+                    })
+                    //请求经销商数据
+                    this.getDealer();
+                  }else{
+                    this.getLocation();
+                  }
+                },
               })
-              //请求经销商数据
-              this.getDealer();
             }
         },
         fail: () => {
@@ -145,6 +169,7 @@ Page({
   },
   //请求经销商数据
   getDealer(provinceId,cityId){
+    console.log(this.data.locationInfo)
     wx.request({
       url:this.data.ajaxUrl + 'Dealer/getDealerList.aspx?productid=' + this.data.productId + '&provincesn=' + this.data.locationInfo.provincesn + '&citysn=' + this.data.locationInfo.citysn,
       data:{},
@@ -301,6 +326,33 @@ Page({
       submitData:submitData
     })
   },
+  // 获取焦点
+  onFocus(e) {
+    let name = e.currentTarget.dataset.type;
+    if (name == 'name') {
+      this.setData({
+        phoneFocus: false,
+        nameFocus: true
+      })
+    } else {
+      this.setData({
+        phoneFocus: true,
+        nameFocus: false
+      })
+    }
+  },
+  onBlur(e) {
+    let name = e.currentTarget.dataset.type;
+    if (name == 'name') {
+      this.setData({
+        nameFocus: false
+      })
+    } else {
+      this.setData({
+        phoneFocus: false
+      })
+    }
+  },
   //提交最终数据
   submitData(){
     let submitData = this.data.submitData;
@@ -363,21 +415,25 @@ Page({
           dealerData.push(this.data.dealerSelected[i])
         }
     }
-    if(dealerData.length > 3){
-      this.setData({
-        errText:'最多选择3家经销商',
-        errPop:true
-      })
-      return 
-    }else{
-      if(dealerData.length == 0){
-          this.setData({
-          errText:'请选择经销商',
+    //判断是否有经销商
+    if (this.data.dealerData.length){
+      //如果有经销商 && 最多选择三个 || 最少选择一个
+      if(dealerData.length > 3){
+        this.setData({
+          errText:'最多选择3家经销商',
           errPop:true
         })
         return 
+      }else{
+        if(dealerData.length == 0){
+            this.setData({
+            errText:'请选择经销商',
+            errPop:true
+          })
+          return 
+        }
+        submitData.shopstr = dealerData.join(',');
       }
-      submitData.shopstr = dealerData.join(',');
     }
     
     //判断个人信息保护声明
@@ -483,4 +539,104 @@ Page({
   cancelLoading:function(){
      wx.hideToast();
   },
+  // 点击换车型弹层
+  switchModelShow(){
+    this.setData({
+      switchModelPop: true
+    })
+  },
+  // 关闭弹层
+  back() {
+    this.setData({
+      switchModelPop: false
+    })
+  },
+  //请求车型信息
+  getTruckData() {
+    //请求车型数据
+    wx.request({
+      url: this.data.ajaxUrl + 'Dealer/getProductInfo.aspx?productid=' + this.data.productId,
+      data: {},
+      success: (res) => {
+        if (res.errMsg == 'request:ok') {
+          this.setData({
+            truckInfo: res.data
+          })
+        }
+      }
+    })
+  },
+  //请求换车型信息
+  switchModel() {
+    // 请求换车型弹层
+    wx.request({
+      url: app.ajaxurl + 'index.php?r=weex/product/get-product-change-list&subId=' + this.data.truckInfo.SubCategoryId + '&seriesId=' + this.data.truckInfo.SeriesId + '&proId=' + this.data.productId,
+      success: ele => {
+        if (ele.errMsg == 'request:ok') {
+          let switchModelData = {};
+          //换车型列表数据
+          switchModelData.priceList = ele.data.priceList;
+          //换车型标题数据
+          switchModelData.attrList = ele.data.attrList
+
+          //当前显示的是哪一个
+          if (ele.data.paramName) {
+            switchModelData.paramName = ele.data.paramName;
+          } else {
+            //判断哪一个的length最长显示哪一个
+            let paramName = '';
+            let has = true;
+            ele.data.priceList.forEach((res, index) => {
+              if (has) {
+                has = false;
+                paramName = ele.data.attrList[index];
+                ele.data.priceList.forEach((r, i) => {
+                  if (ele.data.priceList[index].list.length < ele.data.priceList[i].list.length) {
+                    paramName = ele.data.attrList[i];
+                  }
+                })
+
+              }
+            })
+            switchModelData.paramName = paramName
+          }
+
+          //更新数据
+          this.setData({
+            switchModelData: switchModelData
+          })
+        }
+      }
+    })
+  },
+  //选择换车型条件选项
+  selectModelOption(e) {
+    let name = e.currentTarget.dataset.name;
+    let switchModelData = this.data.switchModelData;
+    switchModelData.paramName = name;
+    this.setData({
+      switchModelData: switchModelData,
+    })
+  },
+  // 切换车型数据
+  goSwitchModel(e) {
+    //开启loading
+    app.globalData.showLoading('正在加载');
+
+    let productId = e.currentTarget.dataset.item.F_ProductId;
+
+    this.setData({
+      productId: productId,
+      //关闭弹层
+      switchModelPop: false
+    })
+
+    //请求车型信息
+    this.getTruckData()
+
+    //请求车型配置信息
+    this.getConfigData();
+    //请求经销商数据
+    this.getDealer();
+  }
 })

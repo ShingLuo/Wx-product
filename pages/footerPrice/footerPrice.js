@@ -5,6 +5,8 @@ var app = getApp()
 Page({
   data: {
     motto: 'Hello World',
+    // 车系信息
+    seriesInfo:{},
     userInfo: {},
     //车型id
     productId:'16525',
@@ -56,6 +58,13 @@ Page({
     //搜索结果列表数据
     searchResultData: [],
     searchResultPop: false,
+    //换车型弹层是否显示
+    switchModelPop: false,
+    //换车型弹层数据
+    switchModelData: {},
+    // 姓名和电话输入框状态和内容
+    nameFocus: true,
+    phoneFocus: false,
   },
   //事件处理函数
   bindViewTap: function() {
@@ -88,7 +97,17 @@ Page({
     wx.setNavigationBarTitle({
       title: '询底价'
     })
-    
+    // 获取车系信息
+    wx.getStorage({
+      key: 'seriesInfo',
+      success: res => {
+        this.setData({
+          seriesInfo: res.data,
+        })
+        this.switchModel();
+      },
+    })
+
     //获取缓存的经销商信息
     wx.getStorage({
       key: 'dealerId',
@@ -426,6 +445,33 @@ Page({
     this.setData({
       submitData:submitData
     })
+  },
+  // 获取焦点
+  onFocus(e){
+    let name = e.currentTarget.dataset.type;
+    if(name == 'name'){
+      this.setData({
+        phoneFocus: false,
+        nameFocus:true
+      })
+    }else{
+      this.setData({
+        phoneFocus: true,
+        nameFocus: false
+      })
+    }
+  },
+  onBlur(e){
+    let name = e.currentTarget.dataset.type;
+    if (name == 'name') {
+      this.setData({
+        nameFocus: false
+      })
+    } else {
+      this.setData({
+        phoneFocus: false
+      })
+    }
   },
   importPhone(e){
     let submitData = this.data.submitData;
@@ -829,5 +875,90 @@ Page({
     wx.makePhoneCall({
       phoneNumber: e.target.dataset.phone
     })
+  },
+  // 点击换车型弹层
+  switchModelShow() {
+    this.setData({
+      switchModelPop: true
+    })
+  },
+  // 关闭弹层
+  back() {
+    this.setData({
+      switchModelPop: false
+    })
+  },
+  //请求换车型信息
+  switchModel() {
+    // 请求换车型弹层
+    wx.request({
+      url: app.ajaxurl + 'index.php?r=weex/product/get-product-change-list&subId=' + this.data.seriesInfo.F_SubCategoryId + '&seriesId=' + this.data.seriesInfo.F_SeriesId + '&proId=' + this.data.seriesInfo.proid,
+      success: ele => {
+        if (ele.errMsg == 'request:ok') {
+          let switchModelData = {};
+          //换车型列表数据
+          switchModelData.priceList = ele.data.priceList;
+          //换车型标题数据
+          switchModelData.attrList = ele.data.attrList
+
+          //当前显示的是哪一个
+          if (ele.data.paramName) {
+            switchModelData.paramName = ele.data.paramName;
+          } else {
+            //判断哪一个的length最长显示哪一个
+            let paramName = '';
+            let has = true;
+            ele.data.priceList.forEach((res, index) => {
+              if (has) {
+                has = false;
+                paramName = ele.data.attrList[index];
+                ele.data.priceList.forEach((r, i) => {
+                  if (ele.data.priceList[index].list.length < ele.data.priceList[i].list.length) {
+                    paramName = ele.data.attrList[i];
+                  }
+                })
+
+              }
+            })
+            switchModelData.paramName = paramName
+          }
+
+          //更新数据
+          this.setData({
+            switchModelData: switchModelData
+          })
+        }
+      }
+    })
+  },
+  //选择换车型条件选项
+  selectModelOption(e) {
+    let name = e.currentTarget.dataset.name;
+    let switchModelData = this.data.switchModelData;
+    switchModelData.paramName = name;
+    this.setData({
+      switchModelData: switchModelData,
+    })
+  },
+  // 切换车型数据
+  goSwitchModel(e){
+    //开启loading
+    app.globalData.showLoading('正在加载');
+
+    let productId = e.currentTarget.dataset.item.F_ProductId;
+
+    this.setData({
+      productId: productId,
+      //关闭弹层
+      switchModelPop: false
+    })
+
+    //请求车型信息
+    this.getTruckData()
+
+    //请求车型配置信息
+    this.getConfigData();
+    //请求经销商数据
+    this.getDealer();
   }
 })
