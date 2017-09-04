@@ -1,8 +1,8 @@
 {
   "pages":[
     "pages/brand/brand",
-    "pages/index/index",
     "pages/series/series",
+    "pages/index/index",
     "pages/footerPrice/footerPrice",
     "pages/model/model",
     "pages/success/success",

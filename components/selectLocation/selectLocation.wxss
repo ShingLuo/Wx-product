@@ -164,6 +164,9 @@
     justify-content: center;
     align-items: center;
 }
+.nav-list .visible{
+  color:#f60
+}
 /*城市列表*/
 .city-wrapper{
     position:fixed;

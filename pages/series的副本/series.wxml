@@ -21,7 +21,7 @@
     <!--图片-->
     <template is="picture" data="{{picture,truckImageData}}"/>
     <!--车型列表-->
-      <template is="modelType" data="{{modelList,modelListData,model,sellState,optionState,modelListNumber,compareState}}"/>  
+      <template is="modelType" data="{{modelList,model,sellState,optionState,modelListNumber,compareState}}"/>  
     <!--经销商推荐列表-->
     <template is="dealer" data="{{dealer,dealerList,locationInfo}}"/>
     <!--看过该车的人还关注-->

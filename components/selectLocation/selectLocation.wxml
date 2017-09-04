@@ -45,7 +45,7 @@
           <view>
               <view wx:for="{{indexNav}}" class="nav-list"  data-index="{{indexNav[index]}}" bindtap="indexNav">
                 <!-- bindtouchstart="indexNav"  bindtouchmove="indexNav"  bindtouchend="indexNav" -->
-                  <text  data-index="{{item}}">{{item}}</text>
+                  <text class="{{item == navInfo ? 'visible' : ''}}"  data-index="{{item}}">{{item}}</text>
               </view>
           </view>
       </view>

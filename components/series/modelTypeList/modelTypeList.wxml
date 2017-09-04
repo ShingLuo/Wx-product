@@ -2,25 +2,34 @@
   <view class="model-type">
     <view class="title-name">
       <text>车型报价</text>
-      <view class="sell-state-sum" wx:for="{{modelList}}" wx:if="{{sellState == index}}">
+      <view class="sell-state-sum">
         <text style="font-size:24rpx;color:#999;">共</text>
-        <text style="font-size:24rpx;color:#f60;"> {{item.total}} </text>
-        <text style="font-size:24rpx;color:#999;">款{{item.status}}车型</text>
+        <text style="font-size:24rpx;color:#f60;"> {{modelList.total}} </text>
+        <text style="font-size:24rpx;color:#999;">款{{modelList.status}}车型</text>
       </view>
       <!--在售 || 停售 || 未发布-->
       <view class="sell-state">
-        <text wx:for="{{modelList}}" data-index="{{index}}" class="{{sellState == index ? 'sell-state-visible' : ''}}" bindtap="selectSellState">{{item.status}}</text>
+        <text wx:for="{{modelList.statusAll}}" data-index="{{modelList.statusKey[index]}}" class="{{modelList.statusKey[index] == modelListData.status ? 'sell-state-visible' : ''}}" bindtap="selectSellState">{{item}}</text>
       </view>
     </view>
-    <!--数据列表-->
-    <view class="content" wx:for="{{modelList}}" wx:for-item="model" data-index="{{index}}" wx:if="{{sellState == index}}">
-      <view class="options">
-        <view class="option" wx:for="{{model.list}}" wx:for-index="number" bindtap="selectOpation" data-index="{{index}}" data-name="{{model.attrKey[number]}}">
-          <text class="{{optionState[index] == model.attrKey[number] ? 'option-visible' : ''}}">{{model.attrKey[number] != '10' ? model.attrKey[number] : '底盘'}}</text>
+    <!--数据列表-->     
+    <view class="options">
+      <view wx:if="{{modelList.attr}}" class="option" wx:for="{{modelList.attr}}" bindtap="selectOpation" data-name="{{item}}">
+        <text class="{{item == modelListData.attr ? 'option-visible' : ''}}">{{item}}</text>
+      </view>
+    </view>
+    <view class="content">
+
+      <!-- 筛选项 -->
+      <view wx:if="{{modelList.isTruck == 1}}" class="screen">
+        <text class="screen-text">车型筛选</text>
+        <view class="screen-wrapper">
+          <text class="hot {{modelListData.order  == '' ? 'visible' : ''}}" data-order="" bindtap="selectSort">热度</text>
+          <text class="horsepower {{modelListData.order  == 3 ? 'bottom visible' : modelListData.order == 4 ? 'top visible' : ''}}" data-order="4" bindtap="selectSort">马力</text>
         </view>
       </view>
-      <view class="wrapper" data-number="{{index}}"wx:for="{{model.list}}" wx:for-item="ele" wx:for-index="number" wx:if="{{optionState[index] == model.attrKey[number]}}">
-        <view class="model-list" wx:for="{{ele}}" bindtap="goProduct" data-item="{{item}}" wx:if="{{index < modelListNumber}}">
+      <view class="wrapper" >
+        <view class="model-list" wx:for="{{modelList.list}}" bindtap="goProduct" data-item="{{item}}" wx:if="{{index < modelListNumber}}">
           <view class="truck-info">
             <view class="title">
               <text wx:if="{{item.hotLocation}}" class="truck-name-tag">{{item.hotLocation}}</text>
@@ -37,12 +46,12 @@
               <text class="hot-price">{{item.hotPrice}}</text>
               <view class="comparison">
                 <text class="{{compareState[item.F_ProductId] ? 'compare compare-join' : 'compare'}}" catchtap="compare" data-productId="{{item.F_ProductId}}">{{compareState[item.F_ProductId] ? compareState[item.F_ProductId] : '对比'}}</text>
-                <text class="foot-price" data-productId="{{item.F_ProductId}}" catchtap="goFooterPrice" id="footerPrice">询底价</text>
+                <text wx:if="{{modelListData.status != 4}}" class="foot-price" data-productId="{{item.F_ProductId}}" catchtap="goFooterPrice" id="footerPrice">询底价</text>
               </view>
             </view>
           </view>
         </view>
-        <view class="load-more" wx:if="{{ele.length > modelListNumber}}" bindtap="loadMore">
+        <view class="load-more" wx:if="{{modelList.list.length > modelListNumber}}" bindtap="loadMore">
             <text>加载更多</text>
         </view>
       </view>

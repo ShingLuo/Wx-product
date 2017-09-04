@@ -10,12 +10,9 @@
 
 /*iconfont*/
 @font-face {
-  font-family: 'detail';  /* project id 69439 */
-  src: url('//at.alicdn.com/t/font_c57b8bm6no7xpqfr.eot');
-  src: url('//at.alicdn.com/t/font_c57b8bm6no7xpqfr.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_c57b8bm6no7xpqfr.woff') format('woff'),
-  url('//at.alicdn.com/t/font_c57b8bm6no7xpqfr.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_c57b8bm6no7xpqfr.svg#iconfont') format('svg');
+  font-family: 'detail';
+  src:url('//at.alicdn.com/t/font_69439_0abq9bddbl5trzfr.woff') format('woff'),
+  url('//at.alicdn.com/t/font_69439_0abq9bddbl5trzfr.ttf') format('truetype');
 }
 /*空列表*/
 .empty-list{

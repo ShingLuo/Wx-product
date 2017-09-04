@@ -23,20 +23,11 @@ Page({
       cityId: '',
     },
     // 车型列表数据
-    modelList:{},
-    //请求发送的对象
-    modelListData:{
-      //子类ID
-      subId:'',
-      //车系ID
-      seriesId:'',
-      //当前状态 在售 || 未发布 || 停售
-      status:'',
-      //当前状态 4*2 || 6*2 || 6*4
-      attr:'',
-      //排序状态
-      order:'',
-    },
+    modelList:[],
+    //当前状态 在售 || 未发布 || 停售
+    sellState: '',
+    //当前状态 4*2 || 6*2 || 6*4
+    optionState:['','',''],
     //车型列表显示数量
     modelListNumber:10,
     //加入对比状态
@@ -116,6 +107,9 @@ Page({
       //请求车型列表数据
       this.getProductLidt();
 
+      //请求经销商数据
+      // this.getDealer();
+
       //定位当前地区
       this.getLocation();
     }, () => {
@@ -127,19 +121,12 @@ Page({
           console.log(ele, 'ele')
           if (ele.errMsg == 'getStorage:ok') {
             let seriesInfo = ele.data
-            
-            //车型列表发送的对象
-            let modelListData = this.data.modelListData;
-            modelListData.subId = seriesInfo.F_SubCategoryId;
-            modelListData.seriesId = seriesInfo.F_SeriesId;
 
             this.setData({
               //车系信息
               seriesInfo: seriesInfo,
               //车系id
               seriesId: seriesInfo.F_SubCategoryId,
-              //车型列表发送对象
-              modelListData: modelListData,
             })
 
             //请求标题信息 && 图片信息
@@ -151,6 +138,8 @@ Page({
             //请求车型列表数据
             this.getProductLidt();
 
+            //请求经销商数据
+            // this.getDealer();
           }
 
           //定位当前地区
@@ -178,10 +167,14 @@ Page({
         //请求经销商数据
         this.getDealer();
 
+        console.log(this.data.locationInfo, 'this.data.locationInfo')
         //请求地区热门车型
-        // this.getHotModel(true)
+        this.getHotModel(true)
       }
     })
+
+    //请求热门地区 && 价格
+    // this.getHotModel();
 
     // 判断有没有缓存省份数据 ？ 直接读取缓存 ： 发送请求，请求省份数据
     wx.getStorage({
@@ -307,65 +300,42 @@ Page({
 
   //请求车型列表信息
   getProductLidt(){
-    let params = this.data.modelListData
-    if (params.attr == '底盘') params.attr = '10'
     wx.request({
-      // url: app.ajaxurl + 'index.php?r=weex/series/price&subCateId=' + this.data.seriesInfo.F_SubCategoryId + '&seriesId=' + this.data.seriesInfo.F_SeriesId ,
-      url: 'https://product.m.360che.com//index.php?r=weex/series/price-list',
-      data: params,
+      url: app.ajaxurl + 'index.php?r=weex/series/price&subCateId=' + this.data.seriesInfo.F_SubCategoryId + '&seriesId=' + this.data.seriesInfo.F_SeriesId ,
       success: (res) => {
         if (res.errMsg == 'request:ok') {
-          let modelListData = this.data.modelListData;
-          //如果是全部数据
-          if(res.data.list){
-            modelListData.status = res.data.defaultStatus;
-            modelListData.attr = res.data.defaultAttr,
-              modelListData.attr
-
-            console.log(modelListData,'modelListDatamodelListData')
-            this.setData({
-              modelList: res.data,
-              modelListData: modelListData
-            })
-          }else{
-            //如果是筛选数据，只渲染筛选列表
-            let modelList = this.data.modelList;
-            modelList.list = res.data
-            this.setData({
-              modelList: modelList
-            })
-          }
-          //请求地区热门车型
-          this.getHotModel(true)
+          this.setData({
+            modelList: res.data,
+          })
           // 判断当前状态  在售 && 停售 && 未上市
-          // let ishave = true;
-          // this.data.modelList.forEach((ele, index) => {
-          //   if (this.data.modelList[index].list.length > 0 && ishave) {
-          //     this.setData({
-          //       sellState: index
-          //     })
-          //     ishave = false;
-          //   }
-          // });
+          let ishave = true;
+          this.data.modelList.forEach((ele, index) => {
+            if (this.data.modelList[index].list.length > 0 && ishave) {
+              this.setData({
+                sellState: index
+              })
+              ishave = false;
+            }
+          });
 
           //判断优先显示哪一个分类 4*2 && 6*2 && 6*4
-          // let islongest = true;
-          // let longest = '';
+          let islongest = true;
+          let longest = '';
           //循环最外层标签
-          // this.data.modelList.forEach((ele, index) => {
-          //   islongest = true;
+          this.data.modelList.forEach((ele, index) => {
+            islongest = true;
             //循环状态下的list
-            // this.data.modelList[index].list.forEach((key, number) => {
+            this.data.modelList[index].list.forEach((key, number) => {
               //定义状态，只循环一次，用第一条数据逐个对比之后的数据
-              // if (islongest) {
-              //   islongest = false;
+              if (islongest) {
+                islongest = false;
 
                 //当车系id为空的时候 获取车系id并赋值
-                // if (!this.data.seriesId) {
-                //   this.setData({
-                //     seriesId: key[0].F_SubCategoryId
-                //   })
-                // }
+                if (!this.data.seriesId) {
+                  this.setData({
+                    seriesId: key[0].F_SubCategoryId
+                  })
+                }
 
                 //获取存储对比数据 && 给元素赋值
                 // if (this.data.compareTask[this.data.seriesId]) {
@@ -385,52 +355,45 @@ Page({
                 // }
 
                 //默认取第一条数据的length
-                // longest = this.data.modelList[index].list[number];
-                // //默认取第一条数据的key
-                // // this.$set(this.optionState, index, this.modelList[index].attrKey[number])
-                // let arr = this.data.optionState;
-                // arr[index] = this.data.modelList[index].attrKey[number];
-                // this.setData({
-                //   optionState: arr
-                // })
+                longest = this.data.modelList[index].list[number];
+                //默认取第一条数据的key
+                // this.$set(this.optionState, index, this.modelList[index].attrKey[number])
+                let arr = this.data.optionState;
+                arr[index] = this.data.modelList[index].attrKey[number];
+                this.setData({
+                  optionState: arr
+                })
 
                 //二次循环，去一一对比
-                // this.data.modelList[index].list.forEach((k, kNum) => {
-                //   //如果小于后面的length
-                //   if (this.data.modelList[index].attrKey[kNum] != 10) {
-                //     if (longest.length < this.data.modelList[index].list[kNum].length) {
-                //       //取后面的length比较长的数据
-                //       longest = this.data.modelList[index].list[kNum];
-                //       // this.$set(this.optionState, index, this.modelList[index].attrKey[kNum])
-                //       let arr = this.data.optionState;
-                //       arr[index] = this.data.modelList[index].attrKey[kNum];
-                //       this.setData({
-                //         optionState: arr
-                //       })
-                //     }
-                //   }
-                // })
-              // }
-            // })
-          // });
+                this.data.modelList[index].list.forEach((k, kNum) => {
+                  //如果小于后面的length
+                  if (this.data.modelList[index].attrKey[kNum] != 10) {
+                    if (longest.length < this.data.modelList[index].list[kNum].length) {
+                      //取后面的length比较长的数据
+                      longest = this.data.modelList[index].list[kNum];
+                      // this.$set(this.optionState, index, this.modelList[index].attrKey[kNum])
+                      let arr = this.data.optionState;
+                      arr[index] = this.data.modelList[index].attrKey[kNum];
+                      this.setData({
+                        optionState: arr
+                      })
+                    }
+                  }
+                })
+              }
+            })
+          });
         }
       }
     })
   },
 
+
   //点击在售 停售 tab切换
   selectSellState(e){
-    let modelListData = this.data.modelListData;
-    modelListData.status = e.currentTarget.dataset.index;
-    modelListData.attr = '';
-    modelListData.order = '';
-
     this.setData({
-      modelListData: modelListData
+      sellState:e.target.dataset.index
     })
-
-    //请求车型列表
-    this.getProductLidt();
   },
   //点击加载更多
   loadMore(){
@@ -440,40 +403,18 @@ Page({
   },
   // 切换opation标签 4*2 && 6*2 && 6*4
   selectOpation(e){
-    let modelListData = this.data.modelListData;
-    modelListData.attr = e.currentTarget.dataset.name;
+    let index = e.currentTarget.dataset.index;
+    let name = e.currentTarget.dataset.name;
+    
+    let optionState = this.data.optionState;
+
+    optionState[index] = name;
 
     this.setData({
-      modelListData: modelListData,
+      optionState:optionState,
       //重置加载更多
       modelListNumber:10
     })
-
-    //请求车型列表
-    this.getProductLidt();
-  },
-  //切换筛选列表条件
-  selectSort(e){
-
-    let modelListData = this.data.modelListData;
-    let order = e.currentTarget.dataset.order;
-    if(order != ''){
-      if (modelListData.order == 3){
-        modelListData.order = 4;
-      }else{
-        modelListData.order = 3;
-      }
-    }else{
-      modelListData.order = '';
-    }
-
-    this.setData({
-      modelListData: modelListData
-    })
-    
-    //请求车型列表
-    this.getProductLidt();
-
   },
   //进入车型页
   goProduct(e){
@@ -500,17 +441,23 @@ Page({
 
           if(clear){
               //循环最外层标签
-            let modelList = this.data.modelList;
-            if (modelList.list){
-                modelList.list.forEach((ele, index) => {
-                  //重置热门地区和报价
-                  ele.hotLocation = ''
-                  ele.hotPrice = ''
-                })
-                this.setData({
-                  modelList: modelList
-                })
-              }
+              let modelList = this.data.modelList;
+                modelList.forEach((ele, index) => {
+                  //如果数据的内容不为空
+                  if (modelList[index].list.length > 0) {
+                    modelList[index].list.forEach((key, keyNum) => {
+                      //循环总列表
+                      modelList[index].list[keyNum].forEach((data, number) => {
+                          //重置热门地区和报价
+                          modelList[index].list[keyNum][number].hotLocation = ''
+                          modelList[index].list[keyNum][number].hotPrice = ''
+                        })
+                    })
+                  }
+              })
+              this.setData({
+                modelList: modelList
+              })
             }
 
               //循环热门车型报价
@@ -518,39 +465,36 @@ Page({
                 this.data.hotModelList.forEach((hot, i) => {
                     //循环最外层标签
                     let modelList = this.data.modelList;
-                    // modelList.forEach((ele, index) => {
+                    modelList.forEach((ele, index) => {
                       //如果数据的内容不为空
-                    if (modelList.list && modelList.list.length > 0) {
-                        // modelList[index].list.forEach((key, keyNum) => {
+                      if (modelList[index].list.length > 0) {
+                        modelList[index].list.forEach((key, keyNum) => {
                                 //循环总列表
-                                modelList.list.forEach((data, number) => {
+                                modelList[index].list[keyNum].forEach((data, number) => {
 
                                     //如果id相等
                                     if (data.F_ProductId == hot.productId) {
+                                        console.log('xiangdeng')
                                         let unit = '起';
                                         if (hot.hot == 1) {
                                             unit = '';
                                             //是热门
-                                            modelList.list[number].hotLocation = '[' + this.data.locationInfo.cityname.split('市')[0] + '热门]'
+                                            modelList[index].list[keyNum][number].hotLocation = '[' + this.data.locationInfo.cityname.split('市')[0] + '热门]'
                                         }
 
                                         //赋值价格
-                                        modelList.list[number].hotPrice =  hot.price + unit;
+                                        modelList[index].list[keyNum][number].hotPrice =  hot.price + unit;
 
-                                        //如果是热门，把地区热门提到第一个位置
+                                        // 保存去除掉的一个
+                                        let hotprice = this.data.modelList[index].list[keyNum].splice(number, '1')[0];
 
-                                        if (this.data.modelListData.order == ''){
-                                          // 保存去除掉的一个
-                                          let hotprice = this.data.modelList.list.splice(number, '1')[0];
-
-                                          //重新把带价格的推到最上层
-                                          modelList.list.unshift(hotprice)
-                                        }
+                                        //重新把带价格的推到最上层
+                                        modelList[index].list[keyNum].unshift(hotprice)
                                     }
                                 })
-                            // })
+                            })
                         }
-                    // })
+                    })
 
                     //更新最新状态
                     this.setData({
@@ -733,6 +677,8 @@ Page({
     //重新请求经销商数据
     this.getDealer();
 
+    //请求热门地区 && 价格
+    // this.getHotModel(true);
 
     //存储定位地区 && 选择地区
     wx.setStorage({
@@ -865,7 +811,6 @@ Page({
           if (compareTask[this.data.seriesId]) {
             if (this.data.compareState[productId]) {  //取消
               //循环已保存的数组 && 删除掉
-              console.log(compareTask[this.data.seriesId])
               compareTask[this.data.seriesId].forEach((ele, index) => {
                 if (ele == productId) {
                   //清除当前车型id的存储
@@ -975,22 +920,15 @@ Page({
   // 点击进入其他车系
   goOtherSeries(e){
     let item = e.currentTarget.dataset.item;
-
-    let modelListData = this.data.modelListData;
-    modelListData.attr = '';
-    modelListData.order = '';
-    modelListData.subId = item.info.F_SubCategoryId;
-    modelListData.seriesId = item.info.F_SeriesId;
+    console.log(item)
 
     this.setData({
       //重新赋值车系信息
       seriesInfo:item.info,
       //回到页面顶部
-      goTop:'goTop',
-      modelListData: modelListData
+      goTop:'goTop'
     })
 
-    console.log(this.data.seriesInfo,'seriesInfo')
     //请求标题信息 && 图片信息
     this.getSeriesInfo();
 
@@ -1009,6 +947,8 @@ Page({
       data: item.info,
     })
 
+    //请求地区热门车型
+    this.getHotModel(true)
   },
   //点击对比按钮进入对比页面
   goCompare() {
@@ -1205,6 +1145,9 @@ Page({
 
     //请求经销商数据
     this.getDealer();
+
+    //返回询底价页面
+    // wx.navigateBack()
 
     //请求地区热门车型
     this.getHotModel(true)
