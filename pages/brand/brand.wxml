@@ -68,6 +68,7 @@
     </view>
   </scroll-view>
 </view>
+
 <!--侧边弹层-->
 <view class="mask" bindtap="sidebarListHide" wx:if="{{shadeShow}}" bindtouchmove="nihao">
   <scroll-view class="mask-wrapper"  scroll-y  scroll-with-animation="true">
@@ -117,6 +118,7 @@
     </view>
   </view>
 </view>
+
 <!--索引导航-->
 <view class="scale" hidden="{{indicateShow}}">
   <text>{{navInfo}}</text>
@@ -124,16 +126,20 @@
 <view class="nav">
   <text wx:for="{{indexNav}}" bindtap="indexNav" data-index="{{indexNav[index]}}" class="{{indexNav[index] === navInfo ? 'selected' : ''}}">{{indexNav[index]}}</text>
 </view>
+
 <!--返回顶部-->
-<view style="{{goTop?'right:0':'right:-70px'}}" class="back-top" bindtap="backTop">回顶部</view>
-  <!--错误提示-->
-  <view wx:if="{{errPop}}" class="err-pop">
-      <view class="err-content">
-          <view class="err-text">
-            <text>{{errText}}</text>
-          </view>
-          <view class="err-button" bindtap="closeErrPop">
-            <text>确定</text>
-          </view> 
-      </view>
-  </view>
+<view style="{{goTop?'right:0':'right:-70px'}}" class="back-top" bindtap="backTop">
+  <text>回顶部</text>
+</view>
+
+<!--错误提示-->
+<view wx:if="{{errPop}}" class="err-pop">
+    <view class="err-content">
+        <view class="err-text">
+          <text>{{errText}}</text>
+        </view>
+        <view class="err-button" bindtap="closeErrPop">
+          <text>确定</text>
+        </view> 
+    </view>
+</view>

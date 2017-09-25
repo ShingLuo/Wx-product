@@ -1,0 +1,10 @@
+<!--pages/searchResult/searchResult.wxml-->
+<view class="continer">
+  <scroll-view>
+    <view class="type-module">
+      <view class="list-info" wx:for="{{resultData.paramList}}" wx:key="paramList">
+        <text>{{item.name}}</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

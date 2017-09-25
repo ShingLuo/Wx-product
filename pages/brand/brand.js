@@ -31,7 +31,7 @@ Page({
     // 回顶部显示隐藏
     goTop:false,
     // 是否禁止页面滑动
-    noScroll:'none',
+    // noScroll:'none',
     // 刚开始隐藏展开更多车系按钮
     moreShow: false,
     animation:'',
@@ -201,7 +201,7 @@ Page({
             sidebarListPop:true,
             shadeShow: true,
             sidebarData: res.data,
-            noScroll: 'none'        
+            // noScroll: 'none'        
           })
         }
       }
@@ -233,7 +233,7 @@ Page({
     this.setData({
       sidebarListPop:false,
       shadeShow: false,
-      noScroll: 'vertical' 
+      // noScroll: 'vertical' 
     })
   },
   // 点击侧边栏内容
@@ -262,6 +262,19 @@ Page({
     this.setData({
       errPop:false,
       errText:'',
+    })
+  },
+  //进入条件选车
+  goScreen(){
+    console.log(11)
+    wx.switchTab({
+      url:'../../pages/series/series',
+      success:() => {
+        console.log(22)
+      },
+      complete:() => {
+        console.log(33)
+      }
     })
   },
   //转发

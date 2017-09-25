@@ -1,5 +1,7 @@
 {
   "pages":[
+    "pages/searchResult/searchResult",
+    "pages/searchCar/searchCar",
     "pages/brand/brand",
     "pages/series/series",
     "pages/index/index",
@@ -23,5 +25,29 @@
     "navigationBarBackgroundColor": "#000",
     "navigationBarTitleText": "",
     "navigationBarTextStyle":"#fff"
+  },
+  "tabBar": {
+    "display":"flex",
+    "flexDirection": "row",
+    "fontSize": "10rpx",
+    "selectedColor": "#1571E5",
+    "color": "#8A9199",
+    "borderStyle":"white",
+    "backgroundColor": "#F2F3F5",
+    "boxShadow": "0 -1px0 0 #E9E9E9",
+    "list": [
+      {
+        "pagePath": "pages/brand/brand",
+        "text": "品牌选车",
+        "iconPath": "/pages/Image/brand.png",
+        "selectedIconPath": "/pages/Image/selectedBrand.png"
+      },
+      {
+        "pagePath": "pages/searchCar/searchCar",
+        "text": "条件选车",
+        "iconPath": "/pages/Image/condition.png",
+        "selectedIconPath": "/pages/Image/selectedCondition.png"
+      }
+    ]
   }
 }

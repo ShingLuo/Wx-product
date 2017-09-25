@@ -1,0 +1,54 @@
+<view class="container">
+  <scroll-view class="series-wrapper" scroll-y="true" scroll-into-view="{{goTop}}" scroll-with-animation="true">
+    <view class="title">
+      <text>按用途类别选车</text>
+    </view> 
+    <view class="type-module">
+      <view class="list-info" wx:for="{{searchData.subCateList}}" wx:key="subCateList">
+        <text wx:if="{{item.isCate}}" class="more" bindtap='sidebarShow' data-id="{{item.id}}">{{item.name}}</text>
+        <text wx:else data-id="{{item.id}}" data-name="subCateId" bindtap="goResult">{{item.name}}</text>
+      </view>
+    </view>   
+    <view class="title">
+      <text>按热门品牌选车</text>
+    </view> 
+    <view class="type-module">
+      <view class="list-info" wx:for="{{searchData.hotBrands}}" wx:key="subCateList">
+        <text data-id="{{item.id}}" data-name="brandId" bindtap="goResult">{{item.name}}</text>
+      </view>
+    </view>  
+    <view class="title">
+      <text>按价格选车</text>
+    </view> 
+    <view class="type-module">
+      <view class="list-info" wx:for="{{searchData.priceList}}" wx:key="subCateList">
+        <text data-id="{{item.id}}" data-name="paramId" bindtap="goResult">{{item.name}}</text>
+      </view>
+    </view>  
+  </scroll-view>
+</view>
+
+<!-- 侧边栏 -->
+<view class="mask" bindtap="sidebarListHide" wx:if="{{shadeShow}}" bindtouchmove="nihao">
+  <scroll-view class="mask-wrapper"  scroll-y  scroll-with-animation="true">
+    <view class="mask-content">
+    </view>
+  </scroll-view>
+</view>
+<view class="sidebar" style="{{sidebarListPop?'right:0;':'right:-100%'}}" scroll-y="true">
+  <view class="sidebar-container">
+    <view class="sidebar-title">
+      <text class="title-icon" bindtap="sidebarListHide">回</text>
+      <text>{{sidebarData.cateName}}</text>
+    </view>
+    <view class="sidebar-model">
+      <view class="model-list" data-id="{{item.id}}" data-name="subCateId" bindtap='goResult' wx:key="modeProduct" 
+        wx:for="{{sidebarData.subCateList}}">
+        <text>{{item.name}}</text>
+      </view>
+    </view>
+    <view class="loading" wx:if="{{!sidebarData.subCateList.length}}">
+      <text class="loading-ring">等</text> 正在加载更多...
+    </view>
+  </view>
+</view>

@@ -1,0 +1,31 @@
+/* pages/searchResult/searchResult.wxss */
+/* 分类选项 */
+.type-module{
+  background: #fff;
+  padding: 10rpx;
+  overflow: hidden;
+}
+.type-module .list-info{
+  float: left;
+  width: 25%;
+  height: 64rpx;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 10rpx 0;
+  padding: 0 10rpx;
+}
+.type-module .list-info text{
+  display: block;
+  height: 60rpx;
+  line-height: 60rpx;
+  background: #fff;
+  padding: 0 6rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #333;
+  border: 1px solid #eee;
+  border-radius: 8rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
