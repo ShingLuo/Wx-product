@@ -501,7 +501,7 @@ Page({
           if(clear){
               //循环最外层标签
             let modelList = this.data.modelList;
-            if (modelList.list){
+            if (modelList.list.length){
                 modelList.list.forEach((ele, index) => {
                   //重置热门地区和报价
                   ele.hotLocation = ''
@@ -780,7 +780,6 @@ Page({
   },
   //进入配置 || 图片页面
   goUrl(e){
-    console.log('111111')
     wx.navigateTo({
       url: e.currentTarget.dataset.url,
     })
@@ -1221,7 +1220,7 @@ Page({
       icon: 'loading'
     });
   },
-  cancelLoading: function () {
+  hideLoading: function () {
     wx.hideToast();
   },
   //存储常用地区

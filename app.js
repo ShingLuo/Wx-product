@@ -27,9 +27,13 @@ App({
     },
     //进入页面判断是否是转发过来
     updateDataForShare(options, _this, success, fail) {
-        console.log(options.share);
+      console.log(_this.route,'_this.route')
+      console.log(options, 'options.share');
+      console.log(options.share,'options.share');
         if (options.share) {
           let share = JSON.parse(options.share)
+
+          console.log(share,'share')
             //给data信息赋值
             _this.setData(share)
             //存储信息缓存
@@ -61,9 +65,10 @@ App({
             params[item] = _this.data[item]
         })
         title = this.globalData.shareTitle
+        console.log(params,'params')
         path = `${_this.route}?share=${JSON.stringify(params)}`
-        console.log(path)
-        console.log(title)
+        console.log(path,'path')
+
         return {
             title: title,
             path: path,

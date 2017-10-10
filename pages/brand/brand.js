@@ -11,6 +11,8 @@ Page({
     indexNav:[],
     // 更多品牌列表
     otherBrandList:[],
+    //滚动容器动画
+    scrollAnimation:true,
     // sidebar
     sidebarList:{},
     otherBrandShow:false,
@@ -32,8 +34,6 @@ Page({
     goTop:false,
     // 是否禁止页面滑动
     // noScroll:'none',
-    // 刚开始隐藏展开更多车系按钮
-    moreShow: false,
     animation:'',
     //错误弹层是否显示和提示
     errPop:false,
@@ -44,23 +44,23 @@ Page({
   onLoad: function () {
 
     //清除缓存
-    wx.removeStorage({key: 'seriesInfo'})
-    wx.removeStorage({ key: 'myRegion' })
-    wx.removeStorage({ key: 'locationInfo' })
-    wx.removeStorage({ key: 'myDate' })
-    wx.removeStorage({ key: 'provinceData' })
-    wx.removeStorage({ key: 'hotLocation' })
-    wx.removeStorage({ key: 'my_region' })
-    wx.removeStorage({ key: 'PhotoTabName' })
-    wx.removeStorage({ key: 'imgInfoData' })
-    wx.removeStorage({ key: 'compareTask' })
+    // wx.removeStorage({key: 'seriesInfo'})
+    // wx.removeStorage({ key: 'myRegion' })
+    // wx.removeStorage({ key: 'locationInfo' })
+    // wx.removeStorage({ key: 'myDate' })
+    // wx.removeStorage({ key: 'provinceData' })
+    // wx.removeStorage({ key: 'hotLocation' })
+    // wx.removeStorage({ key: 'my_region' })
+    // wx.removeStorage({ key: 'PhotoTabName' })
+    // wx.removeStorage({ key: 'imgInfoData' })
+    // wx.removeStorage({ key: 'compareTask' })
 
-    wx.removeStorage({ key: 'compareData' })
-    wx.removeStorage({ key: 'selectProduct' })
-    wx.removeStorage({ key: 'compareNumber' })
+    // wx.removeStorage({ key: 'compareData' })
+    // wx.removeStorage({ key: 'selectProduct' })
+    // wx.removeStorage({ key: 'compareNumber' })
 
-    wx.removeStorage({ key: 'productData' })
-    wx.removeStorage({ key: 'brandData' })
+    // wx.removeStorage({ key: 'productData' })
+    // wx.removeStorage({ key: 'brandData' })
 
 
     wx.setNavigationBarTitle({
@@ -76,14 +76,7 @@ Page({
           brandList: res.brandList,
           indexNav: res.letter,
           otherBrandList: res.otherBrandList,
-        })
-
-        let time = setTimeout(() => {
-          this.setData({
-            moreShow: true
-          })
-          clearTimeout(time)
-        }, 2000)   
+        }) 
 
         //请求品牌数据
         this.getBrandData()    
@@ -109,13 +102,6 @@ Page({
             otherBrandList: res.data.otherBrandList,
           })
 
-          let time = setTimeout(() => {
-            this.setData({
-              moreShow: true
-            })
-            clearTimeout(time)
-          }, 2000)
-
           // wx.setStorage({
           //   key: 'brandData',
           //   data: res.data,
@@ -126,20 +112,14 @@ Page({
   },
 
   // 点击返回顶部
-  backTop:function(e){
+  backTop(e){
     this.setData({
       navInfo:'top'
     })
   },
 
   // 页面滑动索引导航固定
-  scrollNav:function(e){
-    let number = 200
-    // if (e.detail.scrollTop < 200){
-    //   this.setData({
-    //     navTop: number - e.detail.scrollTop
-    //   })
-    // }
+  scrollNav(e){
     if (e.detail.scrollTop >= 1500){
       this.setData({
         goTop:true
@@ -152,7 +132,7 @@ Page({
   },
 
   // 点击展开更多品牌
-  moreBrand:function(){
+  moreBrand(){
     let deg = 180;
     if (this.data.otherBrandShow){
       deg = 0;
@@ -174,11 +154,11 @@ Page({
   },
 
   // 点击索引导航
-  indexNav:function(e){
+  indexNav(e,info){
     let index = e.target.dataset.index;
     this.setData({
       activeIndex: index,
-      indicateShow:false,
+      indicateShow: false,
       navInfo: index,
     })
     let time = setTimeout(() => {
@@ -188,9 +168,39 @@ Page({
       clearTimeout(time)
     }, 500)
   },
+  //导航栏
+  indexNavmove(e) {
+    let num = e.target.dataset.number;
+    let top = e.target.offsetTop;
+    let index = this.data.indexNav[Math.floor((e.changedTouches[0].pageY - e.currentTarget.offsetTop) / (top / num))];
+    
+    if (index === this.data.activeIndex){
+      return 
+    }
 
+    this.setData({
+      activeIndex: index,
+      indicateShow: false,
+      scrollAnimation:false,
+      navInfo: index,
+    })
+  },
+  indexNavEnd(e){
+    console.log('结束')
+    let time = setTimeout(() => {
+      this.setData({
+        indicateShow: true,
+        scrollAnimation:true,
+      })
+      clearTimeout(time)
+    }, 500)  
+  },
   // 点击品牌显示 sidebar
   sidebarShow(e){
+    this.setData({
+      sidebarListPop: true,
+      shadeShow: true,
+    })
    let ajaxUrl =  e.currentTarget.dataset.ajaxurl
     wx.request({
       url: ajaxUrl + '&isJson=1&noIndex=1',
@@ -198,11 +208,11 @@ Page({
       success: (res) => {
         if (res.errMsg == 'request:ok') {
           this.setData({
-            sidebarListPop:true,
-            shadeShow: true,
             sidebarData: res.data,
             // noScroll: 'none'        
           })
+          console.log(res.data)
+          console.log(this.data.sidebarData.seriesList, 'sidebarData.seriesList')
         }
       }
     })
@@ -229,21 +239,27 @@ Page({
     })
   },
   // 隐藏 sidebar
-  sidebarListHide:function (){
+  sidebarHide:function (){
     this.setData({
       sidebarListPop:false,
-      shadeShow: false,
+      shadeShow: false
       // noScroll: 'vertical' 
     })
+    let time = setTimeout(() => {
+      this.setData({
+        sidebarData:{}
+      })
+    },300)
+
   },
   // 点击侧边栏内容
   clickSidebar(e){
-    console.log()
-
+    let seriesInfo = e.currentTarget.dataset.item;
+    seriesInfo.F_FirstImgUrl = '';
     //存储品牌和车系数据
     wx.setStorage({
       key: 'seriesInfo',
-      data: e.currentTarget.dataset.item,
+      data: seriesInfo,
       success: function(res){
         wx.navigateTo({
           url: '../series/series'

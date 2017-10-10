@@ -758,6 +758,7 @@ Page({
 
                     //未获取到存储，第一次存储
                     let compareTask = {};
+                    console.log(this.data.seriesId)
                     compareTask[this.data.seriesId] = [];
                     compareTask[this.data.seriesId].push(productId);
                     console.log(this.data.seriesId, 'this.data.seriesId')

@@ -1,10 +1,14 @@
 <!--品牌选车-->
 <view class="container">
-  <scroll-view class="brand-wrapper"  scroll-y  scroll-into-view="{{navInfo}}" bindscroll="scrollNav" scroll-with-animation="true">
+  <!-- 页面初始loading -->
+  <view class="loading" wx:if="{{!brandList.length}}">
+    <text class="loading-ring">等</text> 正在加载更多...
+  </view>
+  <scroll-view class="brand-wrapper"  scroll-y  scroll-into-view="{{navInfo}}" bindscroll="scrollNav" scroll-with-animation="{{scrollAnimation}}">
      <view class="recommend" id="top">
-      <text class="header">推荐品牌</text>
+      <text class="header" wx:if="{{brandList.length}}">推荐品牌</text>
       <view class="recommend-list">
-        <view class="recommend-info" wx:for="{{recommendList}}" bindtap="sidebarShow" data-ajaxurl="{{item.url}}">
+        <view class="recommend-info" wx:for="{{recommendList}}" wx:key="recommendList" bindtap="sidebarShow" data-ajaxurl="{{item.url}}">
           <view class="recommend-img">
             <image src="{{item.img}}"></image>
           </view>
@@ -14,9 +18,9 @@
     </view> 
     <!--品牌列表-->
     <view class="brands-model">
-      <view class="brand-list" wx:for="{{brandList}}" wx:for-item="brand" id="{{indexNav[index]}}">
+      <view class="brand-list" wx:for="{{brandList}}" wx:key="brandList" wx:for-item="brand" id="{{indexNav[index]}}">
         <text class="title">{{indexNav[index]}}</text>
-        <view wx:for="{{brand}}" wx:for-item="model" class="truck-list">
+        <view wx:for="{{brand}}" wx:key="brand" wx:for-item="model" class="truck-list">
           <view class="truck-model" wx:if="{{!model.list}}" bindtap="sidebarShow" data-ajaxurl="{{model.url}}">
             <view class="truck-number">
               <view class="brands-img">
@@ -39,7 +43,7 @@
             <!--集团分类-->
             <view class="group-classify">
               <view class="group-classify-list">
-                <text wx:for="{{model.list}}" bindtap="sidebarShow" data-ajaxurl="{{item.url}}">{{item.F_BrandName}}</text>
+                <text wx:for="{{model.list}}" wx:key="modelList" bindtap="sidebarShow" data-ajaxurl="{{item.url}}">{{item.F_BrandName}}</text>
               </view>
             </view>
           </view>
@@ -50,7 +54,7 @@
     <view class="other">
       <view class="other-list" wx:if="{{otherBrandShow}}">
         <text>更多品牌</text>
-        <view class="truck-other" wx:for="{{otherBrandList}}" bindtap="sidebarShow" data-ajaxurl="{{item.url}}">
+        <view class="truck-other" wx:for="{{otherBrandList}}" wx:key="otherBrandList" bindtap="sidebarShow" data-ajaxurl="{{item.url}}">
           <view class="other-model">
             <view class="other-img">
                <image src="{{item.logo}}"></image> 
@@ -59,7 +63,7 @@
           </view>
         </view>
       </view>
-      <view class="other-brand" bindtap="moreBrand" wx:if="{{moreShow}}">
+      <view class="other-brand" bindtap="moreBrand" wx:if="{{brandList.length}}">
         <text>{{otherBrandShow ? '收起' : '展开'}}皮卡、微面品牌</text>
         <view class="other-brand-icon" animation="{{animation}}">
           <text>下</text> 
@@ -70,7 +74,7 @@
 </view>
 
 <!--侧边弹层-->
-<view class="mask" bindtap="sidebarListHide" wx:if="{{shadeShow}}" bindtouchmove="nihao">
+<view class="mask" bindtap="sidebarHide" wx:if="{{shadeShow}}" bindtouchmove="nihaoa">
   <scroll-view class="mask-wrapper"  scroll-y  scroll-with-animation="true">
     <view class="mask-content">
     
@@ -79,13 +83,13 @@
 </view>
 <view class="sidebar" style="{{sidebarListPop?'right:0;':'right:-100%'}}" scroll-y="true">
   <view class="sidebar-container">
-    <view class="sidebar-title">
-      <text class="title-icon" bindtap="sidebarListHide">回</text>
+    <view class="sidebar-title" wx:if="{{sidebarData.seriesList.length}}">
+      <text class="title-icon" bindtap="sidebarHide">回</text>
       <text>{{sidebarData.brandName}}</text>
     </view>
-    <view class="sidebar-module" wx:for="{{sidebarData.seriesList}}">
+    <view class="sidebar-module" wx:for="{{sidebarData.seriesList}}" wx:key="sidebarDataList">
       <text class="header">{{item[0].info.F_SubCategoryName}}</text>
-      <view class="sidebar-chunk" wx:for="{{item}}" data-item="{{item.info}}" bindtap="clickSidebar">
+      <view class="sidebar-chunk" wx:for="{{item}}" wx:key="sidebarDataModel" data-item="{{item.info}}" bindtap="clickSidebar">
         <view class="sidebar-module-list">
           <view class="sidebar-img">
             <image src="{{item.img[0].src}}"></image>
@@ -96,10 +100,16 @@
         </view>
       </view>
     </view>
+
+    <!-- loading状态 -->
+    <view class="loading" wx:if="{{!sidebarData.seriesList}}">
+      <text class="loading-ring">等</text> 正在加载更多...
+    </view>
+  
     <!--展开更多商用车-->
-    <view class="sidebar-module" wx:for="{{sidebarData.otherSeriesList}}" wx:if="{{!sidebarData.seriesList.length || moreSeriesShow}}">
+    <view class="sidebar-module" wx:for="{{sidebarData.otherSeriesList}}" wx:key="otherSeriesList" wx:if="{{!sidebarData.seriesList.length || moreSeriesShow}}">
       <text class="header">{{item[0].info.F_SubCategoryName}}</text>
-      <view class="sidebar-chunk" wx:for="{{item}}" data-item="{{item.info}}" bindtap="clickSidebar">
+      <view class="sidebar-chunk" wx:for="{{item}}" wx:key="otherListModel"  data-item="{{item.info}}" bindtap="clickSidebar">
         <view class="sidebar-module-list">
             <view class="sidebar-img">
               <image src="{{item.img[0].src}}"></image>
@@ -123,12 +133,12 @@
 <view class="scale" hidden="{{indicateShow}}">
   <text>{{navInfo}}</text>
 </view>
-<view class="nav">
-  <text wx:for="{{indexNav}}" bindtap="indexNav" data-index="{{indexNav[index]}}" class="{{indexNav[index] === navInfo ? 'selected' : ''}}">{{indexNav[index]}}</text>
+<view class="nav" bindtouchmove='indexNavmove' bindtouchend='indexNavEnd' bindtouchcancel='nihao'>
+  <text wx:for="{{indexNav}}" id="{{indexNav[index]}}" wx:key="indexNav" bindtap="indexNav" data-number="{{index}}" data-index="{{indexNav[index]}}" class="{{indexNav[index] === navInfo ? 'selected' : ''}}">{{indexNav[index]}}</text>
 </view>
 
 <!--返回顶部-->
-<view style="{{goTop?'right:0':'right:-70px'}}" class="back-top" bindtap="backTop">
+<view style="{{goTop?'right:0':'right:-80px'}}" class="back-top" bindtap="backTop">
   <text>回顶部</text>
 </view>
 
