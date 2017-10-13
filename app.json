@@ -1,15 +1,15 @@
 {
   "pages":[
+    "pages/searchCar/searchCar",
+    "pages/seriesConfig/seriesConfig",
     "pages/brand/brand",
     "pages/searchResult/searchResult",
-    "pages/searchCar/searchCar",
     "pages/series/series",
     "pages/index/index",
     "pages/footerPrice/footerPrice",
     "pages/model/model",
     "pages/success/success",
     "pages/modelPhoto/modelPhoto",
-    "pages/seriesConfig/seriesConfig",
     "pages/photoInfo/photoInfo",
     "pages/seriesPhoto/seriesPhoto",
     "pages/modelConfig/modelConfig",

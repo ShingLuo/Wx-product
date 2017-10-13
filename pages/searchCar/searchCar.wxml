@@ -1,3 +1,5 @@
+
+<import src="../../components/searchResult/searchResult.wxml"/>
 <view class="container">
   <view class="loading" wx:if="{{!searchData.subCateList.length}}">
     <text class="loading-ring">等</text> 正在加载更多...
@@ -6,16 +8,16 @@
     <view class="title">
       <text>按用途类别选车</text>
     </view> 
-    <view class="type-module">
+    <view class="options">
       <view class="list-info" wx:for="{{searchData.subCateList}}" wx:key="subCateList">
-        <text wx:if="{{item.isCate}}" class="more" bindtap='sidebarShow' data-id="{{item.id}}">{{item.name}}</text>
+        <text wx:if="{{item.isCate}}" class="more" bindtap='moreType' data-id="{{item.id}}">{{item.name}}</text>
         <text wx:else data-id="{{item.id}}" data-name="subCateId" bindtap="goResult">{{item.name}}</text>
       </view>
     </view>   
     <view class="title">
       <text>按热门品牌选车</text>
     </view> 
-    <view class="type-module">
+    <view class="options">
       <view class="list-info" wx:for="{{searchData.hotBrands}}" wx:key="subCateList">
         <text data-id="{{item.id}}" data-name="brandId" bindtap="goResult">{{item.name}}</text>
       </view>
@@ -23,7 +25,7 @@
     <view class="title">
       <text>按价格选车</text>
     </view> 
-    <view class="type-module">
+    <view class="options">
       <view class="list-info" wx:for="{{searchData.priceList}}" wx:key="subCateList">
         <text data-id="{{item.id}}" data-name="paramId" bindtap="goResult">{{item.name}}</text>
       </view>
@@ -31,27 +33,98 @@
   </scroll-view>
 </view>
 
+
 <!-- 侧边栏 -->
 <view class="mask" bindtap="sidebarListHide" wx:if="{{shadeShow}}" bindtouchmove="nihao">
-  <scroll-view class="mask-wrapper"  scroll-y  scroll-with-animation="true">
+  <scroll-view class="mask-wrapper"  scroll-y >
     <view class="mask-content">
     </view>
   </scroll-view>
 </view>
-<view class="sidebar" style="{{sidebarListPop?'right:0;':'right:-100%'}}" scroll-y="true">
-  <view class="sidebar-container">
-    <view class="sidebar-title" wx:if="{{sidebarData.subCateList.length}}">
+<scroll-view class="sidebar" style="{{sidebarListPop?'right:0;':'right:-100%'}}" scroll-y="true" scroll-into-view="{{navInfo}}" scroll-with-animation="{{scrollAnimation}}">
+    <view class="sidebar-title" wx:if="{{sidebarData.subCateList.length || sidebarData.params.list.length || sidebarData.brandList.length || sidebarData.length}}">
       <text class="title-icon" bindtap="sidebarListHide">回</text>
-      <text>{{sidebarData.cateName}}</text>
+      <text>{{sidebarData.params.name || sidebarData.cateName || '用途类别'}}</text>
     </view>
-    <view class="sidebar-model">
+    <!-- loading -->
+    <view class="loading" wx:if="{{!sidebarData.subCateList.length && !sidebarData.params.list.length && !sidebarData.brandList.length && !sidebarData.list.length && !sidebarData.length}}">
+      <text>{{sidebarData.brandList.length}}</text>
+      <text class="loading-ring">等</text> 正在加载更多...
+    </view>
+    <!-- 更多分类 -->
+    <view class="sidebar-model" wx:if="{{sidebarData.subCateList.length}}">
       <view class="model-list" data-id="{{item.id}}" data-name="subCateId" bindtap='goResult' wx:key="modeProduct" 
         wx:for="{{sidebarData.subCateList}}">
+          <text>{{item.name}}</text>
+      </view>
+    </view>
+    <!-- 用途类别选项 -->
+    <view class="sidebar-model" wx:if="{{sidebarData.length}}">
+      <view class="model-list {{item.selected  == 1? 'selected' : ''}} {{item.is_disable  == 1? 'disabled' : ''}}" wx:for="{{sidebarData}}" wx:key="subCatList" data-id="{{item.id}}" bindtap="getSearchData">
         <text>{{item.name}}</text>
       </view>
     </view>
-    <view class="loading" wx:if="{{!sidebarData.subCateList.length}}">
-      <text class="loading-ring">等</text> 正在加载更多...
+
+    <!-- 品牌类别选项 -->
+    <view class="brand-list" wx:for="{{sidebarData.brandList}}" id="{{sidebarData.letters[index]}}" wx:key="brandList">
+      <view class="title" wx:if="{{sidebarData.letters[index] != 'top'}}">{{sidebarData.letters[index]}}</view>
+      <view class="brand-model {{brand.id  == getSearchData.brandId ? 'selected' : ''}}" data-id="{{brand.id}}" wx:for="{{item}}" wx:for-item="brand" bindtap='clickSidebar' data-name="{{brand.name}}" wx:key="brand">
+        <view class="img">
+          <image wx:if="{{brand.src}}" src="{{brand.src}}"></image>
+          <view class="unlimited" wx:if="{{brand.unlimited}}">ALL</view>
+        </view>
+        <text>{{brand.name}}</text>
+      </view>
     </view>
+    <!-- 其他类别选项 -->
+    <view class="sidebar-model" wx:if="{{sidebarData.params.list.length}}">
+      <view class="model-list {{item.selected  == 1? 'selected' : ''}} {{item.is_disable  == 1? 'disabled' : ''}}" data-id="{{item.id}}" bindtap='clickSidebar' data-name="{{item.name}}" data-disable="{{item.is_disable}}" wx:key="modeProduct" 
+        wx:for="{{sidebarData.params.list}}">
+        <text>{{item.name}}</text>
+      </view>
+    </view>
+    <!-- 车系列表 -->
+    <view class="series-mode" wx:if="{{sidebarData.list.length}}">
+      <view class="series-info" bindtap='goSeries'>
+        <view class="name">{{sidebarData.info.name}}</view> 
+        <view class="model">
+          <view class="img">
+            <image src="{{sidebarData.info.img}}"></image>
+          </view>
+          <view>
+            <text class="price" wx:if="{{sidebarData.info.priceScope.min && sidebarData.info.priceScope.min != 0}}"><text>{{sidebarData.info.priceScope.min}}~{{sidebarData.info.priceScope.max}}</text>万元
+            </text>
+            <text class="price" wx:else>暂无报价</text>
+            <view class="goSeries">进入车系</view>
+          </view>
+        </view>
+      </view>
+      <view class="series-list" wx:for="{{sidebarData.list}}" wx:key="seriesKey">
+        <view class="header">{{sidebarData.attrList[index]}}</view>
+        <view class="product-list" wx:for="{{item}}" data-id="{{model.id}}" bindtap='goModel' wx:if="{{seriesListNumber[index] ? number < seriesListNumber[index] : number < 5}}" wx:for-item="model" wx:for-index="number"   wx:key="modelList">
+          <view class="name">{{model.name}}</view>
+          <view class="tags">
+            <text wx:for="{{model.paramDetail}}" wx:key="{{tag}}" wx:for-item="tag">{{tag}}</text>
+          </view>
+          <view>
+            <text class="price" wx:if="{{model.price}}"><text>{{model.price}}</text>万元</text>
+            <text wx:else class="not-price">暂无报价</text>
+            <view class="footer-price">询底价</view>     
+          </view>
+        </view>
+        <view class="load-more" wx:if="{{sidebarData.list[index].length > 5 && (!seriesListNumber[index] || seriesListNumber[index] < sidebarData.list[index].length)}}" data-index="{{index}}" bindtap='loadMore'>
+          <text>点击加载更多</text>
+        </view>
+      </view>
+    </view>
+</scroll-view>
+  <!--索引导航-->
+  <view class="scale" hidden="{{indicateShow}}">
+    <text>{{navInfo == 'top' ? '#' : navInfo}}</text>
   </view>
-</view>
+  <view class="nav" bindtouchmove='indexNavmove' bindtouchend='indexNavEnd' wx:if="{{shadeShow && sidebarData.brandList.length}}">
+    <text wx:for="{{sidebarData.brandList}}" id="{{sidebarData.letters[index]}}" wx:key="indexNav" bindtap="indexNav" data-number="{{index}}" data-index="{{sidebarData.letters[index]}}" class="{{sidebarData.letters[index] === navInfo ? 'selected' : ''}}">{{sidebarData.letters[index] == 'top' ? '#' : sidebarData.letters[index]}}</text>
+  </view>
+
+
+<template is="searchResult" data="{{getSearchData,searchResultPop,seriesInfo,resultData,sidebarListPop,shadeShow,sidebarData,typeIndex,typeName,paramId,seriesListNumber,fold,indicateShow,indicateText,activeIndex,navInfo}}"/>

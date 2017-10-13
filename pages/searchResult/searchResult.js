@@ -7,6 +7,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    //暂时存放的存储车系信息
+    seriesInfo:{},
     //筛选结果数据
     resultData:{},
     //查看选中的类别
@@ -458,8 +460,22 @@ Page({
   },
   //进入车型页
   goModel(e){
-    let productData = this.data.seriesInfo;
-    productData['F_ProductId'] = e.currentTarget.dataset.id
+    let productData = this.data.seriesInfo
+    let subCateId = e.currentTarget.dataset.subcateid
+    let seriesId = e.currentTarget.dataset.seriesid
+
+    productData.F_ProductId = e.currentTarget.dataset.id
+
+    //点击车型列表，直接进入车型页面
+    if (subCateId){
+      productData.F_SubCategoryId = subCateId
+      productData.F_SeriesId = seriesId
+      wx.setStorage({
+        key: 'seriesInfo',
+        data: productData,
+      })
+    }
+
     wx.setStorage({
       key: 'productData',
       data: productData,

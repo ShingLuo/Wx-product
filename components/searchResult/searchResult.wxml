@@ -1,0 +1,58 @@
+<!--pages/searchResult/searchResult.wxml-->
+<template name="searchResult">
+<view class="search-result {{searchResultPop ? 'visible' : ''}}">
+  <view class="loading" wx:if="{{!resultData.h1}}">
+    <text class="loading-ring">等</text> 正在加载更多...
+  </view>
+  <view class="sidebar-title" wx:if="{{resultData.h1}}">
+    <text class="title-icon" bindtap="searchResultBack">回</text>
+    <text>筛选结果</text>
+  </view>
+  <scroll-view wx:if="{{resultData.h1}}">
+    <view class="type-module {{fold ? 'visible' : ''}}">
+      <view class="list-info {{item.selected || item.selName ? 'selected' : ''}}" wx:for="{{resultData.paramList}}" wx:key="paramList" data-name="{{item.option ? item.option : 'fid'}}" data-option="{{item.option ? item.option : 'paramId'}}" data-index="{{index}}" data-id="{{item.fId}}" bindtap="sidebarShow">
+        <text>{{item.selName ? item.selName : item.name}}</text>
+      </view>
+    </view>
+    <view wx:if="{{resultData.paramList.length && resultData.paramList.length > 6}}" class="fold {{fold ? 'unfold' : ''}}" bindtap="fold">{{fold ? "收起" : "展开更多筛选条件"}}</view>
+    <view class="result">
+      <view class="header">
+        共有 <text class="total">{{resultData.total}}</text>
+        <text wx:if="{{resultData.productList.length}}"> 款</text>
+        <text wx:else> 个车系</text>
+        <view class="newest {{getSearchData.order == 2 ? 'visible' : ''}}" wx:if="{{resultData.productList.length}}" data-order="2" bindtap="selectOrder">最新</view> 
+        <view wx:if="{{resultData.seriesList.length}}" class="price {{getSearchData.order == 6 ? 'top visible' : getSearchData.order == 5 ? 'bottom visible' : ''}}" bindtap='selectOrder' data-order="{{getSearchData.order == '' ? '6' : getSearchData.order == 5 ? 6 : 5}}">价格</view>
+        <view class="hot {{!getSearchData.order ? 'visible' : ''}}" bindtap='selectOrder' data-order="">热度</view>
+      </view>
+      <view class="result-model">
+        <!-- 车系列表 -->
+        <view class="result-list" wx:for="{{resultData.seriesList}}" data-id="{{item.id}}" data-subid="{{item.subId}}" wx:key="resultList" bindtap='clickSeriesList'>
+          <view class="img">
+             <image wx:if="{{item.src}}" src="{{item.src}}"></image> 
+          </view>
+          <view class="product-info">
+            <text class="name">{{item.name}}</text>
+            <text class="price" wx:if="{{item.price.min}}">{{item.price.min}}~{{item.price.max}}万元</text>
+            <text class="price" wx:else>暂无报价</text>
+            <text class="total">共 <text>{{item.productTotal}}</text> 款车型符合条件</text> 
+          </view>
+        </view>  
+        <!-- 车型列表 -->
+        <view class="result-list" wx:for="{{resultData.productList}}" wx:key="productList" data-subcateid="{{resultData.subCateId}}" data-seriesid="{{item.sId}}" data-id="{{item.id}}" bindtap="goModel">
+          <view class="img">
+             <image wx:if="{{item.src}}" src="{{item.src}}"></image> 
+          </view> 
+          <view class="product-info">
+            <text class="name">{{item.name}}</text>
+            <text class="price" wx:if="{{item.price.min}}">{{item.price.min}}~{{item.price.max}}万元</text>
+            <text class="not-price" wx:else>暂无报价</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>
+
+
+
+</template>

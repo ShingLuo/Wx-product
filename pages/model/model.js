@@ -107,6 +107,7 @@ Page({
             key: 'productData',
             success: ele => {
 
+              console.log(ele,'ele.data')
               //设置车型信息数据
               this.setData({
                 productData: ele.data,

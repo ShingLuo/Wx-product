@@ -33,7 +33,7 @@
           </view>
         </view>  
         <!-- 车型列表 -->
-        <view class="result-list" wx:for="{{resultData.productList}}" wx:key="productList" data-id="{{item.id}}" bindtap="goModel">
+        <view class="result-list" wx:for="{{resultData.productList}}" wx:key="productList" data-subcateid="{{resultData.subCateId}}" data-seriesid="{{item.sId}}" data-id="{{item.id}}" bindtap="goModel">
           <view class="img">
              <image wx:if="{{item.src}}" src="{{item.src}}"></image> 
           </view> 

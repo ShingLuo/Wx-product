@@ -227,10 +227,12 @@ Page({
 
                 //清空数据和单位
                 ele.forEach((res, number) => {
+                  if(res.list.length){
                     res.list.forEach((result, i) => {
                         result.value = '';
                         result.unit = '';
                     })
+                  }
                 })
             }
         })
