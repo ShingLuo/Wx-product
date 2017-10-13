@@ -337,8 +337,9 @@ Page({
                     }
 
                     let footerPriceShow = false;
+                    console.log(ele.data.proInfo,'ele.data.proInfo.F_IsStopMake')
                     //判断车型是不是停售
-                    if (ele.data.proInfo.F_IsStopMake == 4) {
+                    if (ele.data.proInfo.F_IsStopMake == 4 || ele.data.proInfo.F_CateName == '配件') {
                         footerPriceShow = false;
                     } else {
                         footerPriceShow = true;

@@ -127,4 +127,4 @@
   </view>
 
 
-<template is="searchResult" data="{{getSearchData,searchResultPop,seriesInfo,resultData,sidebarListPop,shadeShow,sidebarData,typeIndex,typeName,paramId,seriesListNumber,fold,indicateShow,indicateText,activeIndex,navInfo}}"/>
+<template is="searchResult" data="{{getSearchData,searchResultPop,seriesInfo,resultData,sidebarListPop,shadeShow,sidebarData,typeIndex,typeName,paramId,seriesListNumber,fold,indicateShow,indicateText,activeIndex,navInfo,loading}}"/>

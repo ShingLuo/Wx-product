@@ -1,8 +1,8 @@
 {
   "pages":[
+    "pages/brand/brand",
     "pages/searchCar/searchCar",
     "pages/seriesConfig/seriesConfig",
-    "pages/brand/brand",
     "pages/searchResult/searchResult",
     "pages/series/series",
     "pages/index/index",

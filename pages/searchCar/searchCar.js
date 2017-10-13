@@ -58,13 +58,16 @@ Page({
     indicateText: '',
     activeIndex: '',
     navInfo: '',
+    //正在加载列表
+    loading: false,
+    //禁止加载
+    noMore:false,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getSearchData();
     //请求筛选页面数据
     wx.request({
       url: `${app.ajaxurl}/index.php?r=weex/index`,
@@ -135,7 +138,7 @@ Page({
     let id = e.currentTarget.dataset.id
     let name = e.currentTarget.dataset.name
 
-    let getSearchData = {};
+    let getSearchData = this.data.getSearchData;
     getSearchData[name] = id;
 
     //隐藏sidebar
@@ -209,6 +212,11 @@ Page({
       //请求初始数据
       this.getInitialData();
     }
+    //重置配置和允许滚动加载
+    this.setData({
+      page:1,
+      noMore:false,
+    })
   },
   //请求初始化数据
   getInitialData() {
@@ -217,55 +225,72 @@ Page({
       url: `${app.ajaxurl}/index.php?r=weex/list`,
       data: this.data.getSearchData,
       success: ele => {
+        //如果是滚动加载
+        if(this.data.loading){
+          let resultData = this.data.resultData;
 
-        //如果有类别选项
-        if (ele.data.paramList.length) {
-          let number = 0;
-          ele.data.paramList.forEach((el, index) => {
-            if (el.fId == '7') {
-              number++;
+          resultData.seriesList = resultData.seriesList.concat(ele.data.seriesList)
+          resultData.productList = resultData.productList.concat(ele.data.productList)
+
+          this.setData({
+            resultData: resultData,
+            loading:false,
+          })
+          if (this.data.getSearchData.page == ele.data.pageTotal){
+            this.setData({
+              noMore:true,
+            })
+          }
+        }else{
+          //如果有类别选项
+          if (ele.data.paramList.length) {
+            let number = 0;
+            ele.data.paramList.forEach((el, index) => {
+              if (el.fId == '7') {
+                number++;
+              }
+            })
+
+            //添加品牌分类
+            let brand = {
+              name: '品牌',
+              fId: '',
+              option: 'brandId'
             }
+            //如果选择品牌进入页面，默认品牌为选中
+            if (ele.data.brandId) {
+              //修改选择分类的值。
+              brand.selected = ele.data.brandId
+              brand.selName = ele.data.brandName
+            }
+            ele.data.paramList.splice(number, 0, brand)
+
+            //如果选择价格，进入页面默认选中价格
+            console.log(ele.data)
+
+            //如果没有子类，添加子类分类
+            if (!this.data.getSearchData.subCateId) {
+              let subCate = {
+                name: '用途类别',
+                fId: '',
+                option: 'subCateId'
+              }
+              ele.data.paramList.unshift(subCate)
+            }
+          }
+
+          //给数据赋值
+          this.setData({
+            resultData: ele.data
+          })
+          // 标题
+          wx.setNavigationBarTitle({
+            title: ele.data.h1
           })
 
-          //添加品牌分类
-          let brand = {
-            name: '品牌',
-            fId: '',
-            option: 'brandId'
-          }
-          //如果选择品牌进入页面，默认品牌为选中
-          if (ele.data.brandId) {
-            //修改选择分类的值。
-            brand.selected = ele.data.brandId
-            brand.selName = ele.data.brandName
-          }
-          ele.data.paramList.splice(number, 0, brand)
-
-          //如果选择价格，进入页面默认选中价格
-          console.log(ele.data)
-
-          //如果没有子类，添加子类分类
-          if (!this.data.getSearchData.subCateId) {
-            let subCate = {
-              name: '用途类别',
-              fId: '',
-              option: 'subCateId'
-            }
-            ele.data.paramList.unshift(subCate)
-          }
+          //关闭Loading
+          this.hideLoading()
         }
-
-        //给数据赋值
-        this.setData({
-          resultData: ele.data
-        })
-        // 标题
-        wx.setNavigationBarTitle({
-          title: ele.data.h1
-        })
-
-        //关闭Loading
-        this.hideLoading()
       }
     })
   },
@@ -420,6 +445,8 @@ Page({
     //发送参数的值
     let getSearchData = this.data.getSearchData
     getSearchData.order = ''
+    //重置page
+    getSearchData.page = 1;
 
     //封装 paramId 参数
     if (this.data.typeName === 'paramId') {
@@ -461,7 +488,9 @@ Page({
       paramId: paramId,
       //隐藏sidebar
       sidebarListPop: false,
-      shadeShow: false
+      shadeShow: false,
+      //允许滚动加载
+      noMore:false,
     })
     this.searchResult(res => {
       console.log(res.data)
@@ -499,9 +528,14 @@ Page({
     this.showLoading()
 
     getSearchData.order = order
+    //重置page
+    getSearchData.page = 1;
     this.setData({
-      getSearchData: getSearchData
+      getSearchData: getSearchData,
+      //允许滚动加载
+      noMore:false,
     })
+    console.log(this.data.getSearchData,'this.data.getSearchData')
     this.searchResult(res => {
       //改变列表的值
       let resultData = this.data.resultData;
@@ -533,7 +567,7 @@ Page({
   },
   //点击车系列表
   clickSeriesList(e) {
-    console.log(this.data.getSearchData,'this.data.getSearchData')
+    console.log(this.data.getSearchData,'w cao cao ',1)
     let id = e.currentTarget.dataset.id
     let subId = e.currentTarget.dataset.subid
 
@@ -694,7 +728,23 @@ Page({
       clearTimeout(time)
     },300)
   },
-
+  //滚动加载更多
+  loadData(){
+    //如果正在加载，直接return
+    if (this.data.noMore || this.data.loading){
+      return
+    }
+    let getSearchData = this.data.getSearchData
+    getSearchData.page ++
+    console.log(getSearchData)
+    this.setData({
+      loading:true,
+      getSearchData: getSearchData
+    })
+    console.log(this.data.loading)
+    //请求加载数据
+    this.getInitialData()
+  },
 
   showLoading: function () {
     wx.showToast({

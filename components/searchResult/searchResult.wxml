@@ -8,8 +8,8 @@
     <text class="title-icon" bindtap="searchResultBack">回</text>
     <text>筛选结果</text>
   </view>
-  <scroll-view wx:if="{{resultData.h1}}">
-    <view class="type-module {{fold ? 'visible' : ''}}">
+  <scroll-view wx:if="{{resultData.h1}}" scroll-y="true" style="height:100%" bindscrolltolower="loadData">
+    <view class="type-module {{fold ? 'visible' : ''}}" wx:if="{{resultData.paramList.length}}">
       <view class="list-info {{item.selected || item.selName ? 'selected' : ''}}" wx:for="{{resultData.paramList}}" wx:key="paramList" data-name="{{item.option ? item.option : 'fid'}}" data-option="{{item.option ? item.option : 'paramId'}}" data-index="{{index}}" data-id="{{item.fId}}" bindtap="sidebarShow">
         <text>{{item.selName ? item.selName : item.name}}</text>
       </view>
@@ -48,6 +48,11 @@
             <text class="not-price" wx:else>暂无报价</text>
           </view>
         </view>
+      </view>
+    </view>
+    <view class="loading-wrapper" hidden="{{!loading}}">
+      <view class="loading" wx:if="{{loading}}">
+        <text class="loading-ring">等</text> 正在加载更多...
       </view>
     </view>
   </scroll-view>
