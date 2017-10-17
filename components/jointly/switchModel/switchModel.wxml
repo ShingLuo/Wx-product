@@ -6,7 +6,7 @@
       <text class="model-all" wx:if="{{modelAll}}" data-item="" bindtap="goSwitchModel">全部车型</text>
     </view>
     <!--tab切换导航-->
-    <view class="switch-options">
+    <view class="switch-options" wx:if="{{switchModelData.attrList.length}}">
       <view class="options-list" wx:for="{{switchModelData.attrList}}" data-name="{{item}}" bindtap="selectModelOption">
         <text class="{{item == switchModelData.paramName ? 'select-option' : ''}}">{{item}}</text>
       </view>

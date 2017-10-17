@@ -93,7 +93,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    wx.setNavigationBarTitle({
+      title: '条件选车'
+    })
   },
   more(event){
     let id = event.currentTarget.dataset.id;
@@ -131,7 +133,7 @@ Page({
   sidebarListHide: function () {
     this.setData({
       sidebarListPop: false,
-      shadeShow: false
+      shadeShow: false,
     })
   },
   goResult(e){
@@ -727,6 +729,9 @@ Page({
       })
       clearTimeout(time)
     },300)
+    wx.setNavigationBarTitle({
+      title: '条件选车'
+    })
   },
   //滚动加载更多
   loadData(){

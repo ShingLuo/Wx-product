@@ -40,7 +40,14 @@ Page({
     errText:'',
   },
 
-
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    wx.setNavigationBarTitle({
+      title: '品牌选车'
+    })
+  },
   onLoad: function () {
 
     //清除缓存
@@ -62,10 +69,6 @@ Page({
     // wx.removeStorage({ key: 'productData' })
     // wx.removeStorage({ key: 'brandData' })
 
-
-    wx.setNavigationBarTitle({
-      title: '品牌选车'
-    })
     // 请求品牌列表数据
 
     wx.getStorage({
