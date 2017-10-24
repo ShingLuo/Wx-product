@@ -47,3 +47,59 @@
   content:"\9009";
   font-family:'detail';
 }
+
+/* 车型筛选 */
+.screen{
+  height:80rpx;
+  padding-left:30rpx;
+  color:#999;
+  font-size:28rpx;
+  line-height:80rpx;
+  border-bottom:1px solid #eee;
+  border-top:1px solid #eee;
+  background-color:#fff;
+}
+.screen-wrapper{
+  float:right;
+}
+.screen-wrapper > text{
+  float: left;
+  height:80rpx;
+}
+.horsepower{
+    position: relative;
+    padding-right: 50rpx;
+}
+.horsepower.visible{
+  color:#1571E5;
+}
+.horsepower:before{
+  position: absolute;
+  right: 30rpx;
+  bottom: 36rpx;
+  width: 20rpx;
+  content: '\4f4e';
+  font-family: 'detail';
+  font-size: 20rpx;
+  height: 20rpx;
+  transform: scale(.5);
+  color: #999;
+}
+.horsepower:after{
+  position: absolute;
+  right: 30rpx;
+  top: 8rpx;
+  width: 20rpx;
+  content: '\9ad8';
+  font-family: 'detail';
+  font-size: 20rpx;
+  height: 20rpx;
+  transform: scale(.5);
+  color: #999;
+}
+.horsepower.visible.top:after{
+    color:#1571E5;
+}
+.horsepower.visible.bottom:before{
+    color:#1571E5;
+}

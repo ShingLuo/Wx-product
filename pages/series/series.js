@@ -458,10 +458,12 @@ Page({
     let modelListData = this.data.modelListData;
     let order = e.currentTarget.dataset.order;
     if(order != ''){
-      if (modelListData.order == 3){
-        modelListData.order = 4;
-      }else{
+      if (order == 8){
+        modelListData.order = 8;
+      } else if (order == 4 && modelListData.order == 4){
         modelListData.order = 3;
+      }else{
+        modelListData.order = 4;
       }
     }else{
       modelListData.order = '';

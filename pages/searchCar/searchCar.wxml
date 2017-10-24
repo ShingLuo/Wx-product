@@ -99,6 +99,12 @@
           </view>
         </view>
       </view>
+      <view class="screen" wx:if="{{sidebarData.isShow == 1}}">
+        <text class="screen-text">按马力筛选</text>
+        <view class="screen-wrapper">
+          <text class="horsepower {{soup  == 3 ? 'bottom visible' : soup == 4 ? 'top visible' : ''}}" data-order="3" data-id="{{sidebarData.info.id}}" data-subid="{{sidebarData.info.subId}}" bindtap="selectSoup">马力</text>
+        </view>
+      </view>
       <view class="series-list" wx:for="{{sidebarData.list}}" wx:key="seriesKey">
         <view class="header">{{sidebarData.attrList[index]}}</view>
         <view class="product-list" wx:for="{{item}}" data-id="{{model.id}}" bindtap='goModel' wx:if="{{seriesListNumber[index] ? number < seriesListNumber[index] : number < 5}}" wx:for-item="model" wx:for-index="number"   wx:key="modelList">
@@ -109,7 +115,7 @@
           <view>
             <text class="price" wx:if="{{model.price}}"><text>{{model.price}}</text>万元</text>
             <text wx:else class="not-price">暂无报价</text>
-            <view class="footer-price">询底价</view>     
+            <view class="footer-price" data-id="{{model.id}}" catchtap='goFooterPrice'>询底价</view>     
           </view>
         </view>
         <view class="load-more" wx:if="{{sidebarData.list[index].length > 5 && (!seriesListNumber[index] || seriesListNumber[index] < sidebarData.list[index].length)}}" data-index="{{index}}" bindtap='loadMore'>

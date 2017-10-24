@@ -10,7 +10,7 @@
   </view>
   <scroll-view wx:if="{{resultData.h1}}" scroll-y="true" style="height:100%" bindscrolltolower="loadData">
     <view class="type-module {{fold ? 'visible' : ''}}" wx:if="{{resultData.paramList.length}}">
-      <view class="list-info {{item.selected || item.selName ? 'selected' : ''}}" wx:for="{{resultData.paramList}}" wx:key="paramList" data-name="{{item.option ? item.option : 'fid'}}" data-option="{{item.option ? item.option : 'paramId'}}" data-index="{{index}}" data-id="{{item.fId}}" bindtap="sidebarShow">
+      <view class="list-info {{item.selected || item.selName ? 'selected' : ''}}" wx:for="{{resultData.paramList}}" wx:key="paramList" data-name="{{item.option ? item.option : 'fid'}}" data-typename="{{item.name}}" data-option="{{item.option ? item.option : 'paramId'}}" data-index="{{index}}" data-id="{{item.fId}}" bindtap="sidebarShow">
         <text>{{item.selName ? item.selName : item.name}}</text>
       </view>
     </view>

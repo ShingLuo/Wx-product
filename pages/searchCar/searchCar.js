@@ -23,7 +23,7 @@ Page({
       order: '',
       page: 1,
     },
-    
+    soup: '',
     //是否出现result弹层
     searchResultPop:false,
     //暂时存放的存储车系信息
@@ -33,9 +33,10 @@ Page({
     //查看选中的类别
     typeIndex: '',
     //查看选中的发送参数名称
-    typeName: '',
-    //paramId
-    paramId: [],
+    option: '',
+    paramName:'',
+    //paramId 存储器
+    paramId: {},
     // 是否显示 sidebar
     // sidebarListPop: false,
     //sidebar  遮罩层
@@ -134,14 +135,24 @@ Page({
     this.setData({
       sidebarListPop: false,
       shadeShow: false,
+      soup: ''
     })
   },
+  //点击筛选条件弹出筛选结果弹层
   goResult(e){
     let id = e.currentTarget.dataset.id
     let name = e.currentTarget.dataset.name
 
+
     let getSearchData = this.data.getSearchData;
+
+    for (let key in getSearchData){
+      getSearchData[key] = ''
+    }
+
     getSearchData[name] = id;
+
+    console.log(this.data.getSearchData,'this.data.getSearchData')
 
     //隐藏sidebar
     this.setData({
@@ -281,8 +292,17 @@ Page({
             }
           }
 
+
+          let paramId = this.data.paramId;
+          for(let index = 0;index < ele.data.paramList.length;index++){
+            if (ele.data.paramList[index].selName){
+              paramId[ele.data.paramList[index].name] = this.data.getSearchData.paramId
+            }
+          }
+
           //给数据赋值
           this.setData({
+            paramId: paramId,
             resultData: ele.data
           })
           // 标题
@@ -309,8 +329,8 @@ Page({
     let name = e.currentTarget.dataset.name
     let index = e.currentTarget.dataset.index
     let option = e.currentTarget.dataset.option
+    let typeName = e.currentTarget.dataset.typename
     let getSearchData = this.data.getSearchData
-    console.log(getSearchData,'getSearchData')
 
     if (name != 'brandId' || getSearchData.brandId === '') {
       getSearchData[name] = id;
@@ -319,10 +339,11 @@ Page({
     this.setData({
       getSearchData: getSearchData,
       typeIndex: index,
-      typeName: option
+      option: option,
+      typeName: typeName
     })
 
-    console.log(name, 'name')
+    console.log(typeName, 'name')
 
     //请求品牌弹层列表
     if (name == 'brandId') {
@@ -425,7 +446,6 @@ Page({
   },
   //点击 sidebar
   clickSidebar(e) {
-    console.log(1)
     //查看按钮是否是禁用状态
     let disable = e.currentTarget.dataset.disable;
     console.log(disable)
@@ -438,6 +458,9 @@ Page({
 
     //获取点击的id
     let id = e.currentTarget.dataset.id
+
+
+    console.log(id,'wocao')
     //存储 paramId
     let paramId = this.data.paramId
     //增加选择框高亮显示
@@ -451,22 +474,25 @@ Page({
     getSearchData.page = 1;
 
     //封装 paramId 参数
-    if (this.data.typeName === 'paramId') {
-      paramId[this.data.typeIndex] = id;
+    if (this.data.option === 'paramId') {
+      paramId[this.data.typeName] = id;
       //暂时存储 paramId
       let arr = []
-
-      paramId.forEach(ele => {
-        if (ele) {
-          arr.push(ele)
+      
+      for (let key in paramId){
+        if (paramId[key]){
+          arr.push(paramId[key])
         }
-      })
-      //存储 paramId 的值
-      getSearchData[this.data.typeName] = arr.join('-')
+      }
 
-    } else if (this.data.typeName === 'brandId') {
+      //存储 paramId 的值
+      getSearchData[this.data.option] = arr.join('-')
+
+      console.log(getSearchData[this.data.option],'getSearchData[this.data.option]getSearchData[this.data.option]')
+
+    } else if (this.data.option === 'brandId') {
       //存储brandId的值
-      getSearchData[this.data.typeName] = id;
+      getSearchData[this.data.option] = id;
     }
 
     //如果选择品牌的不限，那么选项显示品牌
@@ -537,7 +563,7 @@ Page({
       //允许滚动加载
       noMore:false,
     })
-    console.log(this.data.getSearchData,'this.data.getSearchData')
+
     this.searchResult(res => {
       //改变列表的值
       let resultData = this.data.resultData;
@@ -569,7 +595,7 @@ Page({
   },
   //点击车系列表
   clickSeriesList(e) {
-    console.log(this.data.getSearchData,'w cao cao ',1)
+    // console.log(this.data.getSearchData,'w cao cao ',1)
     let id = e.currentTarget.dataset.id
     let subId = e.currentTarget.dataset.subid
 
@@ -601,7 +627,38 @@ Page({
 
     //请求车系弹层列表
     wx.request({
-      url: `${app.ajaxurl}/index.php?r=weex/list/product&subId=${subId}&seriesId=${id}&paramId=${this.data.getSearchData.paramId || ''}&brandId=${this.data.getSearchData.brandId || ''}`,
+      url: `${app.ajaxurl}/index.php?r=weex/list/product&subId=${subId}&seriesId=${id}&paramId=${this.data.getSearchData.paramId || ''}&brandId=${this.data.getSearchData.brandId || ''}&order=''`,
+      success: res => {
+        //改变sidebar的值并且显示sidebar
+        this.setData({
+          sidebarData: res.data
+        })
+      }
+    })
+  },
+  // 按马力筛选车型
+  selectSoup(e){
+    let id = e.currentTarget.dataset.id
+    let subId = e.currentTarget.dataset.subid
+    let soups = e.currentTarget.dataset.order
+    if (this.data.soup !== '') {
+      if (this.data.soup == 4) {
+        this.setData({
+          soup: 3
+        })
+      } else {
+        this.setData({
+          soup: 4
+        })
+      }
+    } else {
+      this.setData({
+        soup: soups
+      })
+    }
+    //请求车系弹层列表
+    wx.request({
+      url: `${app.ajaxurl}/index.php?r=weex/list/product&subId=${subId}&seriesId=${id}&paramId=${this.data.getSearchData.paramId || ''}&brandId=${this.data.getSearchData.brandId || ''}&order=${this.data.soup}`,
       success: res => {
         //改变sidebar的值并且显示sidebar
         this.setData({

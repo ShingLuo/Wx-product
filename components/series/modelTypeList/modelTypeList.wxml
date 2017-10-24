@@ -26,6 +26,7 @@
         <view class="screen-wrapper">
           <text class="hot {{modelListData.order  == '' ? 'visible' : ''}}" data-order="" bindtap="selectSort">热度</text>
           <text class="horsepower {{modelListData.order  == 3 ? 'bottom visible' : modelListData.order == 4 ? 'top visible' : ''}}" data-order="4" bindtap="selectSort">马力</text>
+          <text class="honew {{modelListData.order  == 8 ? 'visible' : ''}}" data-order="8" bindtap="selectSort">最新</text>
         </view>
       </view>
       <view class="wrapper" >

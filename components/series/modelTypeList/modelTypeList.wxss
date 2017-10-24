@@ -51,10 +51,10 @@
   float: left;
   height:80rpx;
 }
-.hot{
+.hot,.honew{
   padding-right:30rpx;
 }
-.hot.visible{
+.hot.visible,.honew.visible{
   color:#1571E5;
 }
 .hot:after{

@@ -27,7 +27,7 @@
 }
 .type-module .list-info{
   float: left;
-  width: 33.33%;
+  width: 33.3%;
   height: 64rpx;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
