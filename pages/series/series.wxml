@@ -5,23 +5,24 @@
 <import src="../../components/dealer/dealer.wxml"/>
 <import src="../../components/selectLocation/selectLocation.wxml"/>
 <view class="container">
-  <scroll-view class="series-wrapper" scroll-y="true" scroll-into-view="{{goTop}}" scroll-with-animation="true">
-    <!--导航-->
-    <view class="series-nav" id="goTop">
-      <view class="summarize">
-        <text>综述</text>
-      </view>
-      <view class="nav-text">
-        <text bindtap="goUrl" data-url="../seriesConfig/seriesConfig">配置</text>
-      </view>
-      <view class="nav-text" bindtap="goUrl" data-url="../seriesPhoto/seriesPhoto">
-        <text>图片</text>
-      </view>
-    </view>
+  <scroll-view class="series-wrapper" scroll-y="true"
+  scroll-into-view="{{goTop}}" scroll-with-animation="true">
     <!--图片-->
     <template is="picture" data="{{picture,truckImageData}}"/>
+    <!--导航-->
+    <view class="series-nav">
+      <view class="nav-text" bindtap="goUrl" data-url="../seriesConfig/seriesConfig">
+        <text class="nav-ico-pei">配置</text>
+      </view>
+      <view class="nav-text" bindtap="goUrl" data-url="../seriesPhoto/seriesPhoto">
+        <text class="nav-ico-img">图片</text>
+      </view>
+      <view class="nav-text" catchtap="goDealers">
+        <text class="nav-ico-sell">经销商</text>
+      </view>
+    </view>
     <!--车型列表-->
-      <template is="modelType" data="{{modelList,modelListData,model,sellState,optionState,modelListNumber,compareState}}"/>  
+    <template is="modelType" data="{{modelList,modelListData,model,sellState,optionState,modelListNumber,compareState}}"/>  
     <!--经销商推荐列表-->
     <template is="dealer" data="{{dealer,dealerList,locationInfo}}"/>
     <!--看过该车的人还关注-->
@@ -33,7 +34,7 @@
       <text bindtap="goUrl" data-url="../seriesConfig/seriesConfig">配置</text>
       <text bindtap="goUrl" data-url="../seriesPhoto/seriesPhoto">图片</text>
     </view>
-    <view class="footer-price" bindtap="goFooterPrice" data-productId="{{footerInfo.ProductId}}" id="footerPrice">
+    <view class="footer-price ftp-btns" bindtap="goFooterPrice" data-productId="{{footerInfo.ProductId}}" id="footerPrice">
         <text class="foot-price-text">询底价</text>
         <view wx:if="{{footerInfo.askTotal > 100}}">
           <text class="number">已有</text>

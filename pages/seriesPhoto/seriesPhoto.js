@@ -73,7 +73,7 @@ Page({
         url: app.ajaxurl + 'index.php?r=weex/product/get-product-picture-change-list&subId=' + this.data.seriesInfo.F_SubCategoryId + '&seriesId=' + this.data.seriesInfo.F_SeriesId,
         success: res => {
           if (res.errMsg == 'request:ok' && res.data.status != 2) {
-            console.log(res.data.attrList, 'res,res')
+            // console.log(res.data.attrList, 'res,res')
             let switchModelData = {};
             //换车型列表数据
             switchModelData.priceList = res.data.priceList;
@@ -107,7 +107,7 @@ Page({
               switchModelData: switchModelData
             })
 
-            console.log(switchModelData, 'switchModelDataswitchModelData')
+            // console.log(switchModelData, 'switchModelDataswitchModelData')
           } else {
             //没有换车型数据
             this.setData({
@@ -186,7 +186,7 @@ Page({
                         // 询底价数量
                         askPriceNum: res.data.askPriceNum
                     })
-                    console.log(this.data.askPriceNum, 'this.data.askPriceNum')
+                    // console.log(this.data.askPriceNum, 'this.data.askPriceNum')
                 } else {
                     //更新内容
                     this.setData({
@@ -226,7 +226,7 @@ Page({
     },
     //点击换车型，重新请求车型页面信息
     goSwitchModel(e) {
-        console.log(e.currentTarget.dataset.item)
+        // console.log(e.currentTarget.dataset.item)
         this.setData({
             productId: e.currentTarget.dataset.item.F_ProductId,
             switchModelPop: false
@@ -235,7 +235,7 @@ Page({
     },
     //点击图片详细分类
     detailed(e) {
-        console.log(e.currentTarget.dataset.type)
+        // console.log(e.currentTarget.dataset.type)
         let photoData = this.data.photoData;
         photoData.typeId = e.currentTarget.dataset.type
         this.setData({

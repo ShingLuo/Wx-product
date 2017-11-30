@@ -1,0 +1,36 @@
+<view class="top-box">
+  <!-- loading状态 -->
+  <view class="loading" wx:if="{{!carList.length}}">
+    <text class="loading-ring">等</text> 正在加载更多...
+  </view>
+  <scroll-view scroll-y style="height:100%" bindscrolltolower="loadData" scroll-with-animation="{{scrollAnimation}}" wx:if="{{carList.length > 0}}">
+    <view class="options">
+      <view wx:for="{{searchList}}" class="option" data-tp="{{item.enName}}" bindtap="cutBtn">
+        <text class="{{typeEN == item.enName ? 'option-visible' : ''}}">{{item.name}}</text>
+      </view>
+    </view>
+
+    <view class="item-box" wx:for="{{carList}}" catchtap="goMsg" data-inx="{{index}}">
+      <view class="item-box-head">
+        <view class="img">
+          <image src="{{item.img}}"></image>
+          <text class="{{index < 3 ? 'inx' : 'inx gre tags'}}">{{index + 1}}</text>
+        </view>
+        <view class="msg">
+          <text class="txt">{{item.simName}}</text>
+          <text wx:if="{{item.F_Price > 0}}" class="pay">{{item.F_Price}}{{item.F_PriceUnit}}</text>
+          <text wx:if="{{item.F_Price == 0}}" class="pay">暂无报价</text>
+        </view>
+      </view>
+      <view class="item-box-fot">
+        <view class="fot-msg">
+          <text>最近一周已有</text>
+          <text class="num">{{item.num}}</text>
+          <text>人询价</text>
+        </view>
+        <text class="btn ftp-btns" catchtap="goPay" data-id="{{item.F_ProductId}}">询底价</text>
+      </view>
+    </view>
+
+  </scroll-view>
+</view>

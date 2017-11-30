@@ -206,10 +206,11 @@
   line-height: 60rpx;
   text-align: center;
   padding: 0 30rpx;
-  border: 2rpx solid #586c94;
+  background-color: #FFF5EF;
+  border: 2rpx solid #FFB889;
   border-radius: 8rpx;
-  font-size: 24rpx;
-  color: #586c94;
+  font-size: 28rpx;
+  color: #F60;
 }
 .compare{
   display: inline-block;

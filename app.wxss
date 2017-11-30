@@ -14,6 +14,11 @@
   src:url('//at.alicdn.com/t/font_69439_0abq9bddbl5trzfr.woff') format('woff'),
   url('//at.alicdn.com/t/font_69439_0abq9bddbl5trzfr.ttf') format('truetype');
 }
+@font-face {
+  font-family: 'wxfont';
+  src:url('//at.alicdn.com/t/font_478590_3yd86sqn1k9e8kt9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_478590_3yd86sqn1k9e8kt9.ttf') format('truetype');
+}
 /*空列表*/
 .empty-list{
     margin:30rpx 0;

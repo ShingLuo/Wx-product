@@ -27,8 +27,16 @@
             <text class="number"> 100人+ </text>
             <text>询底价</text>
           </view>
+          <view wx:if="{{!truckInfo.CluesCount}}" class="skimp">
+            <text>无询价记录</text>
+          </view>
         </view>
       </view>
+    </view>
+    <view class="car-nav-box">
+      <view class="car-nav-item" bindtap="goCarPage" data-tp="1">查看车型</view>
+      <view class="car-nav-item" bindtap="goCarPage" data-tp="2">查看配置</view>
+      <view class="car-nav-item" bindtap="goCarPage" data-tp="3">查看图片</view>
     </view>
 
     <!--输入信息-->
@@ -101,17 +109,17 @@
       </view>
     </view>
     <!--个人信息保护声明-->
-    <view class="statement">
+    <!-- <view class="statement">
       <view class="select-statement" bindtap="selectStatement">
         <image wx:if="{{statementSelected}}" class="selected-statement" src="{{statementSelected ? 'https://s.kcimg.cn/wap/images/detail/statement-checked.png' : ''}}"></image>
       </view> 
       <text>我同意</text>
       <text class="statement-info" bindtap="goStatement">《个人信息保护声明》</text>
-    </view>
+    </view> -->
   </scroll-view>
   <!--询底价按钮-->
-  <view class="footer-price-button" id="footer-price-button" bindtap="submitData">
-    <text>询底价</text>
+  <view class="footer-price-button ftp-btns" id="footer-price-button" bindtap="submitData">
+    <text>免费询价</text>
   </view>
   <!--错误提示-->
   <view wx:if="{{errPop}}" class="err-pop">
@@ -124,15 +132,12 @@
           </view> 
       </view>
   </view>
-
+  <image src="https://s.kcimg.cn/product/images/xc_home.png" class="home-bt" bindtap="goHomt"></image>
   <!-- 换车型弹层 -->
   <template is="switchModel" data="{{switchModel,switchModelPop,switchModelData}}"/>  
 
   <!--<view  bindtap="bindViewTap" class="userinfo">
     <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
     <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-  </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
   </view>-->
 </view>

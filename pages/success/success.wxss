@@ -91,7 +91,7 @@
 .ask-amount{
     color:#f60;
 }
-.footer-price{
+.ft-price{
     position:absolute;
     right:30rpx;
     bottom:30rpx;
@@ -107,4 +107,44 @@
 .footer-price-checked{
     color:#bbb;
     background-color:#eee;
+}
+.home-bt{
+    width: 94rpx;
+    height: 94rpx;
+    position: absolute;
+    bottom: 140rpx;
+    right: 18rpx;
+    z-index: 66;
+}
+.btn-hot-home{
+    display: block;
+    padding-top: 26rpx;
+    padding-left: 30rpx;
+    text-align: center;
+    font-size: 28rpx;
+    color: #FF6600;
+    line-height: 66rpx;
+}
+.btn-hot-lf{
+    float: left;
+    width: 326rpx;
+    height: 66rpx;
+    background-color: #fff;
+    margin-right: 30rpx;
+    border:2rpx solid #FF6600;
+    border-radius: 4rpx;
+}
+.btn-hot-rt{
+    float: left;
+    width: 326rpx;
+    height: 66rpx;
+    background-color: #fff;
+    border:2rpx solid #FF6600;
+    border-radius: 4rpx;
+}
+.btn-hot-rt:after,.btn-hot-lf:after{
+    font-family:"detail";
+    content:"\53bb";
+    font-size:24rpx;
+    margin-left:10rpx;
 }

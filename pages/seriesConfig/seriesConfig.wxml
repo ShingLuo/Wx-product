@@ -15,6 +15,9 @@
         <view class="name-wrapper">
           <text class="name-text">{{configData.products[0].F_ProductName}}</text>
         </view>
+        <view class="foot-price ftp-btns" wx:if="{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice != 'kong'}}" data-productId="{{configData.products[0].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">
+          <text>询底价</text>
+        </view>
       </view> 
       <view wx:else class="add-product" data-index="0" bindtap="addProduct">
         <text class="add-text">加入车型</text>
@@ -25,6 +28,9 @@
         <text class="clear" bindtap="clear" data-index="1">×</text>
         <view class="name-wrapper">
           <text class="name-text">{{configData.products[1].F_ProductName}}</text>
+        </view>
+        <view class="foot-price ftp-btns" wx:if="{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice != 'kong'}}" data-productId="{{configData.products[1].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">
+          <text>询底价</text>
         </view>
       </view>
       <view wx:else class="add-product" data-index="1" bindtap="addProduct">
@@ -58,12 +64,11 @@
         <view class="content">
             <text wx:if="{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice && configData.lowPrice[0].F_BigPrice != 0 && configData.lowPrice[0].F_BigPrice != 'kong'}}">{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice}}万</text>
             <text wx:if="{{configData.lowPrice[0] && !configData.lowPrice[0].F_BigPrice && configData.lowPrice[0].F_BigPrice != 'kong'}}">暂无报价</text>
-            <text class="footer-price-text"  wx:if="{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice != 'kong'}}" data-productId="{{configData.products[0].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">询价</text>
         </view>
         <view class="content">
             <text wx:if="{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice && configData.lowPrice[1].F_BigPrice != 0 && configData.lowPrice[1].F_BigPrice != 'kong'}}">{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice}}万</text>
             <text wx:if="{{configData.lowPrice[1] && !configData.lowPrice[1].F_BigPrice && configData.lowPrice[1].F_BigPrice != 'kong'}}">暂无报价</text>
-            <text class="footer-price-text" wx:if="{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice != 'kong'}}" data-productId="{{configData.products[1].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">询价</text>
+            
         </view>
       </view>
     </view>
@@ -100,7 +105,7 @@
     </view>
   </view>
   <!--询底价按钮-->
-  <view class="footer-price" bindtap="goFooterPrice" data-productid="{{askProId}}" id="footerPrice">
+  <view class="footer-price ftp-btns" bindtap="goFooterPrice" data-productid="{{askProId}}" id="footerPrice">
     <text class="foot-price-text">询底价</text>
     <view wx:if="{{askPriceNum > 100}}">
       <text class="number">已有</text>
@@ -111,4 +116,5 @@
       <text class="number">已有100人+询底价</text>
     </view>
   </view>
+  <image src="https://s.kcimg.cn/product/images/xc_home.png" class="home-bt" bindtap="goHomt"></image>
 </view>

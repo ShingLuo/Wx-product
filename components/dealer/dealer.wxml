@@ -1,5 +1,5 @@
 <template name="dealer">
-  <view class="dealer">
+  <view class="dealer" id="dealbox">
   <!--头部-->
     <view class="dealer-header">
       <text>经销商</text>
@@ -23,7 +23,7 @@
           </view>
           <view class="dealer-action">
             <text class="contact" wx:if="{{item.phone}}" data-phone="{{item.phone}}" bindtap="makePhone">联系经销商</text>
-            <text class="dealer-foot-price" data-dealerInfo="{{item}}" catchtap="goFooterPrice" id="footerPrice">询底价</text>
+            <text class="dealer-foot-price ftp-btns" data-dealerInfo="{{item}}" catchtap="goFooterPrice" id="footerPrice">询底价</text>
           </view>
         </view>
       </view>

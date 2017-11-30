@@ -36,7 +36,7 @@ Page({
     wx.getStorage({
       key: 'photoSource',
       success: res => {
-        console.log(res,'res')
+        // console.log(res,'res')
         this.setData({
           priceButton:true,
         })
@@ -79,7 +79,7 @@ Page({
           index: res.data.bs - 1,
           typeId: res.data.typeId,
         })
-        console.log(res.data,'res.data')
+        // console.log(res.data,'res.data')
         // console.log(this.data.imgDataList,'this.data.imgDataList')
         let forNum = Math.ceil(res.data.bs / 100) == 0 ? 1 : Math.ceil(res.data.bs / 100);
 
@@ -101,7 +101,7 @@ Page({
     if (this.data.productId) {
       ajaxUrl += '&productId=' + this.data.productId;
     }
-    console.log(ajaxUrl)
+    // console.log(ajaxUrl)
     wx.request({
       url: ajaxUrl,
       success:ele => {
@@ -123,7 +123,7 @@ Page({
             title: titleName
           })
         // }
-        console.log(ele,'ele')
+        // console.log(ele,'ele')
 
           //图片列表详细数据
         let imgList = this.data.imgList;
@@ -143,7 +143,7 @@ Page({
           // }
           
         if (this.data.forNum > 1){
-          console.log(this.data.forNum)
+          // console.log(this.data.forNum)
           this.setData({
             forNum:this.data.forNum-=1,
             page:this.data.page+=1,
@@ -184,7 +184,7 @@ Page({
   //点击询底价按钮，进入询底价页面
   goFooterPrice(e){
     let productId = e.currentTarget.dataset.productid;
-    console.log(productId)
+    // console.log(productId)
 
     //存储询底价页面车型id
     wx.setStorage({
@@ -202,6 +202,6 @@ Page({
     this.setData({
       simpleModel: !this.data.simpleModel
     })
-    console.log(this.data.simpleModel)
+    // console.log(this.data.simpleModel)
   }
 })

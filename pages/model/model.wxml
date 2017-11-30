@@ -7,19 +7,8 @@
 <import src="../../components/jointly/switchModel/switchModel.wxml"/>
 <import src="../../components/selectLocation/selectLocation.wxml"/>
 <view class="container">
-  <scroll-view class="model-wrapper" scroll-into-view="{{scrollInfo}}" scroll-y="true">
+  <scroll-view class="model-wrapper" scroll-into-view="{{scrollInfo}}" scroll-y="true" enable-back-to-top="true" scroll-with-animation="true">
     <view class="model" id="goTop">
-      <view class="model-nav">
-        <view class="model-round">
-          <text>综述</text>
-        </view>
-        <view class="nav-text" bindtap="goUrl" data-url="../modelConfig/modelConfig">
-          <text>配置</text>
-        </view>
-        <view class="nav-text" bindtap="goUrl" data-url="../modelPhoto/modelPhoto">
-          <text>图片</text>
-        </view>
-      </view>
       <!--车型图片-->
       <template is="picture" data="{{picture,truckImageData}}"/>
       <!--车型-->
@@ -27,6 +16,17 @@
         <text class="truck-model-text">{{titleName}}</text>
         <text class="similarity-car" bindtap="examineSimilar" wx:if="{{gatherTotal > 1}}">查看{{gatherTotal - 1}}款相近车型</text>
         <view class="exchange" bindtap="changeTruck">换车型</view>
+      </view>
+      <view class="model-nav">
+        <view class="nav-text" bindtap="goUrl" data-url="../modelConfig/modelConfig">
+          <text class="nav-ico-pei">配置</text>
+        </view>
+        <view class="nav-text" bindtap="goUrl" data-url="../modelPhoto/modelPhoto">
+          <text class="nav-ico-img">图片</text>
+        </view>
+        <view class="nav-text" catchtap="goDealers">
+          <text class="nav-ico-sell">经销商</text>
+        </view>
       </view>
       <!--经销商参考价-->
       <view class="quote-wrapper" wx:if="{{areaPrice.length}}">
@@ -38,7 +38,7 @@
       <!--参数配置数据-->
       <template is="parameterConfig" data="{{parameterConfig,parameterData}}"/>
       <!--相近车型可选配置-->
-      <view id="examineSimilar"></view>
+      <view id="examineSimilar" style="width:100%; height:2rpx;"></view>
       <template is="correlativeTruck" wx:if="{{gatherTotal > 1}}" data="{{correlativeTruck,productId,examineSimliarData,optionCondition,compareState}}"/>
       <!--经销商推荐列表-->
       <template is="dealer" data="{{dealer,dealerList,locationInfo}}"/>
@@ -68,8 +68,8 @@
       <text bindtap="goUrl" data-url="../modelConfig/modelConfig">配置</text>
       <text bindtap="goUrl" data-url="../modelPhoto/modelPhoto">图片</text>
       <text class="{{compareState[productId] ? '' : 'compare-join'}}" data-productId="{{productId}}" bindtap="compare">{{compareState[productId] ? compareState[productId] : '对比'}}</text>
-    </view>
-    <view class="footer-price" wx:if="{{footerPriceShow}}" bindtap="goFooterPrice" data-productId="{{productId}}" id="footerPrice">
+  </view>
+  <view class="footer-price ftp-btns" wx:if="{{footerPriceShow}}" bindtap="goFooterPrice" data-productId="{{productId}}" id="footerPrice">
       <text class="foot-price-text">询底价</text>
       <view wx:if="{{askTotal > 100}}">
         <text class="number">已有</text>

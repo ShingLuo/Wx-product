@@ -1,10 +1,10 @@
 {
   "pages":[
-    "pages/searchCar/searchCar",
     "pages/brand/brand",
+    "pages/searchCar/searchCar",
     "pages/model/model",
+    "pages/tops/tops",
     "pages/seriesConfig/seriesConfig",
-    "pages/searchResult/searchResult",
     "pages/series/series",
     "pages/index/index",
     "pages/footerPrice/footerPrice",
@@ -15,10 +15,7 @@
     "pages/modelConfig/modelConfig",
     "pages/contrast/contrast",
     "pages/addProduct/addProduct",
-    "pages/selectProduct/selectProduct",
-    "pages/location/location",
-    "pages/logs/logs",
-    "pages/statement/statement"
+    "pages/logs/logs"
   ],
   "window":{
     "backgroundTextStyle":"light",
@@ -47,6 +44,12 @@
         "text": "条件选车",
         "iconPath": "/pages/Image/condition.png",
         "selectedIconPath": "/pages/Image/selectedCondition.png"
+      },
+      {
+        "pagePath": "pages/tops/tops",
+        "text": "热销排行",
+        "iconPath": "/pages/Image/ranking.png",
+        "selectedIconPath": "/pages/Image/rank.png"
       }
     ]
   }

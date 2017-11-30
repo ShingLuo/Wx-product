@@ -7,7 +7,8 @@ Page({
     modelList:[],
     //定义当前的经销商列表
     modelIndex:0,
-    locationInfo:{}
+    locationInfo:{},
+    total: 0
   },
   onLoad:function(options){
         wx.setNavigationBarTitle({
@@ -29,19 +30,20 @@ Page({
         locationInfo:locationInfo
       })
     }
-    console.log(this.data.locationInfo,'locationInfo')
+    // console.log(this.data.locationInfo,'locationInfo')
     
     //请求经销商
     wx.request({
-      url: 'https://product.360che.com/index.php?r=api/getcompeteproduct&productId=' + submitData.truckid + '&isW=1',
+      url: 'https://product.360che.com/index.php?r=api/getcompeteproduct&productId=' + submitData.truckid + '&isW=2',
       data:{},
       success:(res) => {
-        console.log(res)
-        if(res.errMsg == 'request:ok'){
+        // console.log(res)
+        if(res.errMsg == 'request:ok' && res.data.info == 'ok'){
           this.setData({
-            modelList:res.data.data
+            modelList: res.data.data,
+            total: res.data.total
           })
-          console.log(this.data.modelList)
+          // console.log(this.data.modelList)
         }
       }
     });
@@ -62,7 +64,7 @@ Page({
       url:'https://dealer-api.360che.com/inquiryprice/Dealer/getDealerList.aspx?productid=' + productId + '&provincesn=' + this.data.locationInfo.provincesn + '&citysn=' + this.data.locationInfo.citysn + '&type=1',
       data:submitData,
       success:res => {
-        console.log(res)
+        // console.log(res)
         let arr = [];
         if(res.errMsg == 'request:ok' && res.data.length){
             for(var i = 0 ; i < res.data.length ; i++){
@@ -78,7 +80,7 @@ Page({
           url:'https://dealer-api.360che.com/inquiryprice/Dealer/submitClues.aspx?',
           data:submitData,
           success:(res) => {
-            console.log(submitData)
+            // console.log(submitData)
           
             //隐藏加载
             this.cancelLoading()
@@ -134,7 +136,7 @@ Page({
                 errPop:true
               })
             }
-            console.log(res,'最终提交')
+            // console.log(res,'最终提交')
           },
           fail(){
             wx.showToast({
@@ -159,6 +161,22 @@ Page({
     this.setData({
       modelIndex:number
     })
+  },
+  goHomt(){
+    wx.switchTab({
+      url: '/pages/brand/brand'
+    })
+  },
+  goHomeNav(e){
+    if (e.currentTarget.dataset.tp == 1) {
+      wx.switchTab({
+        url: '/pages/brand/brand'
+      })
+    } else {
+      wx.switchTab({
+        url: '/pages/searchCar/searchCar'
+      })
+    }
   },
   onReady:function(){
     // 页面渲染完成

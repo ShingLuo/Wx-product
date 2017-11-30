@@ -29,11 +29,11 @@
   vertical-align: middle;
 }
 .import-wrapper{
-  padding:30rpx 30rpx 0;
+  padding:24rpx 24rpx 0;
 }
 .user-name,.user-phone{
   position:relative;
-  margin-bottom:30rpx;
+  margin-bottom:24rpx;
 }
 .user-name > text,.user-phone > text{
   position:absolute;
@@ -50,7 +50,7 @@
 .user-name > input,.user-phone > input{
   height:88rpx;
   line-height:88rpx;
-  padding-left:58rpx;
+  padding-left:48rpx;
   font-size:28rpx;
   border:1px solid #ddd;
   border-radius:4rpx;
@@ -59,7 +59,7 @@
 .select-location{
   position:relative;
   height:88rpx;
-  padding:0 30rpx;
+  padding:0 24rpx;
   line-height:88rpx;
   color:#333;
   font-size:28rpx;
@@ -76,7 +76,8 @@
 }
 .select-location > .label{
   color:#f60;
-  margin-right:4rpx;
+  padding-left: 16rpx;
+  margin-right:20rpx;
 }
 .province-name{
   margin-left:30rpx;
@@ -85,16 +86,16 @@
   margin-left:10rpx;
 }
 .dealer-header{
-  padding:20rpx 30rpx 10rpx;
+  padding:20rpx 24rpx 10rpx;
   color:#999;
   font-size:28rpx;
-  background-color:#EFEFF4;
+  background-color:#f5f5f5;
 }
 .dealer-list{
   display: flex;
   flex-direction:row;
   align-items:center;
-  padding:20rpx 0 10rpx 30rpx;
+  padding:20rpx 0 10rpx 24rpx;
   border-bottom:1px solid #eee;
 }
 .select-dealer{
@@ -231,16 +232,35 @@
   line-height:100rpx;
   background-color:#f60;
 }
+/* 看车型菜单入口 */
+.car-nav-box{
+  display: flex;
+  border-bottom: 24rpx solid #F5F5F5;
+}
+.car-nav-item {
+  width: 220rpx;
+  height:80rpx;
+  flex:1;
+  line-height: 80rpx;
+  text-align: center;
+  color: #586C94;
+  border-right: 2rpx solid #eee;
+  font-size: 28rpx;
+}
+.car-nav-item:last-child{border-right: 0;}
 /* 换车型 */
+.change-model{
+  border-bottom: 2rpx solid #eee;
+}
 .car-module{
   position: relative;
-  padding: 20rpx 80rpx 20rpx 190rpx;
-  border-bottom: 2rpx solid #eee;
+  padding: 20rpx 60rpx 20rpx 288rpx;
+  height: 160rpx;
 }
 .car-module:after{
   position: absolute;
   top: 50%;
-  right: 20rpx;
+  right: 24rpx;
   color: #999;
   margin-top: -16rpx;
   font-size: 32rpx;
@@ -250,13 +270,13 @@
 .car-module image{
   position: absolute;
   top: 20rpx;
-  left: 20rpx;
-  width: 75px;
-  height: 50px;
+  left: 24rpx;
+  width: 240rpx;
+  height: 160rpx;
 }
 .model-message .product{
   display: block;
-  height: 72rpx;
+  height: 126rpx;
   line-height: 36rpx;
   font-size: 28rpx;
   color: #333;
@@ -304,4 +324,12 @@
     background-size: cover;
     margin-right: 5px;
     margin-bottom: -2px;
+}
+.home-bt{
+    width: 94rpx;
+    height: 94rpx;
+    position: fixed;
+    bottom: 140rpx;
+    right: 18rpx;
+    z-index: 666;
 }

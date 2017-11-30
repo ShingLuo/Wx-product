@@ -70,7 +70,6 @@ Page({
     // wx.removeStorage({ key: 'brandData' })
 
     // 请求品牌列表数据
-
     wx.getStorage({
       key: 'brandData',
       success: res => {
@@ -94,7 +93,7 @@ Page({
   //请求品牌数据
   getBrandData(){
     wx.request({
-      url: app.ajaxurl + 'index.php?r=api/gethotbrandlist&haveGroup=1&noIndex=1',
+      url: app.ajaxurl + 'index.php?r=api/gethotbrandlist&haveGroup=1&noIndex=1&isW=2',
       data: {},
       success: (res) => {
         if (res.errMsg == 'request:ok') {
@@ -146,7 +145,7 @@ Page({
       delay: 0,
       transformOrigin: '50% 50% 0',
       success: function (res) {
-        console.log("res")
+        // console.log("res")
       }
     })
     this.animation.rotate(deg).step()
@@ -189,7 +188,7 @@ Page({
     })
   },
   indexNavEnd(e){
-    console.log('结束')
+    // console.log('结束')
     let time = setTimeout(() => {
       this.setData({
         indicateShow: true,
@@ -214,8 +213,8 @@ Page({
             sidebarData: res.data,
             // noScroll: 'none'        
           })
-          console.log(res.data)
-          console.log(this.data.sidebarData.seriesList, 'sidebarData.seriesList')
+          // console.log(res.data)
+          // console.log(this.data.sidebarData.seriesList, 'sidebarData.seriesList')
         }
       }
     })
@@ -232,7 +231,7 @@ Page({
       delay: 0,
       transformOrigin: '50% 50% 0',
       success: function (res) {
-        console.log("res")
+        // console.log("res")
       }
     })
     this.animation.rotate(deg).step()
@@ -285,14 +284,14 @@ Page({
   },
   //进入条件选车
   goScreen(){
-    console.log(11)
+    // console.log(11)
     wx.switchTab({
       url:'../../pages/series/series',
       success:() => {
-        console.log(22)
+        // console.log(22)
       },
       complete:() => {
-        console.log(33)
+        // console.log(33)
       }
     })
   },
@@ -300,7 +299,7 @@ Page({
   onShareAppMessage: function (res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
-      console.log(res.target)
+      // console.log(res.target)
     }
     return {
       title: '品牌选车',

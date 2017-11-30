@@ -29,6 +29,9 @@
             <text class="number"> 100人+ </text>
             <text>询底价</text>
           </view>
+          <view wx:if="{{!truckInfo.CluesCount}}" class="skimp">
+            <text>无询价记录</text>
+          </view>
         </view>
       </view>
     </view>
@@ -103,17 +106,17 @@
       </view>
     </view>
     <!--个人信息保护声明-->
-    <view class="statement">
+    <!-- <view class="statement">
       <view class="select-statement" bindtap="selectStatement">
         <image wx:if="{{statementSelected}}" class="selected-statement" src="{{statementSelected ? 'https://s.kcimg.cn/wap/images/detail/statement-checked.png' : ''}}"></image>
       </view> 
       <text>我同意</text>
       <text class="statement-info" bindtap="goStatement">《个人信息保护声明》</text>
-    </view>
+    </view> -->
   </scroll-view>
   <!--询底价按钮-->
-  <view class="footer-price-button" id="footer-price-button" bindtap="submitData">
-    <text>询底价</text>
+  <view class="footer-price-button ftp-btns" id="footer-price-button" bindtap="submitData">
+    <text>免费询价</text>
   </view>
   <!--错误提示-->
   <view wx:if="{{errPop}}" class="err-pop">

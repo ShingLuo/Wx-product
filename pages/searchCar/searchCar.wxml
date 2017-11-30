@@ -1,4 +1,3 @@
-
 <import src="../../components/searchResult/searchResult.wxml"/>
 <view class="container">
   <view class="loading" wx:if="{{!searchData.subCateList.length}}">
@@ -115,7 +114,7 @@
           <view>
             <text class="price" wx:if="{{model.price}}"><text>{{model.price}}</text>万元</text>
             <text wx:else class="not-price">暂无报价</text>
-            <view class="footer-price" data-id="{{model.id}}" catchtap='goFooterPrice'>询底价</view>     
+            <view class="footer-price ftp-btns" data-id="{{model.id}}" catchtap='goFooterPrice'>询底价</view>     
           </view>
         </view>
         <view class="load-more" wx:if="{{sidebarData.list[index].length > 5 && (!seriesListNumber[index] || seriesListNumber[index] < sidebarData.list[index].length)}}" data-index="{{index}}" bindtap='loadMore'>

@@ -1,6 +1,6 @@
 <!--导航-->
 <template name="picture">
-  <view class="picture" data-url="../seriesPhoto/seriesPhoto" bindtap="goUrl">
+  <view class="picture" id="goTop" data-url="../seriesPhoto/seriesPhoto" bindtap="goUrl">
       <view class="picture-list">
         <image wx:if="{{truckImageData.imgSrc}}" src="{{truckImageData.imgSrc}}"></image>
         <view  wx:if="{{truckImageData.notImg}}"  class="not-img">
@@ -12,12 +12,18 @@
         <text class="ranking-icon"></text>
         <text class="ranking-text">{{truckImageData.rank}}</text>
       </view>
+      <view class="share-box" catchtap="onShareAppMessage">
+        <text class="share-icon"></text>
+        <button class="share-text" open-type="share"
+        catchtap="onShareAppMessage"
+        plain="true">我要分享</button>
+      </view>
       <view class="price">
         <text class="vender">厂商指导价：</text>
         <text class="price-text" wx:if="{{truckImageData.priceScope.min && truckImageData.priceScope.min != truckImageData.priceScope.max && truckImageData.priceScope.min != 0}}">{{truckImageData.priceScope.min}}-</text>
         <text class="price-text" wx:if="{{truckImageData.priceScope.max && truckImageData.priceScope.max != 0}}">{{truckImageData.priceScope.max}}万</text>
         <text class="not-price" wx:else>暂无</text>
-        <text class="picture-text" wx:if="{{truckImageData.imgTotal > 0}}">{{truckImageData.imgTotal}}张图片</text>
+        <text class="picture-text" wx:if="{{truckImageData.imgTotal > 0}}">{{truckImageData.imgTotal}}张</text>
       </view>
     </view>
 </template>

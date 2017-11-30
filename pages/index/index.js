@@ -1,10 +1,9 @@
 //index.js
-var util = require('../../utils/util.js')
+// var util = require('../../utils/util.js')
 //获取应用实例
 var app = getApp()
 Page({
   data: {
-    motto: 'Hello World',
     userInfo: {},
     //车型id
     productId: '16525',//
@@ -167,9 +166,53 @@ Page({
   onReady:() => {
     
   },
+  goHomt(){
+    wx.switchTab({
+      url: '/pages/brand/brand'
+    })
+  },
+  // 跳转页面函数
+  goCarPage(e){
+    var json;
+    switch(e.currentTarget.dataset.tp){
+      case '1':
+        json = {
+          locationInfo: this.data.locationInfo,
+          productData:{
+            F_SeriesId: this.data.truckInfo.SeriesId,
+            F_ProductId: this.data.productId
+          },
+          seriesId: this.data.truckInfo.SubCategoryId
+        }
+        wx.redirectTo({
+          url: '/pages/model/model?share=' + JSON.stringify(json)
+        })
+        break;
+      case '2':
+        json = {
+          productId: this.data.productId
+        }
+        wx.redirectTo({
+          url: '/pages/modelConfig/modelConfig?share=' + JSON.stringify(json)
+        })
+        break;
+      default:
+        json = {
+          seriesInfo:{
+            F_SubCategoryId: this.data.truckInfo.SubCategoryId,
+            F_SeriesId: this.data.truckInfo.SeriesId
+          },
+          photoData:{typeId: 0},
+          productId: this.data.productId
+        }
+        wx.redirectTo({
+          url: '/pages/modelPhoto/modelPhoto?share=' + JSON.stringify(json)
+        })
+    }
+  },
   //请求经销商数据
   getDealer(provinceId,cityId){
-    console.log(this.data.locationInfo)
+    // console.log(this.data.locationInfo)
     wx.request({
       url:this.data.ajaxUrl + 'Dealer/getDealerList.aspx?productid=' + this.data.productId + '&provincesn=' + this.data.locationInfo.provincesn + '&citysn=' + this.data.locationInfo.citysn,
       data:{},
@@ -191,7 +234,7 @@ Page({
           this.setData({
               dealerSelected:arr
           })
-          console.log(arr)
+          // console.log(arr)
         }
       }
     })
@@ -201,10 +244,10 @@ Page({
 
     let index = e.currentTarget.dataset.index;
     let ShopId = e.currentTarget.dataset.shopid;
-    console.log(ShopId)
+    // console.log(ShopId)
 
     let arr = this.data.dealerSelected;
-    console.log(index,'index')
+    // console.log(index,'index')
     if(arr[index] != ''){
       arr[index] = ''
     }else{
@@ -214,7 +257,7 @@ Page({
     this.setData({
       dealerSelected:arr
     })
-    console.log(arr)
+    // console.log(arr)
     // console.log(this.data.dealerData)
   },
   //选择参数配置
@@ -507,7 +550,7 @@ Page({
             errPop:true
           })
         }
-        console.log(res,'最终提交')
+        // console.log(res,'最终提交')
       },
       fail:() => {
         this.setData({

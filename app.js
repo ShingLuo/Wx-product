@@ -1,39 +1,38 @@
 //app.js
 App({
     onLaunch: function() {
-        //调用API从本地缓存中获取数据
-        var logs = wx.getStorageSync('logs') || []
-        logs.unshift(Date.now())
-        wx.setStorageSync('logs', logs)
-        this.ajaxurl = 'https://product.360che.com/'
+      //调用API从本地缓存中获取数据
+      var logs = wx.getStorageSync('logs') || []
+      logs.unshift(Date.now())
+      wx.setStorageSync('logs', logs)
+      this.ajaxurl = 'https://product.360che.com/'
     },
     getUserInfo: function(cb) {
-        var that = this
-        if (this.globalData.userInfo) {
-            typeof cb == "function" && cb(this.globalData.userInfo)
-        } else {
-            //调用登录接口
-            wx.login({
-                success: function() {
-                    wx.getUserInfo({
-                        success: function(res) {
-                            that.globalData.userInfo = res.userInfo
-                            typeof cb == "function" && cb(that.globalData.userInfo)
-                        }
-                    })
-                }
+      var that = this
+      if (this.globalData.userInfo) {
+          typeof cb == "function" && cb(this.globalData.userInfo)
+      } else {
+        //调用登录接口
+        wx.login({
+          success: function() {
+            wx.getUserInfo({
+              success: function(res) {
+                that.globalData.userInfo = res.userInfo
+                typeof cb == "function" && cb(that.globalData.userInfo)
+              }
             })
-        }
+          }
+        })
+      }
     },
     //进入页面判断是否是转发过来
     updateDataForShare(options, _this, success, fail) {
-      console.log(_this.route,'_this.route')
-      console.log(options, 'options.share');
-      console.log(options.share,'options.share');
+      // console.log(_this.route,'_this.route')
+      // console.log(options, 'options.share')
+      // console.log(options.share,'options.share')
         if (options.share) {
           let share = JSON.parse(options.share)
-
-          console.log(share,'share')
+            // console.log(share,'share')
             //给data信息赋值
             _this.setData(share)
             //存储信息缓存
@@ -49,7 +48,7 @@ App({
             //   duration: 2000
             // })
             success && success.call(_this)
-        }else{
+        } else {
           // wx.showToast({
           //   title: '正常进来',
           //   icon: 'success',
@@ -60,30 +59,30 @@ App({
     },
     //页面分享转发
     shareCurrentPage(shareParams, _this) {
-        let [params, path, title] = [{}, '', ''];
-        shareParams.forEach(item => {
-            params[item] = _this.data[item]
-        })
-        title = this.globalData.shareTitle
-        console.log(params,'params')
-        path = `${_this.route}?share=${JSON.stringify(params)}`
-        console.log(path,'path')
-
-        return {
-            title: title,
-            path: path,
-            success: function(res) {
-                // 转发成功
-              wx.showToast({
-                title: '成功',
-                icon: 'success',
-                duration: 2000
-              })
-            },
-            fail: function(res) {
-                // 转发失败
-            }
+      let [params, path, title] = [{}, '', '']
+      shareParams.forEach(item => {
+          params[item] = _this.data[item]
+      })
+      title = this.globalData.shareTitle
+      // console.log(params,'params')
+      path = `${_this.route}?share=${JSON.stringify(params)}`
+      console.log(path,'path')
+      return {
+        title: title,
+        path: path,
+        success: function(res) {
+          console.log(path)
+            // 转发成功
+          // wx.showToast({
+          //   title: '成功',
+          //   icon: 'success',
+          //   duration: 2000
+          // })
+        },
+        fail: function(res) {
+            // 转发失败
         }
+      }
     },
     globalData: {
         userInfo: null,
@@ -102,3 +101,5 @@ App({
         }
     }
 })
+
+

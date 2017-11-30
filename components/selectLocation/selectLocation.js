@@ -88,7 +88,7 @@ Page({
         this.setData({
           myRegion: res.data
         })
-        console.log(this.data.myRegion, 'hotLocationhotLocationhotLocationhotLocation')
+        // console.log(this.data.myRegion, 'hotLocationhotLocationhotLocationhotLocation')
       }
     })
 
@@ -125,7 +125,7 @@ Page({
   //触摸导航列表
   indexNav(e){
     // console.log(e)
-    console.log(e.target.dataset.index)
+    // console.log(e.target.dataset.index)
     this.setData({
       navInfo:e.target.dataset.index,
       navInfoShow:true
@@ -145,16 +145,16 @@ Page({
   },
   //输入搜素内容，
   searchResult(e){
-    console.log(e.detail.value)
+    // console.log(e.detail.value)
     wx.request({
       url:'https://product.360che.com/index.php?r=weex/series/get-search-region&value=' + e.detail.value,
       success:(res) => {
         if(res.errMsg == 'request:ok' && res.data.info == 'ok'){
-          console.log(res.data,'res.data')
+          // console.log(res.data,'res.data')
           this.setData({
            searchResultData:res.data.data,
           })
-          console.log(this.data.searchResultData,'searchResultDatasearchResultData')
+          // console.log(this.data.searchResultData,'searchResultDatasearchResultData')
         }
       }
     })
@@ -179,7 +179,7 @@ Page({
       url:'https://product.360che.com/index.php?r=app/series/city-list&provinceId=' + this.data.locationInfo.provincesn,
       success:(res) => {
         if(res.errMsg == 'request:ok'){
-          console.log(res,'aaa')
+          // console.log(res,'aaa')
           //给城市列表赋值  显示城市列表
           this.setData({
             cityList:res.data.data,
@@ -188,7 +188,7 @@ Page({
         }
       }
     })
-    console.log(this.data.locationInfo)
+    // console.log(this.data.locationInfo)
   },
   //选择城市弹窗
   selectCity(e){
@@ -216,7 +216,7 @@ Page({
     this.setData({
       locationInfo:e.currentTarget.dataset,
     })
-    console.log(this.data.locationInfo,'点击搜素结果列表或者定位地区')
+    // console.log(this.data.locationInfo,'点击搜素结果列表或者定位地区')
     //存储已选择的城市
     wx.setStorage({
       key:"locationInfo",

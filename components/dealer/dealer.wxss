@@ -49,7 +49,7 @@
   padding: 0 30rpx;
 }
 .dealer-model{
-  padding: 30rpx 0;
+  padding: 30rpx 0; 
   border-bottom: 2rpx solid #eee;
 }
 .dealer-model:last-child{
@@ -117,8 +117,8 @@
   padding: 0 30rpx; 
 }
 .dealer-action .contact:before{
-  content: "\62e8";
   font-family: "detail";
+  content: "\62e8";
   font-size: 32rpx;
   margin-right: 6rpx;
 }
@@ -127,8 +127,9 @@
   height: 56rpx;
   line-height: 56rpx;
   font-size: 28rpx;
-  border: 2rpx solid #586c94;
+  background-color: #FFF5EF;
+  border: 2rpx solid #FFB889;
   border-radius: 8rpx;
   padding: 0 30rpx;
-  color: #586c94;
+  color: #F60;
 }

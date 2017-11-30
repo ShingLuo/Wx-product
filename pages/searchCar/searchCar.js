@@ -77,7 +77,7 @@ Page({
           this.setData({
             searchData:res.data
           })
-          console.log(this.data.searchData)
+          // console.log(this.data.searchData)
         }
       }
     })
@@ -104,7 +104,7 @@ Page({
       url: `${app.ajaxurl}/index.php?r=weex/index/cate-sub&cate_id=${id}`,
       success:res => {
         if (res.errMsg === 'request:ok') {
-          console.log(res.data)
+          // console.log(res.data)
         }
       }
     })
@@ -125,7 +125,7 @@ Page({
           this.setData({
             sidebarData: res.data,
           })
-          console.log(this.data.sidebarData)
+          // console.log(this.data.sidebarData)
         }
       }
     })
@@ -152,7 +152,7 @@ Page({
 
     getSearchData[name] = id;
 
-    console.log(this.data.getSearchData,'this.data.getSearchData')
+    // console.log(this.data.getSearchData,'this.data.getSearchData')
 
     //隐藏sidebar
     this.setData({
@@ -161,7 +161,7 @@ Page({
       getSearchData: getSearchData
     })
 
-    console.log(getSearchData)
+    // console.log(getSearchData)
     //弹出筛选结果弹层
     this.setData({
       searchResultPop:true,
@@ -218,7 +218,7 @@ Page({
 
       let getSearchData = this.data.getSearchData
 
-      console.log(getSearchData, 'getSearchData')
+      // console.log(getSearchData, 'getSearchData')
       this.setData({
         getSearchData: getSearchData
       })
@@ -279,7 +279,7 @@ Page({
             ele.data.paramList.splice(number, 0, brand)
 
             //如果选择价格，进入页面默认选中价格
-            console.log(ele.data)
+            // console.log(ele.data)
 
             //如果没有子类，添加子类分类
             if (!this.data.getSearchData.subCateId) {
@@ -318,7 +318,7 @@ Page({
   },
   // 请求sidebar内容 && 显示sidebar
   sidebarShow(e) {
-    console.log(this.data.getSearchData,'this.data.getSearchData')
+    // console.log(this.data.getSearchData,'this.data.getSearchData')
     //显示sidebar和遮罩层
     this.setData({
       sidebarListPop: true,
@@ -343,7 +343,7 @@ Page({
       typeName: typeName
     })
 
-    console.log(typeName, 'name')
+    // console.log(typeName, 'name')
 
     //请求品牌弹层列表
     if (name == 'brandId') {
@@ -364,7 +364,7 @@ Page({
             res.data.letters.unshift('top')
             res.data.brandList.unshift(unlimited)
 
-            console.log(res.data, 'res.data')
+            // console.log(res.data, 'res.data')
 
             this.setData({
               sidebarData: res.data,
@@ -378,7 +378,7 @@ Page({
         url: `${app.ajaxurl}/index.php?r=weex/list/cate`,
         data: this.data.getSearchData,
         success: res => {
-          console.log(res.data, 'subCateId')
+          // console.log(res.data, 'subCateId')
           let unlimited = {
             'id': '',
             'name': '不限',
@@ -448,7 +448,7 @@ Page({
   clickSidebar(e) {
     //查看按钮是否是禁用状态
     let disable = e.currentTarget.dataset.disable;
-    console.log(disable)
+    // console.log(disable)
     if (disable) {
       return
     }
@@ -460,7 +460,7 @@ Page({
     let id = e.currentTarget.dataset.id
 
 
-    console.log(id,'wocao')
+    // console.log(id,'wocao')
     //存储 paramId
     let paramId = this.data.paramId
     //增加选择框高亮显示
@@ -488,7 +488,7 @@ Page({
       //存储 paramId 的值
       getSearchData[this.data.option] = arr.join('-')
 
-      console.log(getSearchData[this.data.option],'getSearchData[this.data.option]getSearchData[this.data.option]')
+      // console.log(getSearchData[this.data.option],'getSearchData[this.data.option]getSearchData[this.data.option]')
 
     } else if (this.data.option === 'brandId') {
       //存储brandId的值
@@ -499,13 +499,13 @@ Page({
     if (name == '不限') {
       name = ''
     }
-    console.log(name)
+    // console.log(name)
 
     //修改选择分类的值。
     resultData.paramList[this.data.typeIndex].selected = id
     resultData.paramList[this.data.typeIndex].selName = name
 
-    console.log(this.data.getSearchData, 'this.data')
+    // console.log(this.data.getSearchData, 'this.data')
 
     this.setData({
       //增加列别选项的高亮显示
@@ -521,7 +521,7 @@ Page({
       noMore:false,
     })
     this.searchResult(res => {
-      console.log(res.data)
+      // console.log(res.data)
       //改变列表的值
       let resultData = this.data.resultData;
       resultData.total = res.data.total;
@@ -612,7 +612,7 @@ Page({
       data: seriesInfo,
     })
 
-    console.log(this.data.getSearchData)
+    // console.log(this.data.getSearchData)
 
     //显示sidebar和遮罩层
     this.setData({
@@ -746,7 +746,7 @@ Page({
       clearTimeout(time)
     }, 500)
 
-    console.log(this.data.navInfo)
+    // console.log(this.data.navInfo)
   },
   //导航栏
   indexNavmove(e) {
@@ -798,12 +798,12 @@ Page({
     }
     let getSearchData = this.data.getSearchData
     getSearchData.page ++
-    console.log(getSearchData)
+    // console.log(getSearchData)
     this.setData({
       loading:true,
       getSearchData: getSearchData
     })
-    console.log(this.data.loading)
+    // console.log(this.data.loading)
     //请求加载数据
     this.getInitialData()
   },

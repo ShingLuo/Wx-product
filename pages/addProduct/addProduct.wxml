@@ -12,6 +12,7 @@
         <text class="{{selected == 2 ? 'selected' : ''}}">对比记录</text>
       </view>
     </view>
+    <image src="https://s.kcimg.cn/product/images/xc_home.png" class="home-bt" bindtap="goHomt"></image>
     <swiper style="height:100%" current="{{selected}}" bindchange="setSelected">
         <!-- 热门列表 -->
         <swiper-item>

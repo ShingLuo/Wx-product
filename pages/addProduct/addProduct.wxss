@@ -426,3 +426,11 @@ scroll-view{
 .selected{
   color:#999;
 }
+.home-bt{
+    width: 94rpx;
+    height: 94rpx;
+    position: absolute;
+    bottom: 140rpx;
+    right: 18rpx;
+    z-index: 66;
+}

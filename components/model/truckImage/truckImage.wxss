@@ -1,6 +1,5 @@
 .picture{
   position: relative;
-  margin-top:20rpx;
   height:480rpx;
 }
 .picture-list image{
@@ -35,14 +34,14 @@
 }
 .ranking .ranking-icon:before{
   position: absolute;
-  top: 0;
+  top: -2rpx;
   left: 30rpx;
   width: 24rpx;
   height: 40rpx;
-  content: '\e603';
-  font-family: 'detail';
+  content: '\e609';
+  font-family: 'wxfont';
   color: #fff;
-  font-size: 24rpx;
+  font-size: 22rpx;
   z-index: 10;
 }
 .ranking .ranking-text{
@@ -78,4 +77,42 @@
 }
 .price .picture-text{
   float: right;
+  line-height: 96rpx;
+}
+.price .picture-text:before{
+  font-family: 'wxfont';
+  display: inline-block;
+  content: '\e613';
+  font-size: 30rpx;
+  color: #fff;
+  position: relative;
+  top: 5rpx;
+  right: 6rpx;
+}
+.share-box{
+  position: absolute;
+  left: 24rpx;
+  top: 24rpx;
+  width: 180rpx;
+  height: 64rpx;
+  line-height: 56rpx;
+  text-align: center;
+  color: #fff;
+  z-index: 12;
+  background-color: rgba(255,102,0,.7);
+  border-radius: 40rpx;
+}
+.share-text{font-size: 24rpx;
+ display: inline;
+}
+.share-box button[plain]{
+  border:0;color: #fff; padding:0; margin: 0;
+}
+.share-icon:before{
+  font-family: 'wxfont';
+  display: inline-block;
+  content: '\e6fb';
+  font-size: 26rpx;
+  margin-right: 8rpx;
+  color: #fff;
 }

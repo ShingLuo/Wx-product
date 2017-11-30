@@ -217,7 +217,7 @@ Page({
       key: 'hotLocation',
       success: (res) => {
         //查看是否有定位地区
-        console.log(this.data.myRegion)
+        // console.log(this.data.myRegion)
         if (this.data.myRegion.cityname) {
           //查看现在存储的是否是6个
           if (res.data.length == 6) {
@@ -227,7 +227,7 @@ Page({
         this.setData({
           hotLocation: res.data
         })
-        console.log(this.data.hotLocation, 'hotLocationhotLocationhotLocationhotLocation')
+        // console.log(this.data.hotLocation, 'hotLocationhotLocationhotLocationhotLocation')
       }
     })
     // wx.navigateTo({
@@ -273,7 +273,7 @@ Page({
           this.setData({
               dealerSelected:arr
           })
-          console.log(arr)
+          // console.log(arr)
         }
       }
     })
@@ -301,7 +301,7 @@ Page({
       data: {},
       success: (res) => {
         if (res.errMsg == 'request:ok') {
-          console.log(res.data.data[this.data.productId], 'res')
+          // console.log(res.data.data[this.data.productId], 'res')
           this.setData({
             parameterData: res.data.data[this.data.productId]
           })
@@ -314,10 +314,10 @@ Page({
 
     let index = e.currentTarget.dataset.index;
     let ShopId = e.currentTarget.dataset.shopid;
-    console.log(ShopId)
+    // console.log(ShopId)
 
     let arr = this.data.dealerSelected;
-    console.log(index,'index')
+    // console.log(index,'index')
     if(arr[index] != ''){
       arr[index] = ''
     }else{
@@ -327,7 +327,7 @@ Page({
     this.setData({
       dealerSelected:arr
     })
-    console.log(arr)
+    // console.log(arr)
     // console.log(this.data.dealerData)
   },
   //选择参数配置
@@ -632,7 +632,7 @@ Page({
             errPop:true
           })
         }
-        console.log(res,'最终提交')
+        // console.log(res,'最终提交')
       },
       fail:() => {
         this.setData({
@@ -661,7 +661,7 @@ Page({
 //触摸导航列表
   indexNav(e) {
     // console.log(e)
-    console.log(e.target.dataset.index)
+    // console.log(e.target.dataset.index)
     this.setData({
       navInfo: e.target.dataset.index,
       navInfoShow: true
@@ -689,21 +689,21 @@ Page({
   },
   //清空输入框内容
   clearContent(e) {
-    console.log(e.detail)
+    // console.log(e.detail)
     e.detail = { value: '' }
   },
   //输入搜素内容，
   searchResult(e) {
-    console.log(e.detail.value)
+    // console.log(e.detail.value)
     wx.request({
       url: 'https://product.360che.com/index.php?r=weex/series/get-search-region&value=' + encodeURIComponent(e.detail.value),
       success: (res) => {
         if (res.errMsg == 'request:ok' && res.data.info == 'ok') {
-          console.log(res.data, 'res.data')
+          // console.log(res.data, 'res.data')
           this.setData({
             searchResultData: res.data.data,
           })
-          console.log(this.data.searchResultData, 'searchResultDatasearchResultData')
+          // console.log(this.data.searchResultData, 'searchResultDatasearchResultData')
         }
       }
     })
@@ -718,14 +718,14 @@ Page({
     this.setData({
       locationInfo: locationInfo
     })
-    console.log(this.data.locationInfo)
+    // console.log(this.data.locationInfo)
     //存储已选择的城市
     wx.setStorage({
       key: "locationInfo",
       data: this.data.locationInfo
     })
 
-    console.log(this.data.locationInfo)
+    // console.log(this.data.locationInfo)
 
     wx.request({
       url: 'https://product.360che.com/index.php?r=app/series/city-list&provinceId=' + this.data.locationInfo.provincesn,
@@ -743,7 +743,7 @@ Page({
         }
       }
     })
-    console.log(this.data.locationInfo)
+    // console.log(this.data.locationInfo)
   },
   //选择城市弹窗
   selectCity(e) {

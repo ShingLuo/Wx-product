@@ -9,7 +9,7 @@ page{
 .config{
   height:100%;
   background: #f5f5f5;
-  padding-top:222rpx;
+  padding-top:280rpx;
   box-sizing: border-box;
 }
 .product-name{
@@ -18,7 +18,7 @@ page{
   top:0;
   width:100%;
   min-height:212rpx;  
-  max-height:252rpx;
+  max-height:280rpx;
   display: flex;
   flex-direction: row;
   background: #fff;
@@ -161,13 +161,15 @@ page{
   border-bottom: 2rpx solid #eee;
   border-left: 2rpx solid #eee;
 }
-.footer-price-text{
-  font-size: 24rpx;
-  color: #f60;
-  padding: 3rpx 5rpx;
+.foot-price{
+  height: 60rpx;
+  line-height: 60rpx;
+  margin-top: 10rpx;
+  text-align: center;
   border: 2rpx solid #f60;
   border-radius: 4rpx;
-  margin-left: 10rpx;
+  color: #f60;
+  font-size: 28rpx;
 }
 .classify{
   position: fixed;
@@ -244,4 +246,12 @@ page{
 .footer-price .number{
   font-size: 24rpx;
   color: rgba(255,255,255,0.7);
+}
+.home-bt{
+    width: 94rpx;
+    height: 94rpx;
+    position: absolute;
+    bottom: 140rpx;
+    right: 18rpx;
+    z-index: 66;
 }

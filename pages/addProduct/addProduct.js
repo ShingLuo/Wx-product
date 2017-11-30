@@ -36,7 +36,7 @@ Page({
     //车型名称
     productName: [],
     //车型列表
-    productList: [],
+    productList: []
   },
 
   /**
@@ -65,7 +65,7 @@ Page({
       key: 'seriesInfo',
       success: res => {
         let seriesInfo = res.data;
-        console.log(seriesInfo)
+        // console.log(seriesInfo)
         // 重新读取信息
         wx.getStorage({
           key: 'compareData',
@@ -79,7 +79,7 @@ Page({
                 compareData:compareData,
                 productId: compareData[seriesInfo.F_SubCategoryId][0]
               })
-              console.log(this.data.compareData,'this.data.compareData')
+              // console.log(this.data.compareData,'this.data.compareData')
 
               //请求链接
               ajaxUrl += '&productId=' + this.data.productId;
@@ -89,7 +89,7 @@ Page({
               })
             }
             ajaxUrl += '&seriesId=' + seriesInfo.F_SeriesId + '&brandId=' + seriesInfo.F_BrandId;
-            console.log(seriesInfo.F_SubCategoryId,'seriesInfo.F_SeriesIdseriesId')
+            // console.log(seriesInfo.F_SubCategoryId,'seriesInfo.F_SeriesIdseriesId')
             wx.request({
               url: ajaxUrl,
               success: item => {
@@ -102,7 +102,7 @@ Page({
                     //车系id
                     seriesId:seriesInfo.F_SubCategoryId
                   })
-                  console.log(this.data.listInfo)
+                  // console.log(this.data.listInfo)
                 }
               }
             })
@@ -185,7 +185,7 @@ Page({
             shadeShow: true,
             sidebarData: res.data
           })
-          console.log(this.data.sidebarData)
+          // console.log(this.data.sidebarData)
         }
       }
     })
@@ -263,8 +263,8 @@ Page({
     wx.getStorage({
       key: 'compareNumber',
       success: num => {
-        console.log(compareData)
-        console.log(this.data.seriesId)
+        // console.log(compareData)
+        // console.log(this.data.seriesId)
         if (num.data == 0) {
           compareData[this.data.seriesId].unshift(productId)
         } else {
@@ -306,6 +306,11 @@ Page({
     wx.setStorage({
       key: 'compareHistory',
       data: compareHistory,
+    })
+  },
+  goHomt(){
+    wx.switchTab({
+      url: '/pages/brand/brand'
     })
   },
   // 点击索引导航

@@ -8,10 +8,10 @@
             <text class="contact-dealer">稍后会有经销商与您联系</text>
         </view>
     </view>
-    <view class="rests-model" wx:if="{{modelList.length}}">
+    <view class="rests-model" wx:if="{{modelList.length > 0}}">
         <view class="model-header">
            <text>询价此车型的人还关注</text>
-            <view class="switchover" id="switchover" bindtap="switchover">
+            <view wx:if="{{total > 1}}" class="switchover" id="switchover" bindtap="switchover">
                 <text class="switchover-icon">刷</text>
                 <text>换一批</text>
             </view>
@@ -27,10 +27,15 @@
                     </view>
                    
                 </view>
-                <view class="footer-price {{item.text? 'footer-price-checked' : ''}}" data-productid="{{item.F_ProductId}}" data-index="{{index}}" bindtap="goFooterPrice" id="footer-price">
+                <view class="ft-price {{item.text ? 'footer-price-checked' : ''}}" data-productid="{{item.F_ProductId}}" data-index="{{index}}" bindtap="goFooterPrice" id="footer-price">
                     <text>{{item.text ? item.text : '一键询价'}}</text>
                 </view>
             </view>
         </view>
     </view>
+    <view class="btn-hot-home">
+        <text class="btn-hot-lf" bindtap="goHomeNav" data-tp="1">品牌选车</text>
+        <text class="btn-hot-rt" bindtap="goHomeNav" data-tp="2">条件选车</text>
+    </view>
+    <image src="https://s.kcimg.cn/product/images/xc_home.png" class="home-bt" bindtap="goHomt"></image>
 </view>

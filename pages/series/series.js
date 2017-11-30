@@ -82,31 +82,38 @@ Page({
   },
   onShow: function (options) {
     //如果有停售车型缓存，删除
-    wx.getStorage({
-      key: 'footerPriceShow',
-      success: res => {
-        wx.removeStorage({
-          key: 'footerPriceShow',
-        })
-      },
-    })
-
-    //获取对比存储数据
-    this.getCompareTask();
+    if(!options){
+      wx.getStorage({
+        key: 'footerPriceShow',
+        success: res => {
+          wx.removeStorage({
+            key: 'footerPriceShow',
+          })
+        },
+      })
+      app.globalData.shareTitle = this.data.titleName
+      //获取对比存储数据
+      this.getCompareTask();
+    }
   },
   onLoad: function (options) {
 
     // 来源为分享的 更新数据
     app.updateDataForShare(options, this, () => {
       //转发进来
-      // let seriesInfo = JSON.parse(options.seriesInfo);
-      // this.setData({
-      //   //车系信息
-      //   seriesInfo: seriesInfo,
-      //   //车系id
-      //   seriesId: seriesInfo.F_SubCategoryId,
-      // })
-
+      let shareData = JSON.parse(options.share)
+      // console.log(this.data)
+      let modelListData = this.data.modelListData;
+          modelListData.subId = shareData.seriesInfo.F_SubCategoryId;
+          modelListData.seriesId = shareData.seriesInfo.F_SeriesId;
+      this.setData({
+        //车系信息
+        seriesInfo: shareData.seriesInfo,
+        //车系id
+        seriesId: shareData.seriesInfo.F_SubCategoryId,
+        //车型列表发送对象
+        modelListData: modelListData,
+      })
       //请求标题信息 && 图片信息
       this.getSeriesInfo();
 
@@ -124,7 +131,7 @@ Page({
       wx.getStorage({
         key: 'seriesInfo',
         success: ele => {
-          console.log(ele, 'ele')
+          // console.log(ele, 'ele')
           if (ele.errMsg == 'getStorage:ok') {
             let seriesInfo = ele.data
             
@@ -234,7 +241,7 @@ Page({
         this.setData({
           hotLocation: res.data
         })
-        console.log(this.data.hotLocation, 'hotLocationhotLocationhotLocationhotLocation')
+        // console.log(this.data.hotLocation, 'hotLocationhotLocationhotLocationhotLocation')
       }
     })
 
@@ -248,7 +255,7 @@ Page({
 
           // 标题
           wx.setNavigationBarTitle({
-            title: res.data.h1
+            title: res.data.h1 || this.data.titleName
           })
           app.globalData.shareTitle = res.data.h1
 
@@ -322,7 +329,7 @@ Page({
             modelListData.attr = res.data.defaultAttr,
               modelListData.attr
 
-            console.log(modelListData,'modelListDatamodelListData')
+            // console.log(modelListData,'modelListDatamodelListData')
             this.setData({
               modelList: res.data,
               modelListData: modelListData
@@ -331,6 +338,7 @@ Page({
             //如果是筛选数据，只渲染筛选列表
             let modelList = this.data.modelList;
             modelList.list = res.data
+            modelList.total = res.data.total
             this.setData({
               modelList: modelList
             })
@@ -460,10 +468,10 @@ Page({
     if(order != ''){
       if (order == 8){
         modelListData.order = 8;
-      } else if (order == 4 && modelListData.order == 4){
-        modelListData.order = 3;
-      }else{
+      } else if (order == 3 && modelListData.order == 3){
         modelListData.order = 4;
+      }else{
+        modelListData.order = 3;
       }
     }else{
       modelListData.order = '';
@@ -479,7 +487,7 @@ Page({
   },
   //进入车型页
   goProduct(e){
-    console.log(e.currentTarget.dataset.item)
+    // console.log(e.currentTarget.dataset.item)
     wx.setStorage({
       key: 'productData',
       data: e.currentTarget.dataset.item,
@@ -568,7 +576,7 @@ Page({
   },
   //请求经销商列表
   getDealer(){
-    console.log(this.data.locationInfo,'this.data.location.Info')
+    // console.log(this.data.locationInfo,'this.data.location.Info')
     wx.request({
       url: app.ajaxurl + '/index.php?r=weex/series/dealer&subCateId=' + this.data.seriesId + '&seriesId=' + this.data.seriesInfo.F_SeriesId + '&provinceId=' + this.data.locationInfo.provincesn + '&cityId=' + this.data.locationInfo.citysn,
       success:res => {
@@ -655,11 +663,11 @@ Page({
                       },
                       //调用失败或者没有存储已选择地区
                       fail: err => {
-                        wx.showToast({
-                          title: '失败',
-                          icon: 'success',
-                          duration: 2000
-                        })
+                        // wx.showToast({
+                        //   title: '失败',
+                        //   icon: 'success',
+                        //   duration: 2000
+                        // })
                         //调用存储定位地区
                         this.setMyRegion();
                       }
@@ -850,6 +858,12 @@ Page({
       },
     })
   },
+  goIndex(e){
+    wx.navigateTo({
+      url: '../index/index?productId='+ e.currentTarget.dataset.productid,
+      // url: `../series/series?share=${JSON.stringify(this.data.seriesInfo)}`,
+    })
+  },
   //点击加入对比
   compare(e){
     let productId = e.currentTarget.dataset.productid;
@@ -859,14 +873,14 @@ Page({
       complete:ele => {
         //如果有数据
         if(ele.data){
-          console.log(ele.data,'ele.data')
+          // console.log(ele.data,'ele.data')
           let compareTask = ele.data; 
           let compareState = this.data.compareState;
           //如果有车系id存储
           if (compareTask[this.data.seriesId]) {
             if (this.data.compareState[productId]) {  //取消
               //循环已保存的数组 && 删除掉
-              console.log(compareTask[this.data.seriesId])
+              // console.log(compareTask[this.data.seriesId])
               compareTask[this.data.seriesId].forEach((ele, index) => {
                 if (ele == productId) {
                   //清除当前车型id的存储
@@ -890,7 +904,7 @@ Page({
                 }
               });
             }else{  //加入
-              console.log(this.data.compareTask)
+              // console.log(this.data.compareTask)
               //最多对比两项
               if (compareTask[this.data.seriesId].length >= 2){
                 // this.alert('只能对比两款车型')
@@ -991,7 +1005,7 @@ Page({
       modelListData: modelListData
     })
 
-    console.log(this.data.seriesInfo,'seriesInfo')
+    // console.log(this.data.seriesInfo,'seriesInfo')
     //请求标题信息 && 图片信息
     this.getSeriesInfo();
 
@@ -1062,7 +1076,7 @@ Page({
   //触摸导航列表
   indexNav(e) {
     // console.log(e)
-    console.log(e.target.dataset.index)
+    // console.log(e.target.dataset.index)
     this.setData({
       navInfo: e.target.dataset.index,
       navInfoShow: true
@@ -1090,22 +1104,22 @@ Page({
   },
   //清空输入框内容
   clearContent(e) {
-    console.log(e.detail)
+    // console.log(e.detail)
     e.detail = { value: '' }
   },
   //输入搜素内容，
   searchResult(e) {
-    console.log(e.detail.value)
+    // console.log(e.detail.value)
     wx.request({
       url: 'https://product.360che.com/index.php?r=weex/series/get-search-region&value=' + encodeURIComponent(e.detail.value),
       success: (res) => {
-        console.log(res)
+        // console.log(res)
         if (res.errMsg == 'request:ok' && res.data.info == 'ok') {
-          console.log(res.data, 'res.data')
+          // console.log(res.data, 'res.data')
           this.setData({
             searchResultData: res.data.data,
           })
-          console.log(this.data.searchResultData, 'searchResultDatasearchResultData')
+          // console.log(this.data.searchResultData, 'searchResultDatasearchResultData')
         }
       }
     })
@@ -1120,7 +1134,7 @@ Page({
     this.setData({
       locationInfo: locationInfo
     })
-    console.log(this.data.locationInfo)
+    // console.log(this.data.locationInfo)
     //存储已选择的城市
     wx.setStorage({
       key: "locationInfo",
@@ -1146,7 +1160,7 @@ Page({
         }
       }
     })
-    console.log(this.data.locationInfo)
+    // console.log(this.data.locationInfo)
   },
   //选择城市弹窗
   selectCity(e) {
@@ -1270,6 +1284,11 @@ Page({
           hotLocation: arr
         })
       },
+    })
+  },
+  goDealers(){
+    this.setData({
+      goTop: 'dealbox'
     })
   },
   //转发

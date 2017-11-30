@@ -34,7 +34,7 @@
           <text class="hot-price">{{item.hotPrice}}</text>
           <view class="comparison">
             <text class="{{compareState[item.F_ProductId] ? 'compare add-compare' : 'compare'}}"  catchtap="compare" data-productId="{{item.F_ProductId}}">{{compareState[item.F_ProductId] ? compareState[item.F_ProductId] : '对比'}}</text>
-            <text class="foot-price" bindtap="goFooterPrice" data-productId="{{item.F_ProductId}}" id="footerPrice">询底价</text>
+            <text class="foot-price ftp-btns" bindtap="goFooterPrice" data-productId="{{item.F_ProductId}}" id="footerPrice">询底价</text>
           </view>
         </view>
       </view>

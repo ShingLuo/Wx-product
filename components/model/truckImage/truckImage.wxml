@@ -12,11 +12,18 @@
         <text class="ranking-icon"></text>
         <text class="ranking-text">{{truckImageData.rank}}</text>
       </view>
+      <view class="share-box" catchtap="onShareAppMessage">
+        <text class="share-icon"></text>
+        <button class="share-text" open-type="share"
+        catchtap="onShareAppMessage"
+        plain="true">我要分享</button>
+      </view>
       <view class="price">
         <text class="vender" wx:if="{{truckImageData.price}}">厂商指导价：</text>
         <text class="price-text" wx:if="{{truckImageData.price && truckImageData.price > 0}}">{{truckImageData.price}}万</text>
         <text class="not-price" wx:else="{{!truckImageData.price}}">暂无报价</text>
-        <text class="picture-text" wx:if="{{truckImageData.imgTotal > 0}}">{{truckImageData.imgTotal}}张图片</text>
+        <text class="picture-text" wx:if="{{truckImageData.imgTotal > 0}}">{{truckImageData.imgTotal}}张</text>
       </view>
+
     </view>
 </template>

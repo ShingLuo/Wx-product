@@ -83,7 +83,7 @@
 </view>
 <view class="sidebar" style="{{sidebarListPop?'right:0;':'right:-100%'}}" scroll-y="true">
   <view class="sidebar-container">
-    <view class="sidebar-title" wx:if="{{sidebarData.seriesList.length}}">
+    <view class="sidebar-title">
       <text class="title-icon" bindtap="sidebarHide">回</text>
       <text>{{sidebarData.brandName}}</text>
     </view>
@@ -107,7 +107,7 @@
     </view>
   
     <!--展开更多商用车-->
-    <view class="sidebar-module" wx:for="{{sidebarData.otherSeriesList}}" wx:key="otherSeriesList" wx:if="{{!sidebarData.seriesList.length || moreSeriesShow}}">
+    <view class="sidebar-module" wx:for="{{sidebarData.otherSeriesList}}" wx:key="otherSeriesList">
       <text class="header">{{item[0].info.F_SubCategoryName}}</text>
       <view class="sidebar-chunk" wx:for="{{item}}" wx:key="otherListModel"  data-item="{{item.info}}" bindtap="clickSidebar">
         <view class="sidebar-module-list">
@@ -120,12 +120,12 @@
         </view>
       </view>
     </view>
-    <view class="more-series" bindtap="moreSeries" wx:if="{{sidebarData.seriesList.length && !sidebarData.otherSeriesList.length && sidebarData.otherSeriesList.length !=0}}">
+    <!-- <view class="more-series" bindtap="moreSeries" wx:if="{{sidebarData.seriesList.length && !sidebarData.otherSeriesList.length && sidebarData.otherSeriesList.length !=0}}">
       <text>{{moreSeriesShow ? '收起' : '展开'}}更多车系</text>
       <view class="more-series-icon" animation="{{animation}}">
         <text>下</text>
       </view>
-    </view>
+    </view> -->
   </view>
 </view>
 
@@ -133,7 +133,7 @@
 <view class="scale" hidden="{{indicateShow}}">
   <text>{{navInfo}}</text>
 </view>
-<view class="nav" bindtouchmove='indexNavmove' bindtouchend='indexNavEnd' bindtouchcancel='nihao'>
+<view class="nav" catchtouchmove='indexNavmove' catchtouchend='indexNavEnd'>
   <text wx:for="{{indexNav}}" id="{{indexNav[index]}}" wx:key="indexNav" bindtap="indexNav" data-number="{{index}}" data-index="{{indexNav[index]}}" class="{{indexNav[index] === navInfo ? 'selected' : ''}}">{{indexNav[index]}}</text>
 </view>
 

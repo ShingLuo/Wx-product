@@ -34,7 +34,7 @@ Page({
                 wx.getStorage({
                     key: 'compareData',
                     success: res => {
-                        console.log(this.data.seriesId, 'this.data.seriesId')
+                        // console.log(this.data.seriesId, 'this.data.seriesId')
                         if (res.data[this.data.seriesId].length) {
                             let ajaxUrl = app.ajaxurl + 'index.php?r=weex/product/contrast&proId=' + res.data[this.data.seriesId][0];
 
@@ -118,11 +118,16 @@ Page({
           })
         })
     },
+    goHomt(){
+        wx.switchTab({
+          url: '/pages/brand/brand'
+        })
+    },
     getSeriesConfigData () {
         wx.request({
             url: app.ajaxurl + '/index.php?r=weex/series/config&subId=' + this.data.seriesInfo.F_SubCategoryId + '&seriesId=' + this.data.seriesInfo.F_SeriesId,
             success: ele => {
-                console.log(ele.data)
+                // console.log(ele.data)
 
                 // 标题
                 wx.setNavigationBarTitle({
@@ -192,7 +197,7 @@ Page({
             anchor: e.currentTarget.dataset.anchor,
             classifyPop: false
         })
-        console.log(this.data.anchor)
+        // console.log(this.data.anchor)
     },
     //进入询底价页面
     goFooterPrice(e) {
@@ -268,7 +273,7 @@ Page({
     //添加车型
     addProduct(e) {
         let index = e.currentTarget.dataset.index;
-        console.log(index)
+        // console.log(index)
 
         wx.setStorage({
             key: 'compareNumber',

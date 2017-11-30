@@ -33,7 +33,7 @@ Page({
         wx.getStorage({
           key: 'compareData',
           success: res => {
-            console.log(this.data.seriesId, 'this.data.seriesId')
+            // console.log(this.data.seriesId, 'this.data.seriesId')
             if (res.data[this.data.seriesId].length) {
               let ajaxUrl = app.ajaxurl + 'index.php?r=weex/product/contrast&proId=' + res.data[this.data.seriesId][0];
 
@@ -170,7 +170,7 @@ Page({
                   compareNumber: ele.data.data.length
                 })
 
-                console.log(this.data.configData)
+                // console.log(this.data.configData)
               }
             })
           },
@@ -204,7 +204,7 @@ Page({
       anchor:e.currentTarget.dataset.anchor,
       classifyPop:false
     })
-    console.log(this.data.anchor)
+    // console.log(this.data.anchor)
   },
   //进入询底价页面
   goFooterPrice(e){
@@ -278,7 +278,7 @@ Page({
   //添加车型
   addProduct(e){
     let index = e.currentTarget.dataset.index;
-    console.log(index)
+    // console.log(index)
 
     wx.setStorage({
       key: 'compareNumber',

@@ -1,9 +1,8 @@
 // pages/seriesPhoto/seriesPhoto.js
-let app = getApp(),
-    util = require('../../utils/util.js');
+let app = getApp();
 Page({
     data: {
-        //车系信息数据
+        //车系信息数据----------数据
         seriesInfo:{},
         // 车型信息数据
         productData:{},
@@ -13,7 +12,7 @@ Page({
         allName: '',
         //车型简称
         proName: '',
-        // 图片列表数据
+        // 图片列表----------数据
         photoData: {},
         //换车型弹层是否显示
         switchModelPop: false,
@@ -38,6 +37,7 @@ Page({
     },
     onLoad: function(options) {
         // 来源为分享的 更新数据
+        // console.log(options);
         app.updateDataForShare(options, this , () => {
           //转发
 
@@ -138,7 +138,7 @@ Page({
             this.setData({
               switchModelData: switchModelData
             })
-            console.log(switchModelData, 'switchModelDataswitchModelData')
+            // console.log(switchModelData, 'switchModelDataswitchModelData')
           } else {
             //没有换车型数据
             this.setData({
@@ -169,7 +169,7 @@ Page({
             url: ajaxUrl,
             success: res => {
                 if (res.errMsg == 'request:ok' && res.data.info != 'error') {
-                    console.log(res.data)
+                    // console.log(res.data)
 
                     //车型名称
                     let allName = res.data.allName;
@@ -188,7 +188,7 @@ Page({
                     let photoData = this.data.photoData;
 
                     //tab标题
-                    console.log(res,'resresres')
+                    // console.log(res,'resresres')
                     photoData.options = res.data.data.tab;
 
                     //默认显示全部
@@ -224,7 +224,7 @@ Page({
                         priceProductId: res.data.recommendId,
                     })
 
-                    console.log(this.data.proName)
+                    // console.log(this.data.proName)
 
                     //如果是推荐，给推荐车型id赋值
                     this.setData({
@@ -269,7 +269,7 @@ Page({
     },
     //点击换车型，重新请求车型页面信息
     goSwitchModel(e) {
-        console.log(e.currentTarget.dataset.item)
+        // console.log(e.currentTarget.dataset.item)
         this.setData({
             productId: e.currentTarget.dataset.item.F_ProductId,
             switchModelPop: false
@@ -278,7 +278,7 @@ Page({
     },
     //点击图片详细分类
     detailed(e) {
-        console.log(e.currentTarget.dataset.type)
+        // console.log(e.currentTarget.dataset.type)
         let photoData = this.data.photoData;
         photoData.typeId = e.currentTarget.dataset.type
         this.setData({

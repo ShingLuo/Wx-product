@@ -52,7 +52,7 @@
 .user-name > input,.user-phone > input{
   height:88rpx;
   line-height:88rpx;
-  padding-left:58rpx;
+  padding-left:48rpx;
   font-size:28rpx;
   border:1px solid #ddd;
   border-radius:4rpx;
@@ -78,7 +78,8 @@
 }
 .location-box > .label{
   color:#f60;
-  margin-right:4rpx;
+  padding-left: 16rpx;
+  margin-right:20rpx;
 }
 .province-name{
   margin-left:30rpx;
@@ -236,15 +237,18 @@
   background-color:#f60;
 }
 /* 换车型 */
+.change-model{
+  border-bottom: 2rpx solid #eee;
+}
 .car-module{
   position: relative;
-  padding: 20rpx 80rpx 20rpx 190rpx;
-  border-bottom: 2rpx solid #eee;
+  padding: 20rpx 60rpx 20rpx 288rpx;
+  height: 160rpx;
 }
 .car-module:after{
   position: absolute;
   top: 50%;
-  right: 20rpx;
+  right: 24rpx;
   color: #999;
   margin-top: -16rpx;
   font-size: 32rpx;
@@ -254,13 +258,13 @@
 .car-module image{
   position: absolute;
   top: 20rpx;
-  left: 20rpx;
-  width: 150rpx;
-  height: 100rpx;
+  left: 24rpx;
+  width: 240rpx;
+  height: 160rpx;
 }
 .model-message .product{
   display: block;
-  height: 72rpx;
+  height: 126rpx;
   line-height: 36rpx;
   font-size: 28rpx;
   color: #333;
