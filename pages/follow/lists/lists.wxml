@@ -1,0 +1,49 @@
+<view class="top-box">
+  <!-- loading状态 -->
+  <view class="loading" wx:if="{{!seriesList.length}}">
+    <text class="loading-ring">等</text> 正在加载更多...
+  </view>
+
+
+  <view class="{{isHet > 0 ? 'recommend rec-down': 'recommend'}}" id="top" wx:if="{{subList.length}}">
+    <view class="{{navInx === index ? 'active' : ''}}" wx:for="{{subList}}" catchtap="anchorEvn" data-inx="{{index}}" wx:key="{{index}}" >{{item.name}}</view>
+    <text class="{{isHet > 0 ? 'after-dow after-ups' : 'after-dow'}}" wx:if="{{subList.length > 3}}" catchtap="checkDow"></text>
+  </view>
+
+  <scroll-view scroll-y class="fol-list" 
+   scroll-into-view="{{navInfo}}"
+   scroll-with-animation="{{scrollAnimation}}">
+    
+    <view class="tonn-list-box" 
+    wx:for="{{seriesList}}" wx:key="{{index}}"
+    id="hot_car{{index}}">
+      <text class="tonn-title">{{item.name}}</text>
+      <view class="tonn-ems" wx:for="{{item.list}}"
+        wx:for-index="inx" wx:key="{{inx}}"
+        catchtap="goXar"
+        data-inx="{{inx}}"
+        data-idx="{{index}}"
+        wx:for-item="em">
+        <view class="image">
+          <image wx:if="{{em.img}}" mode="aspectFill" lazy-load="true" src="{{em.img}}"></image>
+        </view>
+        <view class="fol-ebs">
+          <text class="text">{{em.F_ProductName}}</text>
+          <view class="btn-box">
+            <text class="pays" wx:if="{{em.F_Price > 0}}">{{em.F_Price}}万元</text>
+            <text class="pays" wx:if="{{em.F_Price == 0}}">暂无报价</text>
+            <text class="btn" data-id="{{em.F_ProductId}}" catchtap="goFooterPrice">询底价</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="fol-btslst" wx:if="{{item.isShow === 1}}">
+        <view catchtap="goCarX" data-inx="{{index}}" data-num="1">进入车系</view>
+        <view catchtap="goCarX" data-inx="{{index}}" data-num="2">查看配置</view>
+        <view catchtap="goCarX" data-inx="{{index}}" data-num="3">查看图片</view>
+      </view>
+
+    </view>
+    
+  </scroll-view>
+</view>

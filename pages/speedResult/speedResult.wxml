@@ -1,0 +1,37 @@
+<!-- loading状态 -->
+<view wx:if="{{isLoad}}" class="loading">
+  <text class="loading-ring">等</text> 正在加载更多...
+</view>
+
+<scroll-view class="result-wrapper" wx:if="{{!isLoad}}" scroll-y>
+  <view class="spd-ret-box" wx:for="{{DATA}}" wx:key="{{index}}">
+    <text>{{item.stalls}}</text>
+    <view class="spd-itm-em">
+      <view>变速箱档位速比</view>
+      <view>{{item.speedrati}}</view>
+    </view>
+    <view class="spd-itm-em">
+      <view>该档位下轮上驱动力</view>
+      <view>{{item.traction}} N</view>
+    </view>
+    <view class="spd-itm-em">
+      <view>水平道路下车速</view>
+      <view>{{item.speed}} km/h</view>
+    </view>
+    <view class="spd-itm-em">
+      <view>爬9%大坡情况</view>
+      <view wx:if="{{item.bigslope !== '爬不上去'}}">{{item.bigslope}} km/h</view>
+      <view wx:else>{{item.bigslope}}</view>
+    </view>
+    <view class="spd-itm-em">
+      <view>爬4%小坡情况</view>
+      <view wx:if="{{item.smallslope !== '爬不上去'}}">{{item.smallslope}} km/h</view>
+      <view wx:else>{{item.smallslope}}</view>
+    </view>
+  </view>
+</scroll-view>
+
+<view class="notification {{AlertBox ? 'notification-in' : ''}}">
+  <view class="notification-content">{{AlertTxt}}</view>
+  <view class="notification-handle-bar"></view>
+</view>

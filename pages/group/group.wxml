@@ -1,0 +1,71 @@
+<view class="top-box">
+  <!-- loading状态 -->
+  <view class="loading" wx:if="{{!brandList.length}}">
+    <text class="loading-ring">等</text> 正在加载更多...
+  </view>
+  <scroll-view scroll-y style="height:100%"  scroll-with-animation="{{scrollAnimation}}" scroll-into-view="{{navInfo}}" 
+  bindscroll="scrollNav"
+  enable-back-to-top="true">
+    <view class="recommend" id="top">
+      <view class="recommend-list">
+        <view class="recommend-info" 
+        wx:for="{{brandList}}" 
+        catchtap="goBrand"
+        data-id="{{item.F_BrandId}}"
+        wx:key="index">
+          <view class="recommend-img">
+            <image src="{{item.logo}}"></image>
+          </view>
+          <text>{{item.F_BrandName}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="tonn-box" wx:if="{{brandList.length}}">
+      <view wx:for="{{tonnageList}}"
+      class="{{defaTon == index ? 'active' : ''}}" 
+      wx:key="index" 
+      catchtap="tonnEvn" data-inx="{{index}}"
+      data-val="{{item.value}}">{{item.name}}</view>
+    </view>
+
+    <view class="tonn-list-box" 
+    wx:for="{{brandSeriesList}}" wx:key="{{index}}">
+      <text class="tonn-title">{{item.name}}</text>
+      <view class="tonn-ems" wx:for="{{item.seriesList}}"
+        wx:for-index="inx" wx:key="{{inx}}"
+        wx:for-item="em" 
+        catchtap="goCarX" 
+        data-inx="{{inx}}" 
+        data-idx="{{index}}"
+        hidden="{{ oneMor[index] > inx ? false : true}}">
+        <view class="image">
+          <image wx:if="{{em.imgSrc}}" mode="aspectFill" lazy-load="true" src="{{em.imgSrc}}"></image>
+        </view>
+        <text class="text">{{em.F_ShortName}}</text>
+        <text class="pays">{{em.priceScore}}</text>
+        <view class="btn-box">
+          <view class="num">
+            <text>共</text>
+            <text>{{em.F_ProductNum}}</text>
+            <text>款车型</text>
+          </view>
+          <text wx:if="{{em.F_IsStopMake < 2}}" 
+          data-pid="{{em.proid}}" 
+          catchtap="xunPay"
+          class="btn">询底价</text>
+        </view>
+      </view>
+      <view wx:if="{{item.seriesList.length > 5}}" 
+        class="{{ oneMor[index] < 6 ? 'ismore' : 'ismore isdown'}}"
+        data-inx="{{index}}"
+        catchtap="mroEvn"></view>
+    </view>
+    
+  </scroll-view>
+</view>
+
+<!--返回顶部-->
+<view style="{{goTop ? 'right:0' : 'right:-80px'}}" class="back-top" catchtap="backTop">
+  <text>回顶部</text>
+</view>

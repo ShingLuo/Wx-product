@@ -2,11 +2,26 @@
 let app = getApp(),
     util = require('../../utils/util.js');
 Page({
-
-    /**
-     * 页面的初始数据
-     */
     data: {
+        // 是否折叠筛选
+        isDow: false,
+        // 是否折叠弹层
+        isAlert: false,
+        // 索引筛选项
+        navIndex: {},
+        // 筛选滚动位置
+        sclTop: 0,
+        isSclDow: false,
+        // 弹层标题
+        navTitle:'',
+        // 弹层数组
+        navData: [],
+        // 筛选值z
+        searchNav: [],
+        // 筛选值
+        param: '',
+        // 筛选列表
+        searchList: [],
         //车系信息
         seriesInfo: {},
         //配置信息
@@ -54,10 +69,12 @@ Page({
                                         configData.lowPrice[index] = list.lowPrice;
                                     })
                                     this.setData({
+                                        isSclDow: true,
+                                        sclTop: 0,
                                         configData: configData,
                                         compareNumber: ele.data.data.length
                                     })
-
+                                    this.isLocks()
                                     //删除请求对比车型缓存
                                     wx.removeStorage({
                                         key: 'addProduct'
@@ -85,7 +102,20 @@ Page({
                         }
                     },
                 })
-            },
+                let searCh = this.data.searchList
+                for(let inx in searCh){
+                    this.data.searchNav[inx].splice(0,1)
+                    searCh[inx]['isSelectName'] = ''
+                    searCh[inx]['isSelect'] = 0
+                    for(let em in searCh[inx]['list']){
+                        searCh[inx]['list'][em]['is_disable'] = 0
+                        searCh[inx]['list'][em]['is_select'] = 0
+                    }
+                }
+                this.setData({
+                    searchList: searCh
+                })
+            }
         })
 
         //获取询底价信息
@@ -118,30 +148,94 @@ Page({
           })
         })
     },
+    // 显示选项菜单
+    showSidebarNav(e){
+        let num = Number(e.currentTarget.dataset.inx)
+        let obj = {}
+        obj.inx = this.data.searchNav[num].length
+        obj.num = num
+        this.setData({
+            navIndex: obj,
+            navData: this.data.searchList[num]['list'],
+            navTitle: this.data.searchList[num]['name'],
+            isAlert: !this.data.isAlert
+        })
+    },
+    clickSidebar(e){
+        let num = e.currentTarget.dataset.id
+        if(e.currentTarget.dataset.dsb !== 1){
+            if(num !== '-1'){
+                if(this.data.searchNav[this.data.navIndex.num].length > 0){
+                    this.data.searchNav[this.data.navIndex.num].splice(0,1,num)
+                }else{
+                    this.data.searchNav[this.data.navIndex.num].push(num)
+                }
+            } else {
+                this.data.searchNav[this.data.navIndex.num].splice(0,1)
+            }
+            // console.log(this.data.searchNav)
+            this.sidebarShow()
+            this.getSeriesConfigData(1)
+        }
+    },
+    sidebarShow(){
+        this.setData({
+            isAlert: !this.data.isAlert
+        })
+    },
+    fold(){
+        this.setData({
+          isDow: !this.data.isDow
+        })
+    },
     goHomt(){
         wx.switchTab({
           url: '/pages/brand/brand'
         })
     },
-    getSeriesConfigData () {
+    getSeriesConfigData (ftype) {
+        let urls = `${app.ajaxurl}index.php?r=api/series/param&seriesId=${this.data.seriesInfo.F_SeriesId}&subId=${this.data.seriesInfo.F_SubCategoryId}`
+        if(ftype){
+            let regTxt = this.data.searchNav.join('-');
+            let Regs = /[^-]/g;
+            if(Regs.test(regTxt)){
+                urls = `${app.ajaxurl}index.php?r=api/series/param&seriesId=${this.data.seriesInfo.F_SeriesId}&subId=${this.data.seriesInfo.F_SubCategoryId}&param=${regTxt.replace(/-+/g,'-').split('-').filter(x => x !== '').join('-')}`
+            }
+            Regs.lastIndex = 0
+        }
         wx.request({
-            url: app.ajaxurl + '/index.php?r=weex/series/config&subId=' + this.data.seriesInfo.F_SubCategoryId + '&seriesId=' + this.data.seriesInfo.F_SeriesId,
+            url: urls,
             success: ele => {
                 // console.log(ele.data)
-
                 // 标题
                 wx.setNavigationBarTitle({
-                    title: ele.data.seriesInfo.F_SeriesName + ele.data.seriesInfo.F_SubCategoryName + '配置'
+                    title: ele.data.data.seriesInfo.F_SeriesName + ele.data.data.seriesInfo.F_SubCategoryName + '配置'
                 })
-                app.globalData.shareTitle = ele.data.seriesInfo.F_SeriesName + ele.data.seriesInfo.F_SubCategoryName + '配置'
-
+                app.globalData.shareTitle = ele.data.data.seriesInfo.F_SeriesName + ele.data.data.seriesInfo.F_SubCategoryName + '配置'
+                let newSearch = ele.data.data.searchList
+                for(let em in newSearch){
+                    for(let om in newSearch[em]['list']){
+                        newSearch[em]['list'][om]['value'] = `${newSearch[em]['list'][om]['value']}${newSearch[em]['unit']}`
+                    }
+                    if(!ftype){
+                        this.data.searchNav.push([])
+                    }
+                }
+                // console.log(this.data.searchNav)
                 this.setData({
-                    configData: ele.data,
-                    compareNumber: ele.data.products.length,
+                    searchList: newSearch,
+                    configData: ele.data.data,
+                    compareNumber: ele.data.data.products.length,
                     //询底价人数
-                    askPriceNum: ele.data.askPriceNum
+                    askPriceNum: ele.data.data.askPriceNum
                 })
-
+                if(ftype){
+                    this.setData({
+                        isSclDow: true,
+                        sclTop: 0 
+                    })
+                    this.isLocks()
+                }
                 //获取对比数据
                 wx.getStorage({
                     key: 'compareData',
@@ -184,13 +278,28 @@ Page({
                 classifyPop: !this.data.classifyPop
             })
         }
+        if (this.data.isDow && !this.data.isSclDow) {
+            this.setData({
+                isDow: false
+            })
+        }
+    },
+    // 是否滚动顶部
+    isLocks(){
+        let _this = this
+        setTimeout(function() {
+            _this.setData({
+                isSclDow: false
+            })
+        }, 300);
+        // console.log(this.data.isSclDow, 'isSclDow')
     },
     // 点击导航切换
-    setSelected(index) {
-        this.setData({
+    // setSelected(index) {
+    //     this.setData({
 
-        })
-    },
+    //     })
+    // },
     //锚点导航跳转
     anchor(e) {
         this.setData({

@@ -1,0 +1,66 @@
+<template name="stepTwo">
+  <view class="two-box">
+
+    <view class="step-box">
+      <view class="step-ems step-ems-two">
+        <view class="step-item step-item-two">
+          <view class="step-em-two"></view>
+        </view>
+        <view class="step-item step-rt">
+          <text class="step-em">...</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="serial">
+      <text>请选择驾驶路况</text>
+    </view>
+
+    <view class="ty-car">
+      <view class="ty-em ty-two {{roadId === 1 ?'actives':''}}"
+            data-id="0"
+            catchtap="roaBtn">
+        <text>平原</text>
+      </view>
+      <view class="ty-em ty-two ty-shan {{roadId === 2  ?'actives':''}}"
+            data-id="1"
+            catchtap="roaBtn">
+        <text>山地</text>
+      </view>
+      <view class="ty-em ty-two ty-qiu no-mg-rt {{roadId === 3  ?'actives':''}}"
+            data-id="2"
+            catchtap="roaBtn">
+        <text>丘陵</text>
+      </view>
+      <view class="ty-em ty-two ty-he mt {{roadId === 4  ?'actives':''}}"
+            data-id="3"
+            catchtap="roaBtn">
+        <text>综合</text>
+      </view>
+    </view>
+
+    <view class="serial serial2">
+      <text>请确认最大坡度</text>
+      <text class="msgi">(可修改)</text>
+    </view>
+
+    <view class="inputs inputs-two">
+      <input type="digit" data-id="1" value="{{slopeVal}}" maxlength="4" bindinput="chengInput"/>
+    </view>
+
+    <view class="serial serial3">
+      <text>请确认最大经济车速</text>
+      <text class="msgi">(可修改)</text>
+    </view>
+
+    <view class="inputs inputs-last">
+      <input type="number" data-id="2" value="{{speedVal}}" maxlength="3" bindinput="chengInput"/>
+    </view>
+
+    <view class="btn-box">
+      <text catchtap="twoBtn" data-pg="1">上一步</text>
+      <text class="btn-ovr" catchtap="ovrBtn" data-pg="3">完成</text>
+    </view>
+
+  </view>
+</template>

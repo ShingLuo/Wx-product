@@ -5,8 +5,9 @@
     <text class="loading-ring">等</text> 正在加载更多...
   </view>
   <view class="sidebar-title" wx:if="{{resultData.h1}}">
-    <text class="title-icon" bindtap="searchResultBack">回</text>
+    <text class="title-icon" catchtap="searchResultBack">回</text>
     <text>筛选结果</text>
+    <text class="last-top-btn" catchtap="searchResultBack">重新筛选</text>
   </view>
   <scroll-view wx:if="{{resultData.h1}}" scroll-y="true" style="height:100%" bindscrolltolower="loadData">
     <view class="type-module {{fold ? 'visible' : ''}}" wx:if="{{resultData.paramList.length}}">

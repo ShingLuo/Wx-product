@@ -4,9 +4,10 @@
   <view class="loading" wx:if="{{!brandList.length}}">
     <text class="loading-ring">等</text> 正在加载更多...
   </view>
-  <scroll-view class="brand-wrapper"  scroll-y  scroll-into-view="{{navInfo}}" bindscroll="scrollNav" scroll-with-animation="{{scrollAnimation}}">
+  <scroll-view class="brand-wrapper"  scroll-y  scroll-into-view="{{navInfo}}" bindscroll="scrollNav" scroll-with-animation="{{scrollAnimation}}" enable-back-to-top="true">
      <view class="recommend" id="top">
-      <text class="header" wx:if="{{brandList.length}}">推荐品牌</text>
+      <text class="header sp-rit-head" wx:if="{{brandList.length}}">推荐品牌</text>
+      <view class="speed-flt-url" catchtap="toSpeeds">车速计算器</view>
       <view class="recommend-list">
         <view class="recommend-info" wx:for="{{recommendList}}" wx:key="recommendList" bindtap="sidebarShow" data-ajaxurl="{{item.url}}">
           <view class="recommend-img">
@@ -14,6 +15,12 @@
           </view>
           <text>{{item.name}}</text>
         </view>
+      </view>
+      <text class="header" wx:if="{{brandList.length}}">新能源选车</text>
+      <view class="new-rencar" wx:if="{{brandList.length}}">
+        <text data-num="0" catchtap="newToPg">电动轻卡</text>
+        <text data-num="1" catchtap="newToPg">电动封闭箱货</text>
+        <text data-num="2" catchtap="newToPg">LNG牵引车</text>
       </view>
     </view> 
     <!--品牌列表-->
@@ -31,7 +38,7 @@
           </view>
           <!--品牌集团-->
           <view class="group" wx:else>
-            <view class="group-model">
+            <view class="group-model" data-group="{{model.F_BrandGroupEnName}}" data-name="{{model.F_BrandGroupName}}" bindtap="goJiTuan">
               <image src="{{model.F_BrandGroupImg}}"></image>
               <text class="group-title">{{model.F_BrandGroupName}}</text>
               <text class="group-name">集团</text>
@@ -51,7 +58,7 @@
       </view>    
     </view>
     <!--其他品牌-->
-    <view class="other">
+    <!-- <view class="other">
       <view class="other-list" wx:if="{{otherBrandShow}}">
         <text>更多品牌</text>
         <view class="truck-other" wx:for="{{otherBrandList}}" wx:key="otherBrandList" bindtap="sidebarShow" data-ajaxurl="{{item.url}}">
@@ -69,7 +76,7 @@
           <text>下</text> 
         </view>
       </view>
-    </view>
+    </view> -->
   </scroll-view>
 </view>
 

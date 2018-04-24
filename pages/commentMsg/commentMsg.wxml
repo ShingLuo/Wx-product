@@ -1,0 +1,32 @@
+
+<view class="comm-item-box">
+  <view class="comm-rt-box">
+    <view class="com-str-nam">
+      <view class="name">
+        <view class="comm-left-ioc">
+          <image src="{{DATA.userPhoto}}"></image>
+        </view>
+        <text>{{DATA.userName}}</text>
+      </view>
+      <view class="start">
+        <text class="{{DATA.star > inx ? 'red-str' : ''}}" wx:for="{{[1,2,3,4,5]}}" wx:key="{{*this}}" wx:for-index="inx" wx:for-item="em"></text>
+      </view>
+    </view>
+    <view class="com-cont-txt">
+      <text>{{DATA.content}}</text>
+    </view>
+    <view class="com-fot-box">
+      <view class="time">{{DATA.time}}</view>
+      <view class="{{DATA.isVote > 0 ? 'zan red' : 'zan'}}" catchtap="zan" data-em="{{DATA.isVote}}">{{DATA.voteNum}}</view>
+    </view>
+  </view>
+</view>
+
+<!-- 红色提示框 -->
+<view class="notification {{AlertBox ? 'notification-in' : ''}}">
+  <view class="notification-content">{{AlertTxt}}</view>
+  <view class="notification-handle-bar"></view>
+</view>
+
+<!-- 点赞等提示框 -->
+<view class="prompt-box" wx:if="{{ToastBox}}">{{ToastTxt}}</view>

@@ -1,0 +1,21 @@
+
+<view class="comm-write-box">
+  <view class="{{index < stars ? 'red-str' : ''}}" 
+  data-id="{{item}}"
+  wx:for="{{[1,2,3,4,5]}}" wx:key="{{index}}" catchtap="starsEvn">
+</view>
+</view>
+<view class="comm-form-box">
+  <textarea placeholder="{{place}}" bindinput="inputEvn" placeholder-class="comm-phcolor"
+  />
+</view>
+<view class="comm-btns" hidden="{{isSave}}" catchtap="istoast">发布</view>
+<view class="comm-btns isActive" hidden="{{!isSave}}" catchtap="issue">发布</view>
+
+<view class="notification {{AlertBox ? 'notification-in' : ''}}">
+  <view class="notification-content">{{AlertTxt}}</view>
+  <view class="notification-handle-bar"></view>
+</view>
+
+<!-- 点赞等提示框 -->
+<view class="prompt-box" wx:if="{{ToastBox}}">{{ToastTxt}}</view>

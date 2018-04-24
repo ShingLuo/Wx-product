@@ -1,0 +1,133 @@
+<view class="top-box">
+  <!-- loading状态 -->
+  <view class="loading" wx:if="{{!carList.length}}">
+    <text class="loading-ring">等</text> 正在加载更多...
+  </view>
+  <view class="options" wx:if="{{searchList.length > 0}}">
+    <view wx:for="{{searchList}}" class="option" data-tp="{{item.desc}}" bindtap="cutBtn" data-inx="{{index}}">
+      <text class="{{typeEN === item.desc ? 'option-visible' : ''}}">{{item.name}}</text>
+    </view>
+  </view>
+  <scroll-view scroll-y class="fol-scr-box" scroll-into-view="{{navInfo}}" bindscroll="scrollNav" scroll-with-animation="{{scrollAnimation}}" wx:if="{{carList.length > 0}}">
+    <view id="top"></view>
+    <view style="padding-top: 30rpx;" wx:for="{{carList}}" wx:for-index="idx" wx:for-item="ems" wx:if="{{navAll == 0 && !typeEN}}">
+      <view class="fol-title-box">
+        <view class="fol-t-name">{{ems.name}}</view>
+        <view class="fol-t-more" data-tp="{{ems.desc}}" catchtap="cutBtn">完整榜单</view>
+      </view>
+
+      <view class="item-box" wx:for="{{ems.data}}" wx:for-index="inx" catchtap="goMsg" data-type="{{inx.type}}">
+        <view class="item-box-head" data-tp="{{item.type}}" data-sid="{{ems.subCateId}}" data-id="{{item.id}}" catchtap="toPg">
+          <view class="img">
+            <image src="{{item.logo}}"></image>
+            <text class="{{inx < 3 ? 'inx' : 'inx gre tags'}}">{{inx + 1}}</text>
+          </view>
+          <view class="msg">
+            <view class="fol-t-box">
+              <text class="txt">{{item.sName}}</text>
+              <text class="typ" wx:if="{{item.status == 3}}"></text>
+              <text class="typ to-up" wx:if="{{item.status == 1}}">{{item.statusNum}}</text>
+              <text class="typ to-down" wx:if="{{item.status == 2}}">{{item.statusNum}}</text>
+            </view>
+            <text class="fol-s-txt">关注指数：{{item.attentnum}}</text>
+            <view class="fol-s-line">
+              <view style="width:{{item.width}}%;"></view>
+            </view>
+            <view class="fol-s-xun">
+              <text class="pay">{{item.price}}</text>
+              <text class="fol-pay-btn" data-id="{{item.proid}}" catchtap="goFooterPrice">询底价</text>
+            </view>
+          </view>
+        </view>
+        <view class="fol-fot-line" style="border-width:{{inx == 4 ? '0' : '2rpx'}}"></view>
+      </view>
+    </view>
+
+    <view class="fol-lists-box" wx:if="{{typeList.length > 0}}">
+      <view class="{{navAll == item.type ? 'active':''}}" wx:for="{{typeList}}" data-ty="{{item.type}}" catchtap="navType">{{item.name}}</view>
+    </view>
+
+    <view class="item-box" wx:for="{{carList}}" wx:for-index="inx" catchtap="goMsg" data-type="{{inx.type}}" wx:if="{{navAll == 1}}">
+      <view class="item-box-head" data-tp="{{item.type}}" data-sid="{{subId}}" data-id="{{item.id}}" data-group="{{item.group}}" data-name="{{item.sName}}" data-tog="{{item.tonnage}}" catchtap="toPg">
+        <view class="{{item.logo ? 'img logoNg':'img'}}">
+          <image src="{{item.logo}}"></image>
+          <text class="{{inx < 3 ? 'inx' : 'inx gre tags'}}">{{inx + 1}}</text>
+        </view>
+        <view class="msg">
+          <view class="fol-t-box">
+            <text class="txt">{{item.sName}}</text>
+            <text class="typ" wx:if="{{item.status == 3}}"></text>
+            <text class="typ to-up" wx:if="{{item.status == 1}}">{{item.statusNum}}</text>
+            <text class="typ to-down" wx:if="{{item.status == 2}}">{{item.statusNum}}</text>
+          </view>
+          <text class="fol-s-txt">关注指数：{{item.attentnum}}</text>
+          <view class="fol-s-line">
+            <view style="width:{{item.width}}%;"></view>
+          </view>
+        </view>
+      </view>
+      <view class="fol-fot-line"></view>
+    </view>
+
+    <view class="item-box" wx:for="{{carList}}" wx:for-index="inx" wx:if="{{navAll == 2}}">
+      <view class="item-box-head" data-tp="{{item.type}}" data-sid="{{subId}}" data-id="{{item.id}}" catchtap="toPg">
+        <view class="img">
+          <image src="{{item.logo}}"></image>
+          <text class="{{inx < 3 ? 'inx' : 'inx gre tags'}}">{{inx + 1}}</text>
+        </view>
+        <view class="msg">
+          <view class="fol-t-box">
+            <text class="txt">{{item.sName}}</text>
+            <text class="typ" wx:if="{{item.status == 3}}"></text>
+            <text class="typ to-up" wx:if="{{item.status == 1}}">{{item.statusNum}}</text>
+            <text class="typ to-down" wx:if="{{item.status == 2}}">{{item.statusNum}}</text>
+          </view>
+          <text class="fol-s-txt">关注指数：{{item.attentnum}}</text>
+          <view class="fol-s-line">
+            <view style="width:{{item.width}}%;"></view>
+          </view>
+          <view class="fol-s-xun">
+            <text class="pay">{{item.price}}</text>
+            <text class="fol-pay-btn" data-id="{{item.proid}}" catchtap="goFooterPrice">询底价</text>
+          </view>
+        </view>
+      </view>
+      <view class="fol-fot-line"></view>
+    </view>
+
+    <view class="item-box" wx:for="{{carList}}" wx:for-index="inx" wx:if="{{navAll == 3}}">
+      <view class="item-box-head" data-tp="{{item.type}}" data-sid="{{subId}}" data-id="{{item.id}}" data-ser="{{item.seriesInfo.F_SeriesId}}" catchtap="toPg">
+        <view class="img">
+          <image src="{{item.logo}}"></image>
+          <text class="{{inx < 3 ? 'inx' : 'inx gre tags'}}">{{inx + 1}}</text>
+        </view>
+        <view class="msg">
+          <view class="fol-tit-txt">{{item.sName}}</view>
+            
+          <view class="fol-s-xun">
+            <text class="pay">{{item.price}}</text>
+            <text class="fol-pay-btn" data-id="{{item.proid}}" catchtap="goFooterPrice">询底价</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="fol-t-box">
+        <view class="fol-s-line fol-s-car">
+          <view style="width:{{item.width}}%;"></view>
+        </view>
+        <text class="fol-s-txt fol-s-hot">关注指数：{{item.attentnum}}</text>
+        <text class="typ" wx:if="{{item.status == 3}}"></text>
+        <text class="typ to-up" wx:if="{{item.status == 1}}">{{item.statusNum}}</text>
+        <text class="typ to-down" wx:if="{{item.status == 2}}">{{item.statusNum}}</text>
+      </view>
+
+      <view class="fol-fot-line"></view>
+    </view>
+
+  </scroll-view>
+</view>
+
+<!--返回顶部-->
+<view style="{{goTop?'right:0':'right:-80px'}}" class="back-top" bindtap="backTop">
+  <text>回顶部</text>
+</view>

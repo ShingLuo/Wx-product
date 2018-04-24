@@ -1,44 +1,53 @@
 <!--pages/config/config.wxml-->
 <import src="../../components/config/addSeries/addSeries.wxml"/>
-<view class="config">
-  <view class="product-name">
-    <view class="caption caption-name">
-      <text class="title">车型名称</text>
-      <view class="number">
-        <text class="existing">{{compareNumber}}</text>
-        <text class="total">/2</text>
+<view class="config {{configData.isThreeMains !== 1 ? 'isNones' : ''}}">
+  <view class="car-xboxs">
+    <view class="type-module {{isDow ? '' : 'type-nones'}}">
+      <view class="list-info {{item.isSelect === 1 ? 'selected' : ''}}" wx:for="{{searchList}}" data-name="{{item.name}}" data-id="{{item.id}}" data-inx="{{index}}" catchtap="showSidebarNav">
+        <text wx:if="{{item.isSelectName === ''}}">{{item.name}}</text>
+        <text wx:else>{{item.isSelectName}}{{item.unit}}</text>
       </view>
-    </view>
-    <view class="name-info">
-      <view class="name" wx:if="{{configData.products[0] && configData.products[0].F_ProductName}}">
-        <text class="clear" bindtap="clear" data-index="0">×</text>
-        <view class="name-wrapper">
-          <text class="name-text">{{configData.products[0].F_ProductName}}</text>
-        </view>
-        <view class="foot-price ftp-btns" wx:if="{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice != 'kong'}}" data-productId="{{configData.products[0].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">
-          <text>询底价</text>
-        </view>
-      </view> 
-      <view wx:else class="add-product" data-index="0" bindtap="addProduct">
-        <text class="add-text">加入车型</text>
-      </view>
-    </view>
-    <view class="name-info">
-      <view class="name" wx:if="{{configData.products[1] && configData.products[1].F_ProductName}}">
-        <text class="clear" bindtap="clear" data-index="1">×</text>
-        <view class="name-wrapper">
-          <text class="name-text">{{configData.products[1].F_ProductName}}</text>
-        </view>
-        <view class="foot-price ftp-btns" wx:if="{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice != 'kong'}}" data-productId="{{configData.products[1].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">
-          <text>询底价</text>
+    </view> 
+    <view wx:if="{{configData.isThreeMains === 1}}" class="fold {{isDow ? 'unfold' : ''}}" catchtap="fold">车型筛选</view>
+    <view class="product-name">
+      <view class="caption caption-name">
+        <text class="title">车型名称</text>
+        <view class="number">
+          <text class="existing">{{compareNumber}}</text>
+          <text class="total">/2</text>
         </view>
       </view>
-      <view wx:else class="add-product" data-index="1" bindtap="addProduct">
-        <text class="add-text">加入车型</text>
+      <view class="name-info">
+        <view class="name" wx:if="{{configData.products[0] && configData.products[0].F_ProductName}}">
+          <text class="clear" bindtap="clear" data-index="0">×</text>
+          <view class="name-wrapper">
+            <text class="name-text">{{configData.products[0].F_ProductName}}</text>
+          </view>
+          <view class="foot-price ftp-btns" wx:if="{{configData.lowPrice[0] && configData.lowPrice[0].F_BigPrice != 'kong'}}" data-productId="{{configData.products[0].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">
+            <text>询底价</text>
+          </view>
+        </view> 
+        <view wx:else class="add-product" data-index="0" bindtap="addProduct">
+          <text class="add-text">加入车型</text>
+        </view>
+      </view>
+      <view class="name-info">
+        <view class="name" wx:if="{{configData.products[1] && configData.products[1].F_ProductName}}">
+          <text class="clear" bindtap="clear" data-index="1">×</text>
+          <view class="name-wrapper">
+            <text class="name-text">{{configData.products[1].F_ProductName}}</text>
+          </view>
+          <view class="foot-price ftp-btns" wx:if="{{configData.lowPrice[1] && configData.lowPrice[1].F_BigPrice != 'kong'}}" data-productId="{{configData.products[1].F_ProductId}}" bindtap="goFooterPrice" id="footerPrice">
+            <text>询底价</text>
+          </view>
+        </view>
+        <view wx:else class="add-product" data-index="1" bindtap="addProduct">
+          <text class="add-text">加入车型</text>
+        </view>
       </view>
     </view>
   </view>
-  <scroll-view style="height:100%;" scroll-y="true" scroll-into-view="{{anchor}}" bindscroll="hiddenPop"  scroll-with-animation="true">
+  <scroll-view style="height:100%" scroll-y="true" scroll-into-view="{{anchor}}" bindscroll="hiddenPop" scroll-top="{{sclTop}}" >
     <!--对比车型选项-->
     <view class="model">
       <view class="title-text" id="anchor">
@@ -91,6 +100,7 @@
         </view>
       </view>
     </view>
+    <view style="font-size:24rpx;padding:10px;color:#999;background-color: #fafafa;">注：不符合中华人民共和国法规的，例如国三/国四车型，国内已经不能上牌，仅供出口，或国内非公路内部转运等不上牌地区使用。此参数仅供参考，实际车型配置以店内实车为准。</view>
   </scroll-view>
   <!--分类框-->
   <view class="classify" bindtap="classifyShow">
@@ -104,6 +114,39 @@
       <text>{{item.F_ParameterTypeName}}</text>
     </view>
   </view>
+
+  <!-- 侧边栏 -->
+  <view class="mask" wx:if="{{isAlert}}" catchtap="sidebarShow">
+    <scroll-view class="mask-wrapper"  scroll-y >
+      <view class="mask-content">
+      </view>
+    </scroll-view>
+  </view>
+
+  <scroll-view class="sidebar" style="{{isAlert ? 'right:0;':'right:-100%'}}" scroll-y="true" scroll-with-animation="true">
+    
+    <view class="sidebar-title">
+      <text class="title-icon" catchtap="sidebarShow">回</text>
+      <text>{{navTitle}}</text>
+    </view>
+    <view class="sbox-item">
+      <view class="model-list"
+        catchtap="clickSidebar" data-id="-1" data-dsb="0">
+        <text class="{{navIndex.inx === 0 ? 'selected' : ''}}">不限</text>
+      </view>
+      <view class="model-list" wx:for="{{navData}}"
+        catchtap="clickSidebar" data-id="{{item.param}}" data-dsb="{{item.is_disable}}">
+        <text wx:if="{{item.is_disable === 0}}"
+          class="{{item.is_select === 1 ? 'selected' : ''}}">{{item.value}}</text>
+        <text wx:if="{{item.is_disable === 1}}" class="disabled">{{item.value}}</text>
+      </view>
+    </view>
+    <!-- loading状态 -->
+    <view class="loading" wx:if="{{!navData.length > 0}}">
+      <text class="loading-ring">等</text> 正在加载更多...
+    </view>
+  </scroll-view>
+
   <!--询底价按钮-->
   <view class="footer-price ftp-btns" bindtap="goFooterPrice" data-productid="{{askProId}}" id="footerPrice">
     <text class="foot-price-text">询底价</text>

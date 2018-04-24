@@ -3,6 +3,11 @@ let app = getApp(),
   util = require('../../utils/util.js');
 Page({
   data: {
+    toTime: null,               // 气泡定时器
+    ToastBox: false,            // 显隐气泡
+    ToastTxt: '',               // 气泡文案
+
+    shareBtns: false,
     //车系标题名称
     titleName: '子类车系综述页',
     //车系信息 子类id && 车系id && 品牌id
@@ -16,12 +21,7 @@ Page({
     //是否重置选择地区弹层
     resetLocationPop: false,
     //选择的城市信息
-    locationInfo: {
-      provinceName: '全国',
-      provinceId: '',
-      cityName: '',
-      cityId: '',
-    },
+    locationInfo: {},
     // 车型列表数据
     modelList:{},
     //请求发送的对象
@@ -79,6 +79,9 @@ Page({
     //搜索结果列表数据
     searchResultData: [],
     searchResultPop: false,
+    comList: [],
+    comNum: 0,
+    isZan: true,
   },
   onShow: function (options) {
     //如果有停售车型缓存，删除
@@ -89,15 +92,17 @@ Page({
           wx.removeStorage({
             key: 'footerPriceShow',
           })
-        },
+        }
       })
-      app.globalData.shareTitle = this.data.titleName
       //获取对比存储数据
       this.getCompareTask();
+      // 点评列表
+      this.getComList()
     }
+    app.globalData.shareTitle = this.data.titleName
   },
   onLoad: function (options) {
-
+    app.getUserInfo()
     // 来源为分享的 更新数据
     app.updateDataForShare(options, this, () => {
       //转发进来
@@ -107,69 +112,56 @@ Page({
           modelListData.subId = shareData.seriesInfo.F_SubCategoryId;
           modelListData.seriesId = shareData.seriesInfo.F_SeriesId;
       this.setData({
-        //车系信息
+        // 车系信息
         seriesInfo: shareData.seriesInfo,
-        //车系id
+        // 车系id
         seriesId: shareData.seriesInfo.F_SubCategoryId,
-        //车型列表发送对象
+        // 车型列表发送对象
         modelListData: modelListData,
       })
-      //请求标题信息 && 图片信息
-      this.getSeriesInfo();
 
-      //请求地址列表信息 && 其他人还关注信息
-      this.getOtherData();
+      // 请求标题信息 && 图片信息
+      this.getSeriesInfo()
 
-      //请求车型列表数据
-      this.getProductLidt();
+      // 请求地址列表信息 && 其他人还关注信息
+      this.getOtherData()
 
-      //定位当前地区
-      this.getLocation();
+      // 请求车型列表数据
+      this.getProductLidt()
+
+      // 定位当前地区
+      this.getLocation()
+
     }, () => {
       //正常进入页面
       //读取保存的品牌 && 车系信息
-      wx.getStorage({
-        key: 'seriesInfo',
-        success: ele => {
-          // console.log(ele, 'ele')
-          if (ele.errMsg == 'getStorage:ok') {
-            let seriesInfo = ele.data
-            
-            //车型列表发送的对象
-            let modelListData = this.data.modelListData;
-            modelListData.subId = seriesInfo.F_SubCategoryId;
-            modelListData.seriesId = seriesInfo.F_SeriesId;
+      let seriesInfo = wx.getStorageSync('seriesInfo')
+      
+      //车型列表发送的对象
+      let modelListData = this.data.modelListData;
+      modelListData.subId = seriesInfo.F_SubCategoryId;
+      modelListData.seriesId = seriesInfo.F_SeriesId;
 
-            this.setData({
-              //车系信息
-              seriesInfo: seriesInfo,
-              //车系id
-              seriesId: seriesInfo.F_SubCategoryId,
-              //车型列表发送对象
-              modelListData: modelListData,
-            })
-
-            //请求标题信息 && 图片信息
-            this.getSeriesInfo();
-
-            //请求地址列表信息 && 其他人还关注信息
-            this.getOtherData();
-
-            //请求车型列表数据
-            this.getProductLidt();
-
-          }
-
-          //定位当前地区
-          this.getLocation();
-        },
-        fail: () => {
-          this.setData({
-            errText: '网络错误~',
-            errPop: true
-          })
-        }
+      this.setData({
+        //车系信息
+        seriesInfo: seriesInfo,
+        //车系id
+        seriesId: seriesInfo.F_SubCategoryId,
+        //车型列表发送对象
+        modelListData: modelListData,
       })
+
+      //请求标题信息 && 图片信息
+      this.getSeriesInfo()
+
+      //请求地址列表信息 && 其他人还关注信息
+      this.getOtherData()
+
+      //请求车型列表数据
+      this.getProductLidt()
+
+      //定位当前地区
+      this.getLocation()
     })
 
     wx.getStorage({
@@ -338,7 +330,9 @@ Page({
             //如果是筛选数据，只渲染筛选列表
             let modelList = this.data.modelList;
             modelList.list = res.data
-            modelList.total = res.data.total
+            if (res.data.total) {
+              modelList.total = res.data.total
+            }
             this.setData({
               modelList: modelList
             })
@@ -578,7 +572,7 @@ Page({
   getDealer(){
     // console.log(this.data.locationInfo,'this.data.location.Info')
     wx.request({
-      url: app.ajaxurl + '/index.php?r=weex/series/dealer&subCateId=' + this.data.seriesId + '&seriesId=' + this.data.seriesInfo.F_SeriesId + '&provinceId=' + this.data.locationInfo.provincesn + '&cityId=' + this.data.locationInfo.citysn,
+      url: app.deaajax + 'APIDealerToProduct/Product/getdealerlist_multparamJson_app.aspx?subCateId=' + this.data.seriesId + '&seriesId=' + this.data.seriesInfo.F_SeriesId + '&provinceId=' + this.data.locationInfo.provincesn + '&cityId=' + this.data.locationInfo.citysn,
       success:res => {
         if(res.errMsg == 'request:ok'){
           this.setData({
@@ -860,8 +854,7 @@ Page({
   },
   goIndex(e){
     wx.navigateTo({
-      url: '../index/index?productId='+ e.currentTarget.dataset.productid,
-      // url: `../series/series?share=${JSON.stringify(this.data.seriesInfo)}`,
+      url: '../index/index?productId='+ e.currentTarget.dataset.productid
     })
   },
   //点击加入对比
@@ -1286,13 +1279,125 @@ Page({
       },
     })
   },
-  goDealers(){
+  // 页面滑动索引导航固定
+  scrollVc(e){
+    if (e.detail.scrollTop > 80){
+      this.setData({shareBtns: true})
+    }else{
+      this.setData({shareBtns: false})
+    }
+  },
+  // 增加评论
+  addCom () {
+    let SD = wx.getStorageSync('seriesInfo')
+    if (!SD.F_SeriesName) {
+      wx.setStorageSync('seriesInfo', {
+        F_SeriesId: this.data.seriesInfo.F_SeriesId,
+        F_SubCategoryId: this.data.seriesInfo.F_SubCategoryId,
+        F_Nas: this.data.titleName
+      })
+    }
+    wx.navigateTo({
+      url: `../commentForm/commentForm?id=${this.data.seriesInfo.F_SeriesId}&uid=${this.data.seriesInfo.F_SubCategoryId}`,
+    })
+  },
+  // 跳转评论列表
+  goComMsg (e) {
+    wx.setStorageSync('COMMSGS', this.data.comList[e.currentTarget.dataset.inx])
+    wx.navigateTo({
+      url: '../commentMsg/commentMsg'
+    })
+  },
+  goDealers (e) {
     this.setData({
-      goTop: 'dealbox'
+      goTop: e.currentTarget.dataset.id
     })
   },
   //转发
   onShareAppMessage: function (res) {
     return app.shareCurrentPage(['seriesInfo'], this)
-  }
+  },
+  zan (e) {
+    let json = {}
+    let obj = this.data.comList
+    json.cid = obj[e.currentTarget.dataset.inx]['cid']
+    json.openId = wx.getStorageSync('OPENIDS')
+    json.time = Date.parse(new Date())
+    if (e.currentTarget.dataset.em < 1 && this.data.isZan) {
+      this.setData({ isZan: false })
+      wx.request({
+        url: 'https://product.m.360che.com/index.php?r=weex/series/save-series-comment-vote',
+        data: json,
+        success: (res) => {
+          if (res.errMsg === 'request:ok' && res.data.info === 'ok') {
+            obj[e.currentTarget.dataset.inx]['isVote'] = 1
+            obj[e.currentTarget.dataset.inx]['voteNum']++
+            this.setData({
+              comList: obj,
+              isZan: true
+            })
+            // this.isToast('点赞成功')
+            wx.showToast({
+              title: '点赞成功',
+              icon: 'success',
+              duration: 1000
+            })
+          }
+        }
+      })
+    }
+    if (e.currentTarget.dataset.em > 0) {
+      wx.showToast({
+        title: '已经点过赞',
+        icon: 'none',
+        duration: 2000
+      })
+    }
+  },
+  toComList () {
+    wx.navigateTo({
+      url: `../commentList/commentList?id=${this.data.seriesInfo.F_SeriesId}&uid=${this.data.seriesInfo.F_SubCategoryId}`,
+    })
+  },
+  getComList () {
+    let json = {}
+    json.page = 1
+    json.seriesId = this.data.seriesInfo.F_SeriesId
+    json.openId = wx.getStorageSync('OPENIDS')
+    json.subCateId = this.data.seriesInfo.F_SubCategoryId
+    json.time = Date.parse(new Date())
+    wx.request({
+      url: 'https://product.m.360che.com/index.php?r=weex/series/get-series-comment-list',
+      data: json,
+      success: (res) => {
+        if (res.errMsg === 'request:ok' && res.data.info === 'ok') {
+          let ress = res.data.list
+          for (let em in ress) {
+            ress[em]['time'] = app.getDateDiff(ress[em]['time'])
+            ress[em]['content'] = decodeURIComponent(ress[em]['content'])
+          }
+          this.setData({
+            comList: ress,
+            comNum: res.data.num,
+          })
+        }
+      }
+    })
+  },
+  // 黑色提示框
+  isToast(txt) {
+    let _this = this
+    clearTimeout(this.data.toTime)
+    this.data.toTime = null
+    this.setData({
+      ToastBox: true,
+      ToastTxt: txt
+    })
+    this.data.toTime = setTimeout(function () {
+      _this.setData({
+        ToastBox: false,
+        ToastTxt: ''
+      })
+    }, 1000)
+  },
 })

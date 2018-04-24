@@ -1,0 +1,85 @@
+<view class="top-box">
+  <!-- loading状态 -->
+  <view class="loading" wx:if="{{!subCateList.length}}">
+    <text class="loading-ring">等</text> 正在加载更多...
+  </view>
+  <scroll-view scroll-y style="height:100%" 
+   scroll-into-view="{{navInfo}}"
+   scroll-with-animation="{{scrollAnimation}}">
+    <view class="{{isHet > 0 ? 'recommend rec-down': 'recommend'}}" id="top"
+    wx:if="{{subList.length}}">
+      <view class="{{navInx === index ? 'active' : ''}}" wx:for="{{subList}}" catchtap="anchorEvn"
+      data-inx="{{index}}"
+      wx:key="{{index}}">{{item}}</view>
+      <text 
+      class="{{isHet > 0 ? 'after-dow after-ups' : 'after-dow'}}"
+      wx:if="{{subList.length > 3}}"
+      catchtap="checkDow"></text>
+    </view>
+
+    <view class="tonn-list-box" 
+    wx:for="{{subCateList}}" wx:key="{{index}}"
+    id="hot_car{{index}}">
+      <text class="tonn-title">{{brandName}}{{item.name}}</text>
+      <view class="tonn-ems" wx:for="{{item.list}}"
+        wx:for-index="inx" wx:key="{{inx}}"
+        catchtap="goCarX"
+        data-inx="{{inx}}"
+        data-idx="{{index}}"
+        wx:for-item="em">
+        <view class="image">
+          <image wx:if="{{em.imgSrc}}" mode="aspectFill" lazy-load="true" src="{{em.imgSrc}}"></image>
+        </view>
+        <text class="text">{{em.subCateName}}</text>
+        <text class="pays">{{em.priceScope}}</text>
+        <view class="btn-box">
+          <text wx:if="{{em.F_IsStopMake < 2}}" class="btn"
+          data-pid="{{em.proid}}"
+          catchtap="xunPay">询底价</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="tonn-list-box ton-pic-boxs">
+
+      <view wx:if="{{bdHP.length}}" class="tonn-pic-box">
+        <text>热门车型图片实拍</text>
+        <text wx:if="{{checkNum > -1}}" 
+        class="btn-huan" 
+        catchtap="checkHP">换一批</text>
+      </view>
+
+      <view class="tonn-ems" wx:for="{{bdHP}}" wx:for-index="inx" wx:key="{{inx}}" 
+      wx:for-item="em" 
+      data-inx="{{inx}}"
+      catchtap="goMsg">
+        <view class="image">
+          <image wx:if="{{em.imgSrc}}" mode="aspectFill" lazy-load="true" src="{{em.imgSrc}}"></image>
+        </view>
+        <text class="text">{{em.F_ProductName}}</text>
+        <text class="pays">{{em.F_ImagesCount}}张</text>
+      </view>
+    </view>
+
+    <!-- <view class="tonn-list-box wzs-box">
+      <text class="tonn-title">文章</text>
+      <view class="tonn-ems" wx:for="{{articleList}}"
+       data-url="{{item.href}}" wx:key="{{index}}"
+       catchtap="goView">
+        <text class="tt">[新闻]</text>
+        <text class="text">{{item.Title}}</text>
+      </view>
+    </view>
+
+    <view class="tonn-list-box lts-box">
+      <text class="tonn-title">论坛</text>
+      <view class="tonn-ems" wx:for="{{postList.list}}" data-url="{{item.link}}" wx:key="{{index}}" catchtap="goView">
+        <text class="text">{{item.subject}}</text>
+      </view>
+      <view class="ismore" 
+       data-url="{{postList.moreUrl}}"
+       catchtap="goView">查看更多{{brandName}}帖子</view>
+    </view> -->
+
+  </scroll-view>
+</view>

@@ -1,0 +1,59 @@
+<!-- loading状态 -->
+<view wx:if="{{isLoad}}" class="loading">
+  <text class="loading-ring">等</text> 正在加载更多...
+</view>
+
+
+<scroll-view class="scroll-boxs" scroll-into-view="{{isTop}}" scroll-y="true" bindscroll="scrollNav"
+  enable-back-to-top="true" bindscrolltolower="getComList" scroll-with-animation="{{scrollAnimation}}" wx:if="{{!isLoad}}">
+  <view class="comm-top-box" id="goTop">
+    <view class="comm-num-box">
+      共<text>{{comNum}}</text>条点评
+    </view>
+    <view class="comm-top-btn" catchtap="addCom">写点评</view>
+  </view>
+
+  <view class="comm-item-box" wx:for="{{comList}}" wx:key="{{index}}">
+    <view class="comm-left-ioc">
+      <image src="{{item.userPhoto}}"></image>
+    </view>
+    <view class="{{index === comList.length-1 ? '':'comm-rt-box'}}">
+      <view class="com-str-nam">
+        <view class="name">{{item.userName}}</view>
+        <view class="start">
+          <text class="{{item.star > inx ? 'red-str' : ''}}" wx:for="{{[1,2,3,4,5]}}" wx:key="{{*this}}" wx:for-index="inx" wx:for-item="em"></text>
+        </view>
+      </view>
+      <view class="com-cont-txt" data-inx="{{index}}" catchtap="goComMsg">
+        <text>{{item.content}}</text>
+      </view>
+      <view class="com-fot-box">
+        <view class="time">{{item.time}}</view>
+        <view class="{{item.isVote > 0 ? 'zan red' : 'zan'}}"  catchtap="zan" data-inx="{{index}}" data-em="{{item.isVote}}">{{item.voteNum}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="com-more-box" wx:if="{{isMore}}">
+    <view class="loading">
+      <text class="loading-ring">等</text> 正在加载更多...
+    </view>
+  </view>
+  <view class="com-nos-mor" wx:if="{{!isMore}}">没有更多了</view>
+</scroll-view>
+
+
+
+<!-- 红色提示框 -->
+<view class="notification {{AlertBox ? 'notification-in' : ''}}">
+  <view class="notification-content">{{AlertTxt}}</view>
+  <view class="notification-handle-bar"></view>
+</view>
+
+<!-- 点赞等提示框 -->
+<view class="prompt-box" wx:if="{{ToastBox}}">{{ToastTxt}}</view>
+
+<!--返回顶部-->
+<view style="{{goTop ? 'right:0' : 'right:-80px'}}" class="back-top" catchtap="backTop">
+  <text>回顶部</text>
+</view>

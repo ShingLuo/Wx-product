@@ -1,0 +1,67 @@
+<template name="stepOne">
+  <view class="one-box">
+    <view class="step-box">
+      <view class="step-ems">
+        <view class="step-item">
+          <text class="step-em">...</text>
+        </view>
+        <view class="step-item step-rt">
+        </view>
+      </view>
+    </view>
+    <view class="serial">
+      <text>请选择用途类别</text>
+    </view>
+
+    <view class="ty-car">
+      <view class="ty-em {{indexId === 66 ? 'actives':''}}"
+            data-id="0"
+            catchtap="subBtn">
+        <image src="https://s.kcimg.cn/wap/images/detail/qianyin.jpg">
+        </image>
+        <text>牵引车</text>
+      </view>
+      <view class="ty-em {{indexId === 64 ? 'actives':''}}"
+            data-id="1"
+            catchtap="subBtn">
+        <image src="https://s.kcimg.cn/wap/images/detail/zaihuo.jpg">
+        </image>
+        <text>载货车</text>
+      </view>
+      <view class="ty-em no-mg-rt {{indexId === 63 ? 'actives':''}}"
+            data-id="2"
+            catchtap="subBtn">
+        <image src="https://s.kcimg.cn/wap/images/detail/zixie.jpg">
+        </image>
+        <text>自卸车</text>
+      </view>
+    </view>
+
+    <view class="serial serial2">
+      <text>请选择驱动形式</text>
+    </view>
+
+    <view class="ty-car">
+      <view wx:for="{{driveList[OneIndex]}}" wx:key="{{index}}"
+            data-id="{{item.F_SearchId}}"
+            catchtap="driBtn"
+            class="drv-em {{driveId === item.F_SearchId ? 'actives':''}}">
+        <text>{{item.F_SearchName}}</text>
+      </view>
+    </view>
+
+    <view class="serial serial3">
+      <text>请确认车货总重</text>
+      <text class="msgi">(可修改)</text>
+    </view>
+
+    <view class="inputs">
+      <input type="number" data-id="0" maxlength="3" value="{{tonVal}}" bindinput="chengInput"/>
+    </view>
+
+    <view class="btn-box">
+      <view class="btn-next" catchtap="oneBtn" data-pg="2">下一步</view>
+    </view>
+
+  </view>
+</template>

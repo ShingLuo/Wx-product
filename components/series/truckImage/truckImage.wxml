@@ -12,12 +12,6 @@
         <text class="ranking-icon"></text>
         <text class="ranking-text">{{truckImageData.rank}}</text>
       </view>
-      <view class="share-box" catchtap="onShareAppMessage">
-        <text class="share-icon"></text>
-        <button class="share-text" open-type="share"
-        catchtap="onShareAppMessage"
-        plain="true">我要分享</button>
-      </view>
       <view class="price">
         <text class="vender">厂商指导价：</text>
         <text class="price-text" wx:if="{{truckImageData.priceScope.min && truckImageData.priceScope.min != truckImageData.priceScope.max && truckImageData.priceScope.min != 0}}">{{truckImageData.priceScope.min}}-</text>

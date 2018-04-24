@@ -15,6 +15,7 @@ Page({
     shadeShow: false,
     // sidebar 所有数据
     sidebarData: {},
+    indexNav: [],
     //发送的数据
     getSearchData:{
       subCateId:'',
@@ -87,9 +88,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
   },
-
   /**
    * 生命周期函数--监听页面显示
    */
@@ -97,6 +96,55 @@ Page({
     wx.setNavigationBarTitle({
       title: '条件选车'
     })
+    // 跨页筛选
+    const sprdScres = wx.getStorageSync('sprdScres')
+    const getSearchData = this.data.getSearchData;
+    if (sprdScres === 0 || sprdScres === 1 || sprdScres === 2) {
+      switch (sprdScres) {
+        case 0:
+          getSearchData.subCateId = '123'
+          this.setData({
+            sidebarListPop: false,
+            shadeShow: false,
+            searchResultPop: true,
+            getSearchData: getSearchData
+          })
+          //请求搜索结果数据
+          this.getSearchData();
+          break;
+        case 1:
+          getSearchData.subCateId = '124'
+          this.setData({
+            sidebarListPop: false,
+            shadeShow: false,
+            searchResultPop: true,
+            getSearchData: getSearchData
+          })
+          //请求搜索结果数据
+          this.getSearchData();
+          break;
+        default:
+          getSearchData.subCateId = '66'
+          getSearchData.paramId = '703'
+          this.setData({
+            sidebarListPop: false,
+            shadeShow: false,
+            getSearchData: getSearchData,
+            searchResultPop: true,
+            page: 1,
+            noMore: false,
+          })
+          this.getSearchData();
+          break;
+      }
+      wx.removeStorageSync('sprdScres')
+    } else {
+      if (!this.data.shadeShow && !this.data.sidebarListPop) {
+        this.setData({
+          searchResultPop: false
+        })
+      }
+    }
   },
   more(event){
     let id = event.currentTarget.dataset.id;
@@ -123,7 +171,7 @@ Page({
       success: (res) => {
         if (res.errMsg == 'request:ok') {
           this.setData({
-            sidebarData: res.data,
+            sidebarData: res.data
           })
           // console.log(this.data.sidebarData)
         }
@@ -232,11 +280,15 @@ Page({
     })
   },
   //请求初始化数据
-  getInitialData() {
+  getInitialData(obj) {
     //获取选择数据的缓存
+    let objs = this.data.getSearchData
+    if (obj) {
+      objs = obj
+    }
     wx.request({
       url: `${app.ajaxurl}/index.php?r=weex/list`,
-      data: this.data.getSearchData,
+      data: objs,
       success: ele => {
         //如果是滚动加载
         if(this.data.loading){
@@ -368,6 +420,7 @@ Page({
 
             this.setData({
               sidebarData: res.data,
+              indexNav: res.data.letters
             })
           }
         }
@@ -750,6 +803,7 @@ Page({
   },
   //导航栏
   indexNavmove(e) {
+    console.log(e)
     let num = e.target.dataset.number;
     let top = e.target.offsetTop;
     let index = this.data.indexNav[Math.floor((e.changedTouches[0].pageY - e.currentTarget.offsetTop) / (top / num))];

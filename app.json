@@ -1,12 +1,24 @@
 {
   "pages":[
     "pages/brand/brand",
+    "pages/follow/index/index",
+    "pages/follow/lists/lists",
+    "pages/index/index",
+    "pages/commentForm/commentForm",
+    "pages/commentMsg/commentMsg",
+    "pages/commentList/commentList",
+    "pages/speed/speed",
     "pages/searchCar/searchCar",
     "pages/model/model",
     "pages/tops/tops",
     "pages/seriesConfig/seriesConfig",
     "pages/series/series",
-    "pages/index/index",
+    "pages/location/location",
+    "pages/sel/sel",
+    "pages/speedResult/speedResult",
+    "pages/webView/webView",
+    "pages/group/group",
+    "pages/groupMsg/groupMsg",
     "pages/footerPrice/footerPrice",
     "pages/success/success",
     "pages/modelPhoto/modelPhoto",
@@ -46,10 +58,22 @@
         "selectedIconPath": "/pages/Image/selectedCondition.png"
       },
       {
+        "pagePath": "pages/sel/sel",
+        "text": "工况选车",
+        "iconPath": "/pages/Image/sel.png",
+        "selectedIconPath": "/pages/Image/sels.png"
+      },
+      {
         "pagePath": "pages/tops/tops",
         "text": "热销排行",
         "iconPath": "/pages/Image/ranking.png",
         "selectedIconPath": "/pages/Image/rank.png"
+      },
+      {
+        "pagePath": "pages/follow/index/index",
+        "text": "关注排行",
+        "iconPath": "/pages/Image/fols.png",
+        "selectedIconPath": "/pages/Image/fol.png"
       }
     ]
   }

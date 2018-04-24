@@ -355,7 +355,7 @@
   color: #999;  
 }
 .result-list .product-info .total text{
-  color:#f60;
+  color:#333;
 }
 
 /* 车系弹层样式 */
@@ -542,4 +542,19 @@
   position:relative;
   width:100%;
   height:150rpx;
+}
+.last-top-btn{
+  float: right;
+  position: absolute;
+  right: 20rpx;
+  top: 0;
+  width: 140rpx;
+  font-size: 24rpx;
+  color: #999;
+  z-index: 3;
+}
+.last-top-btn:before{
+  content: "\5237";
+  font-family: 'selectcar';
+  margin-right: 10rpx;
 }

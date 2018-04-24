@@ -352,7 +352,6 @@ Page({
       }
     })
 
-
   },
   //输入姓名
   importName(e){
@@ -503,6 +502,7 @@ Page({
         this.cancelLoading()
         if(res.errMsg == 'request:ok'){
           if(res.data.isok == 1){
+            submitData.clueresource = 29;//小程序
             wx.navigateTo({
               url: '../success/success?submitData=' + JSON.stringify(submitData) + '&locationInfo=' + JSON.stringify(this.data.locationInfo)
             })

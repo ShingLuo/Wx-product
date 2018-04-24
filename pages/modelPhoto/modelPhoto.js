@@ -348,8 +348,14 @@ Page({
             key: 'imgInfoData',
             data: item,
             success: res => {
-                wx.navigateTo({
-                    url: '../photoInfo/photoInfo',
+                wx.setStorage({
+                    key: 'photoSource',
+                    data: 'seriesPhoto',
+                    success: () => {
+                        wx.navigateTo({
+                            url: '../photoInfo/photoInfo',
+                        })
+                    }
                 })
             }
         })

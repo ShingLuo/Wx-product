@@ -3,6 +3,7 @@ let app = getApp(),
     util = require('../../utils/util.js');
 Page({
     data: {
+        shareBtns: false,
         //车系ID
         seriesId: '',
         // 车型id
@@ -44,12 +45,7 @@ Page({
         exchangeButton: true,
         total: 0,
         //地区信息
-        locationInfo: {
-            provinceName: '全国',
-            provincesn: '',
-            cityName: '',
-            citysn: '',
-        },
+        locationInfo: {},
         //加入对比状态
         compareState: {},
         //对比的数量
@@ -92,6 +88,8 @@ Page({
         app.globalData.shareTitle = this.data.shareName
     },
     onLoad: function(options) {
+        //定位当前地区
+        this.getLocation();
         // 来源为分享的 更新数据
         app.updateDataForShare(options, this , () => {
           //转发进来的页面
@@ -598,7 +596,7 @@ Page({
     getDealer() {
         // console.log(this.data.locationInfo,'this.data.locationInfo')
         wx.request({
-            url: app.ajaxurl + 'index.php?r=weex/series/dealer&subCateId=' + this.data.seriesId + '&seriesId=' + this.data.productData.F_SeriesId + '&proId=' + this.data.productData.F_ProductId + '&provinceId=' + this.data.locationInfo.provincesn + '&cityId=' + this.data.locationInfo.citysn,
+            url: app.deaajax + 'APIDealerToProduct/Product/getdealerlist_multparamJson_app.aspx?subCateId=' + this.data.seriesId + '&seriesId=' + this.data.productData.F_SeriesId + '&proId=' + this.data.productData.F_ProductId + '&provinceId=' + this.data.locationInfo.provincesn + '&cityId=' + this.data.locationInfo.citysn,
             success: res => {
                 if (res.errMsg == 'request:ok') {
                     this.setData({
@@ -805,66 +803,148 @@ Page({
             }
         })
     },
-    // //定位地区
-    // getLocation(){
-    //   // 微信获取经纬度
-    //   wx.getLocation({
-    //       type: 'wgs84',
-    //       success: res => {
-    //         var latitude = res.latitude;
-    //         var longitude = res.longitude;
+    //定位地区
+    getLocation() {
+        // 微信获取经纬度
+        wx.getLocation({
+          type: 'wgs84',
+          success: res => {
+            var latitude = res.latitude;
+            var longitude = res.longitude;
+            // 获取当前位置省市
+            wx.request({
+              url: 'https://product.360che.com/index.php?r=m/ajax/location/pos&longitude=' + longitude + '&latitude=' + latitude,
+              data: {},
+              success: (res) => {
+                if (res.errMsg == 'request:ok') {
+                  let myRegion = {};
+                  myRegion.provincename = res.data.province.name;
+                  myRegion.provincesn = res.data.province.id;
 
-    //         // 获取当前位置省市
-    //         wx.request({
-    //           url:'https://dealer-api.360che.com/inquiryprice/Dealer/getLocation.aspx',
-    //           data:{},
-    //           success:(res) => {
-    //             if(res.errMsg == 'request:ok'){
-    //               let my_region = {};
-    //               my_region.time = new Date().getTime();
-    //               my_region.data = res.data;
+                  myRegion.cityname = res.data.city.name;
+                  myRegion.citysn = res.data.city.id;
 
-    //               this.setData({
-    //                  locationInfo:res.data
-    //               })
-    //               //请求经销商数据
-    //               this.getDealer();
+                  if (myRegion.citysn == null) return ;
 
-    //               //存储定位城市
-    //               wx.setStorage({
-    //                 key:"my_region",
-    //                 data:my_region
-    //               })
+                  // 设置定位地区
+                  this.setData({
+                    myRegion: myRegion
+                  })
 
-    //               //存储常用定位地区列表
-    //               wx.getStorage({
-    //                 key: 'hotLocation',
-    //                 success: function(res){
-    //                   let data = res.data;
-    //                   if(data[0].citysn != my_region.data.citysn){
-    //                     data.shift();
-    //                     data.unshift(my_region.data);
-    //                     wx.setStorage({
-    //                       key:"hotLocation",
-    //                       data:arr
-    //                     })
-    //                   }
-    //                 },
-    //                 fail: function() {
-    //                   let arr = [];
-    //                   arr.push(my_region.data)
-    //                   wx.setStorage({
-    //                     key:"hotLocation",
-    //                     data:arr
-    //                   })
-    //                 }
-    //               })
-    //             }
-    //           }
-    //         })
-    //       }
-    //     })
-    // },
+                  //存储定位城市
+                  wx.setStorage({
+                    key: "myRegion",
+                    data: myRegion
+                  })
+
+                  //获取有没有存储时间
+                  wx.getStorage({
+                    key: 'myDate',
+                    success: date => {
+                      let present = new Date();
+                      //查看距离上次定位是否超过两个小时
+                      if (((present - new Date(date.data)) >= 2)) {
+                        // 获取已经选择的城市
+                        wx.getStorage({
+                          key: 'locationInfo',
+                          success: ele => {
+                            //设置之前选择的地区
+                            this.setData({
+                              locationInfo: ele.data
+                            })
+                            
+
+                            //查看选择地区和定位地区是否相等
+                            if (this.data.locationInfo.citysn != this.data.myRegion.citysn) {
+                              this.setData({
+                                resetLocationPop: true
+                              })
+                            }
+                          },
+                          //调用失败或者没有存储已选择地区
+                          fail: err => {
+                            // wx.showToast({
+                            //   title: '失败',
+                            //   icon: 'success',
+                            //   duration: 2000
+                            // })
+                            //调用存储定位地区
+                            this.setMyRegion();
+                          }
+                        })
+                      }
+                    },
+                    fail:err => {
+                      this.setMyRegion();
+                    }
+                  })
+                  // //存储常用定位地区列表
+                  // wx.getStorage({
+                  //   key: 'hotLocation',
+                  //   success: function (res) {
+                  //     let data = res.data;
+                  //     console.log(data[0],'data[0]')
+                  //     cosnole.log(this.data.myRegion.data,'myRegion.data')
+                  //     // if (data[0].citysn != this.data.myRegion.data.citysn) {
+                  //     //   data.shift();
+                  //     //   data.unshift(myRegion.data);
+                  //     //   wx.setStorage({
+                  //     //     key: "hotLocation",
+                  //     //     data: arr
+                  //     //   })
+                  //     // }
+                  //   },
+                  //   fail: function () {
+                  //     let arr = [];
+                  //     arr.push(myRegion)
+                  //     wx.setStorage({
+                  //       key: "hotLocation",
+                  //       data: arr
+                  //     })
+                  //   }
+                  // })
+                }
+              }
+            })
+          },
+          fail:ele => {
+            //请求经销商列表
+            this.getDealer();
+          }
+        })
+    },
+    //存储定位城市数据
+    setMyRegion() {
+        this.setData({
+          //赋值选择地区为定位地区
+          locationInfo: this.data.myRegion,
+        })
+
+        //重新请求经销商数据
+        this.getDealer();
+
+
+        //存储定位地区 && 选择地区
+        wx.setStorage({
+          key: 'myRegion',
+          data:this.data.myRegion
+        })
+
+        wx.setStorage({
+          key: 'locationInfo',
+          data: this.data.myRegion
+        })
+
+        //存储定位时间
+        let date = new Date();
+        wx.setStorage({
+          key: 'myDate',
+          data: date,
+        })
+
+        //请求地区热门车型
+        this.getHotModel(true)
+    },
     //关闭报错弹层
     closeErrPop() {
         this.setData({
@@ -1152,6 +1232,14 @@ Page({
                 })
             },
         })
+    },
+    // 页面滑动索引导航固定
+    scrollVc(e){
+        if (e.detail.scrollTop > 80){
+          this.setData({shareBtns: true})
+        }else{
+          this.setData({shareBtns: false})
+        }
     },
     goDealers(){
         this.setData({

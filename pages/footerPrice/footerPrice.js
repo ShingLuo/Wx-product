@@ -585,6 +585,7 @@ Page({
         app.globalData.hideLoading();
         if(res.errMsg == 'request:ok'){
           if(res.data.isok == 1){
+            submitData.clueresource = 29;//小程序
             wx.redirectTo({
               url: '../success/success?submitData=' + JSON.stringify(submitData) + '&locationInfo=' + JSON.stringify(this.data.locationInfo)
             })

@@ -16,8 +16,13 @@
 }
 @font-face {
   font-family: 'wxfont';
-  src:url('//at.alicdn.com/t/font_478590_3yd86sqn1k9e8kt9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_478590_3yd86sqn1k9e8kt9.ttf') format('truetype');
+  src:url('//at.alicdn.com/t/font_478590_ctzf8y81i3z3erk9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_478590_ctzf8y81i3z3erk9.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'selectcar';
+  src: url('//at.alicdn.com/t/font_1472728565_432156.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1472728565_432156.ttf') format('truetype');
 }
 /*空列表*/
 .empty-list{
@@ -32,6 +37,32 @@
     font-size: 108rpx;
     color: #a1c6f5;
     text-align: center;
+}
+/* 弹窗提示 */
+.prompt-box{
+  position: absolute;
+  top: 50%;
+  left: 50%; z-index: 9999;
+  margin-left: -120rpx;
+  margin-top: -240rpx;
+  width: 240rpx;
+  height: 240rpx;
+  font-size: 32rpx;
+  line-height: 100rpx;
+  color: #fff;
+  overflow: hidden;
+  text-align: center;
+  border-radius: 18rpx;
+  background-color: rgba(17, 17, 17, 0.8);
+}
+.prompt-box::before{
+  content: '\e713';
+  font-family: 'wxfont';
+  display: block;
+  font-size: 80rpx;
+  padding-top: 30rpx;
+  margin: 0 auto;
+  text-align: center;
 }
 /*错误提示*/
 .err-pop{

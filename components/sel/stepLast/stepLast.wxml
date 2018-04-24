@@ -1,0 +1,65 @@
+<template name="stepLast">
+  <scroll-view style="height:100%;" scroll-y="true" scroll-into-view="{{Scrolls}}" scroll-with-animation="true" bindscroll="scrollNav"
+  bindscrolltolower="loadMore">
+    <view class="last-top-box" id="goTop">
+        <text class="last-top-name">{{DATA.title}}</text>
+        <text class="last-top-btn" catchtap="regBtn" data-pg="1">重新筛选</text>
+    </view>
+
+    <text class="last-bran-title">品牌筛选</text>
+    <view class="last-bran-box">
+        <view class="last-bran-em" 
+            wx:for="{{brandHot}}" 
+            wx:key="*this"
+            catchtap="brdBtn"
+            data-id="{{item.F_BrandId}}">
+            <text class="{{item.F_BrandId === brandId ? 'activ':''}}">{{item.F_BrandName}}</text>
+        </view>
+        
+        <view class="last-bran-em" catchtap="showSolid">
+            <text class="mores">更多品牌</text>
+        </view>
+    </view>
+
+    <view class="last-header">
+        <text>共有 </text>
+        <text class="total">{{DATA.totalCount}}</text>
+        <text> 款车型</text>
+        <view class="price {{order === 3 ? 'bottom visible' : order === 4 ?'top visible':''}}" 
+            catchtap='selectOrder' data-order="3">价格</view>
+        <view class="hot {{order === 1 ? 'visible' : ''}}" catchtap='selectOrder' data-order="1">热度</view>
+    </view>
+
+    <view class="last-item-box" 
+        wx:for="{{productList}}"
+        wx:key="{{index}}"
+        data-item="{{item}}"
+        bindtap="goMod">
+        <view class="last-em-header">
+            <view class="last-em-img">
+                <image wx:if="{{item.imgSrc}}" src="{{item.imgSrc}}"></image>
+            </view>
+            <view class="last-em-msg">{{item.F_ProductName}}</view>
+        </view>
+        <view class="last-span">
+            <text wx:for="{{item.paramDetail}}" wx:key="*this"
+                wx:for-item="em" wx:for-index="inx">{{em}}</text>
+        </view>
+        <view class="last-foot">
+            <view class="last-foot-lf">
+                <text wx:if="{{item.F_Price !== '暂无报价'}}">厂商指导价：</text>
+                <text class="ft-beg">{{item.F_Price}}</text>
+                <text wx:if="{{item.F_Price !== '暂无报价'}}">万</text>
+            </view>
+            <text class="last-foot-btn" data-id="{{item.F_ProductId}}" catchtap="goPrice">询底价</text>
+        </view>
+    </view>
+
+    <view class="loading-wrapper" hidden="{{!isMore}}">
+      <view class="loading">
+        <text class="loading-ring">等</text> 正在加载更多...
+      </view>
+    </view>
+
+  </scroll-view>
+</template>

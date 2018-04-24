@@ -1,0 +1,223 @@
+<!-- loading状态 -->
+<view class="loading {{isLoad ? '' : 'disNone'}}">
+  <text class="loading-ring">等</text> 正在加载更多...
+</view>
+
+<view class="spd-from-box">
+  <view class="inputs">
+    <view class="lft-txt">发动机品牌</view>
+    <view class="rit-box ico-rit" 
+    data-db="brandAry"
+    data-id="0"
+    catchtap="showSelect">
+      {{ebrand}}
+      <text wx:if="{{!ebrand}}">请选择发动机品牌</text>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">发动机型号</view>
+    <view class="rit-box ico-rit"
+     data-id="1"
+     data-db="emodelAry"
+     catchtap="showSelect">
+      {{emodel}}
+      <text wx:if="{{!emodel}}">请选择发动机型号</text>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">发动机转速</view>
+    <view class="rit-box rit-add-minus">
+      <view class="rmin-box" data-fn="0" catchtap="speedAC"></view>
+      <view class="rit-cont">
+        <view wx:if="{{speed}}">{{speed}} rpm</view>
+        <text wx:if="{{!speed}}">请选择发动机转速</text>
+      </view>
+      <view class="radd-box" data-fn="1" catchtap="speedAC"></view>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">变速箱品牌</view>
+    <view class="rit-box ico-rit"
+     data-db="tbranAry" 
+     data-id="2"
+     catchtap="showSelect">
+      {{tbrand}}
+      <text wx:if="{{!tbrand}}">请选择变速箱品牌</text>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">变速箱型号</view>
+    <view class="rit-box ico-rit"
+    data-db="tmodelAry"
+    data-id="3" catchtap="showSelect">
+      {{tmodel}}
+      <text wx:if="{{!tmodel}}">请选择变速箱型号</text>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">后桥速比</view>
+    <view class="rit-box last-spe-box">
+      <view class="last-selt ico-rit" 
+       data-db="speedAry" 
+       data-id="4"
+       catchtap="showSelect">
+        {{speedratio}}
+        <text wx:if="{{!speedratio}}">请选择常见速比</text>
+      </view>
+      <view class="last-input">
+        其它
+        <input type="digit" placeholder="请填写" 
+        data-name="speratVal" value="{{speratVal}}"
+        bindinput="inputEvn" placeholder-class="phcolor" />
+      </view>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">轮胎型号</view>
+    <view class="rit-box ico-rit" 
+    data-db="tiremAry" 
+    data-id="5"
+    catchtap="showSelect">
+      {{tiremodel}}
+      <text wx:if="{{!tiremodel}}">请选择轮胎型号</text>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">整车吨位</view>
+    <view class="rit-box last-spe-box">
+      <view class="last-selt ico-rit" 
+      data-db="weighAry" 
+      data-id="6"
+      catchtap="showSelect">
+        {{weight}}
+        <text wx:if="{{!weight}}">请选择整车吨位</text>
+      </view>
+      <view class="last-input">
+        其它
+        <input type="digit" placeholder="请填写" 
+        value="{{weightVal}}"
+        data-name="weightVal" bindinput="inputEvn" placeholder-class="phcolor" />
+      </view>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">路面状况</view>
+    <view class="rit-box ico-rit"
+     data-db="roadsAry" 
+     data-id="7"
+     catchtap="showSelect">
+      {{road}}
+      <text wx:if="{{!road}}">请选择路面状况</text>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">风阻系数<text class="spd-query" catchtap="showAlert"></text></view>
+    <view class="rit-box">
+      <input type="digit" class="spd-drag" placeholder="请填写风阻系数 (0.5-1.5)" data-name="drag" bindinput="inputEvn" value="{{drag}}" placeholder-class="phcolor"/>
+    </view>
+  </view>
+  <view class="inputs">
+    <view class="lft-txt">迎风面积</view>
+    <view class="rit-box spd-hh">
+      <input type="digit" placeholder="请填写车宽(米)" data-name="carwide" bindinput="inputEvn" value="{{carwide}}" placeholder-class="phcolor" />
+      <view>X</view>
+      <input type="digit" placeholder="请填写车高(米)" data-name="carhigh" bindinput="inputEvn" value="{{carhigh}}"
+      placeholder-class="phcolor"/>
+    </view>
+  </view>
+</view>
+<!-- 计算器按钮 -->
+<view class="spd-fot-btns">
+  <view class="btn-rest" catchtap="regBtn">重置</view>
+  <view class="btn-cont" catchtap="ovrBtn">计算结果</view>
+</view>
+
+<!-- 侧边栏 catchtap="showAlert"-->
+<view class="mask" hidden="{{!isMask}}"></view>
+
+<view class="mask" hidden="{{!isSolid}}" catchtap="showSolid"></view>
+
+<scroll-view class="sidebar" style="{{isSolid ?'right:0;':'right:-100%'}}" scroll-y="true" scroll-into-view="{{activeIndex}}" scroll-with-animation="{{scrollAnimation}}">
+    <view class="sidebar-title">
+      <text class="title-icon" catchtap="showSolid">回</text>
+      <text>{{solidTitle}}</text>
+    </view>
+    <!-- loading -->
+    <view class="loading" wx:if="{{!solidData}}">
+      <text></text>
+      <text class="loading-ring">等</text> 正在加载更多...
+    </view>
+    <!-- 用途类别选项 -->
+    <view class="sidebar-model" wx:if="{{!solidData.az}}">
+      <view class="model-list {{index  === inxs[solidIndex]? 'selected' : ''}} {{1 < 0? 'disabled' : ''}}" wx:for="{{solidData}}"
+        wx:key="{{index}}" data-val="{{item.label}}" 
+        data-inx="{{index}}"
+        data-id="{{item.value}}"
+        bindtap="setSelt">
+        <text wx:if="{{solidIndex !== '6'}}">{{item.label}}</text>
+        <text wx:if="{{solidIndex === '6'}}">{{item.label}}吨</text>
+      </view>
+    </view>
+    <!-- 品牌类别选项 -->
+    <view class="brand-list" 
+    wx:if="{{solidData.az}}" 
+    wx:for="{{solidData.data}}" 
+    id="{{solidData['az'][index]}}" 
+    wx:key="{{index}}">
+      <view class="title">{{solidData['az'][index]}}</view>
+      <view class="brand-model {{em.label === ebrand && solidIndex === '0' ? 'selected' : ''}} {{em.label === tbrand && solidIndex === '2' ? 'selected' : ''}}" wx:for="{{item}}" wx:for-item="em"
+      data-inx="{{index}}"
+       data-val="{{em.label}}" bindtap="setSelt"
+      data-id="{{em.value}}"
+      wx:key="*this">
+        <!-- <view class="img">
+          <image wx:if="{{em.logo}}" src="{{em.logo}}"></image>
+          <view wx:else="{{em.logo}}" class="unlimited">ALL</view>
+        </view> -->
+        <text>{{em.label}}</text>
+      </view>
+    </view>
+
+</scroll-view>
+
+<!--索引导航-->
+<view class="scale" hidden="{{inxShow}}">
+  <text>{{navInfo == 'nosel' ? '#' : navInfo}}</text>
+</view>
+<view class="nav" wx:if="{{solidData.az}}" hidden="{{!isSolid}}">
+  <text wx:for="{{solidData.az}}" wx:key="indexNav" bindtap="indexNav" data-number="{{index}}" data-index="{{item}}" class="{{item === navInfo ? 'selected' : ''}}">{{item}}</text>
+</view>
+
+<view class="notification {{AlertBox ? 'notification-in' : ''}}">
+  <view class="notification-content">{{AlertTxt}}</view>
+  <view class="notification-handle-bar"></view>
+</view>
+
+<view class="mask-alert-box" hidden="{{isAlert}}">
+  <view class="mask-title-alt">风阻系数参考值说明
+    <text class="mask-clos" catchtap="showAlert"></text></view>
+  <view class="mask-txts mask-txt-title">
+    <view>类别</view>
+    <view>系数</view>
+  </view>
+  <view class="mask-txts">
+    <view>大件半挂牵引车/轿运车</view>
+    <view>1.0</view>
+  </view>
+  <view class="mask-txts">
+    <view>栏板半挂牵引车</view>
+    <view>0.9</view>
+  </view>
+  <view class="mask-txts">
+    <view>厢式半挂牵引车</view>
+    <view>0.8</view>
+  </view>
+  <view class="mask-txts">
+    <view>三轴栏板载货车/自卸车/搅拌车</view>
+    <view>0.75</view>
+  </view>
+  <view class="mask-txts">
+    <view>厢式载货车/带导流罩厢式半挂牵引车</view>
+    <view>0.7</view>
+  </view>
+</view>

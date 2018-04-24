@@ -92,6 +92,7 @@
         </view>
       </view>
     </view>
+    <view style="font-size:24rpx;padding:10px;color:#999;background-color: #fafafa;">注：不符合中华人民共和国法规的，例如国三/国四车型，国内已经不能上牌，仅供出口，或国内非公路内部转运等不上牌地区使用。此参数仅供参考，实际车型配置以店内实车为准。</view>
   </scroll-view>
   <!--分类框-->
   <view class="classify" bindtap="classifyShow">

@@ -1,0 +1,76 @@
+<import src="../../components/sel/stepLast/stepLast.wxml"/>
+<import src="../../components/sel/stepOne/stepOne.wxml"/>
+<import src="../../components/sel/stepTwo/stepTwo.wxml"/>
+
+<!-- loading状态 -->
+<view class="loading {{isLoad ? '' : 'disNone'}}">
+  <text class="loading-ring">等</text> 正在加载更多...
+</view>
+
+<template is="stepOne" 
+          wx:if="{{pages === 1 && !isLoad}}"
+          data="{{indexId,OneIndex,driveId,driveList,tonVal}}"
+/>
+
+<template is="stepTwo" 
+          wx:if="{{pages === 2 && !isLoad}}" 
+          data="{{roadId,slopeVal,speedVal}}"
+/>
+
+<template is="stepLast" 
+          wx:if="{{pages === 3 && !isLoad}}" 
+          data="{{DATA,brandHot,brandList,letters,productList,pg,Scrolls,isMore,brandId,order}}"
+/>
+
+<!-- 侧边栏 -->
+<view class="mask" hidden="{{!isSolid}}" catchtap="showSolid">
+  <scroll-view class="mask-wrapper"  scroll-y >
+    <view class="mask-content">
+    </view>
+  </scroll-view>
+</view>
+<scroll-view class="sidebar" style="{{isSolid ?'right:0;':'right:-100%'}}" scroll-y="true" scroll-into-view="{{activeIndex}}" scroll-with-animation="{{scrollAnimation}}">
+    <view class="sidebar-title">
+      <text class="title-icon" catchtap="showSolid">回</text>
+      <text>品牌</text>
+    </view>
+    <!-- loading -->
+    <view class="loading" wx:if="{{!brandList}}">
+      <text></text>
+      <text class="loading-ring">等</text> 正在加载更多...
+    </view>
+
+    <!-- 品牌类别选项 -->
+    <view class="brand-list" wx:for="{{brandList}}" id="{{letters[index]}}" wx:key="*this">
+      <view class="title" wx:if="{{index !== 0}}">{{letters[index]}}</view>
+      <view class="brand-model {{em.F_BrandId === brandId ? 'selected' : ''}}" wx:for="{{item}}" wx:for-item="em"
+      catchtap="brdBtn"
+      data-id="{{em.F_BrandId}}"
+      wx:key="*this">
+        <view class="img">
+          <image wx:if="{{em.logo}}" src="{{em.logo}}"></image>
+          <view wx:else="{{em.logo}}" class="unlimited">ALL</view>
+        </view>
+        <text>{{em.F_BrandName}}</text>
+      </view>
+    </view>
+
+</scroll-view>
+
+<!--索引导航-->
+<view class="scale" hidden="{{inxShow}}">
+  <text>{{navInfo == 'nosel' ? '#' : navInfo}}</text>
+</view>
+<view class="nav" hidden="{{!isSolid}}" catchtouchmove='indexNavmove' catchtouchend='indexNavEnd'>
+  <text wx:for="{{letters}}" id="{{letters[index]}}" wx:key="indexNav" bindtap="indexNav" data-number="{{index}}" data-index="{{letters[index]}}" class="{{letters[index] === navInfo ? 'selected' : ''}}">{{letters[index] === 'nosel' ? '#' : letters[index]}}</text>
+</view>
+
+<!--返回顶部-->
+<view style="{{goTop?'right:0':'right:-80px'}}" class="back-top" catchtap="backTop">
+  <text>回顶部</text>
+</view>
+
+<view class="notification {{AlertBox ? 'notification-in' : ''}}">
+  <view class="notification-content">{{AlertTxt}}</view>
+  <view class="notification-handle-bar"></view>
+</view>

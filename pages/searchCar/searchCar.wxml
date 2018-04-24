@@ -127,7 +127,7 @@
   <view class="scale" hidden="{{indicateShow}}">
     <text>{{navInfo == 'top' ? '#' : navInfo}}</text>
   </view>
-  <view class="nav" bindtouchmove='indexNavmove' bindtouchend='indexNavEnd' wx:if="{{shadeShow && sidebarData.brandList.length}}">
+  <view class="nav" catchtouchmove='indexNavmove' catchtouchend='indexNavEnd' wx:if="{{shadeShow && sidebarData.brandList.length}}">
     <text wx:for="{{sidebarData.brandList}}" id="{{sidebarData.letters[index]}}" wx:key="indexNav" bindtap="indexNav" data-number="{{index}}" data-index="{{sidebarData.letters[index]}}" class="{{sidebarData.letters[index] === navInfo ? 'selected' : ''}}">{{sidebarData.letters[index] == 'top' ? '#' : sidebarData.letters[index]}}</text>
   </view>
 

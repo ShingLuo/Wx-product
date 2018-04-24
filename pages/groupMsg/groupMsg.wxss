@@ -1,0 +1,161 @@
+/* pages/tops/tops.wxss */
+page{
+  height:100%;
+}
+.top-box{
+  height:100%;
+  background-color: #f5f5f5; 
+  overflow: hidden;
+}
+
+.recommend{background: #fff; padding-right: 88rpx; padding-bottom: 14rpx;
+  position: relative; height: 80rpx; overflow: hidden;
+}
+.recommend::after{content: ''; display: block; clear: both;width: 100%;height: 2rpx;}
+.rec-down{ height: auto;}
+.after-dow{
+  display: block; width: 88rpx;
+  height: 88rpx;
+  position: absolute; top: 0; right: 0; z-index: 3;
+}
+.after-dow::before{
+  content: '\e63c';
+  font-family: "wxfont";
+  font-size: 30rpx;
+  display: block; width: 88rpx; text-align: center;
+  height: 88rpx; line-height: 88rpx; color: #999;
+}
+.after-ups::before{content: '\e63d';}
+
+.recommend view{ float: left;
+  width: 186rpx; height: 56rpx; border: 2rpx solid #eee; border-radius: 6rpx; font-size: 24rpx;  color: #333; line-height: 56rpx;
+  margin: 20rpx 0 0 20rpx; text-align: center;
+}
+.recommend .active{ color: #586C94; border-color:#586C94;}
+
+
+.tonn-box{
+  width: 100%;
+  height: 88rpx;
+  background: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border-bottom: 2rpx solid #f5f5f5;
+  border-top: 2rpx solid #f5f5f5;
+}
+.tonn-box view{
+  font-size: 28rpx;
+  color: #5C6066;
+  line-height: 84rpx;
+}
+.tonn-box .active{color: #586C94; border-bottom:4rpx solid #586C94;}
+.tonn-list-box{background: #fff; margin-top: 20rpx;}
+.tonn-list-box .tonn-title,.tonn-list-box .tonn-pic-box{
+  display: block;
+  border-bottom:2rpx solid #f5f5f5;
+  padding: 0 30rpx;
+  font-size: 32rpx; color:#333;
+  height: 80rpx; line-height: 80rpx;
+}
+.tonn-list-box .tonn-pic-box .btn-huan{
+  float: right; color: #586c94; font-size: 28rpx;
+}
+.tonn-pic-box .btn-huan::before{
+  content: '\e641';
+  font-family: "wxfont";
+  display: inline-block;
+  padding-right: 10rpx;
+}
+.tonn-list-box .tonn-ems{
+  height: 184rpx;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30rpx 30rpx 0;
+  overflow: hidden;  position: relative;
+}
+.tonn-ems::after{
+  content: '';
+  display: block;
+  height: 30rpx;
+  width:100%;
+  clear: both;
+  border-bottom: 2rpx solid #f5f5f5;
+}
+.tonn-ems:last-child::after{display: none;}
+.tonn-list-box .tonn-ems image,.tonn-list-box .tonn-ems .image{
+  float: left; width:180rpx; height: 120rpx; overflow: hidden;
+}
+.tonn-list-box .tonn-ems .image{
+  background: url(https://s.kcimg.cn/gonggao/default90.jpg)  center center no-repeat;
+  background-size: cover;
+}
+.tonn-list-box .tonn-ems text,.tonn-list-box .btn-box{
+  float: right; width: 490rpx; height: 40rpx;
+  display: block; line-height: 40rpx;
+}
+.tonn-list-box .text{font-size: 28rpx; color: #333;}
+.tonn-list-box .pays{font-size: 28rpx; color: #F60; padding-top: 20rpx;}
+.tonn-list-box .btn-box{ position: absolute; bottom: 30rpx; right: 30rpx; z-index: 5;}
+.tonn-list-box .btn-box .num{
+  font-size: 24rpx; float: left;
+  width: 320rpx; height: 30rpx; line-height: 30rpx;
+  color: #999; padding-top: 10rpx;
+}
+.ton-pic-boxs .tonn-ems text{min-height: 40rpx; height: auto;}
+.ton-pic-boxs .tonn-ems .pays{padding-top: 2rpx;}
+.tonn-list-box .num text{
+  display: inline-block; float: none; width: auto;
+  color: #999; height: 30rpx; line-height: 30rpx;}
+.tonn-list-box .num text:nth-child(2){
+  color: #151515; padding: 0 8rpx;}
+.tonn-list-box .btn-box .btn{
+  font-size: 28rpx; color: #F60; float: right;
+  width: 130rpx; padding-top: 10rpx; text-align: right;
+}
+.tonn-list-box .btn-box .btn::after{
+  content: '\e620';
+  font-family: "wxfont";
+  display: inline-block;
+}
+/* 文章 */
+.wzs-box .tonn-ems{
+  height: 98rpx; overflow: hidden; padding-top:0;
+}
+.wzs-box .tonn-ems text{ display: block;float: left; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;height: 92rpx; line-height: 92rpx;}
+.wzs-box .tonn-ems .tt{ width: 74rpx; padding-right: 10rpx; font-size: 24rpx; color: #448DEA;}
+.wzs-box .tonn-ems .text{width: 606rpx;}
+.wzs-box .tonn-ems::after{ height: 4rpx;}
+/* 论坛 */
+.lts-box .tonn-ems::after{ height: 20rpx;}
+.lts-box .tonn-ems{
+  padding-top: 20rpx; 
+  min-height: 98rpx; height: auto;
+}
+.lts-box .tonn-ems .text{
+  float: none; width: 100%; word-break: break-all; 
+  
+  min-height: 56rpx; display: block; line-height: 56rpx;
+  height: auto;
+}
+/*  */
+.tonn-list-box .ismore{
+  width: 100%;
+  display: block;
+  height: 90rpx;
+  background: #fff;
+  font-size: 28rpx; color: #999;
+  border-top: 2rpx solid #eee;
+  position: relative;
+  text-align: center;
+  top: -4rpx;
+  left: 0;
+}
+.tonn-list-box .ismore::after{
+  content: '\e620';
+  font-family: "wxfont";
+  font-size: 28rpx;
+  display: inline-block;
+  height: 90rpx; line-height: 90rpx; color: #999;
+  padding-left: 10rpx;
+}

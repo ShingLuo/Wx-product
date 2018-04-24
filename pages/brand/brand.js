@@ -49,7 +49,8 @@ Page({
     })
   },
   onLoad: function () {
-
+    app.scopeSetting()
+    app.getUserInfo()
     //清除缓存
     // wx.removeStorage({key: 'seriesInfo'})
     // wx.removeStorage({ key: 'myRegion' })
@@ -93,7 +94,7 @@ Page({
   //请求品牌数据
   getBrandData(){
     wx.request({
-      url: app.ajaxurl + 'index.php?r=api/gethotbrandlist&haveGroup=1&noIndex=1&isW=2',
+      url: app.ajaxurl + 'index.php?r=api/brand/gethotbrandlist&haveGroup=1&noIndex=1&isW=2',
       data: {},
       success: (res) => {
         if (res.errMsg == 'request:ok') {
@@ -197,6 +198,27 @@ Page({
       clearTimeout(time)
     }, 500)  
   },
+  // 集团
+  goJiTuan (e) {
+    let groups = [];
+    groups.push(e.currentTarget.dataset.group);
+    groups.push(e.currentTarget.dataset.name);
+    // console.log(groups)
+    wx.setStorage({
+      key: 'myGroups',
+      data: groups,
+      success: () => {
+        wx.navigateTo({
+          url: '../group/group',
+        })
+      }
+    })
+  },
+  toSpeeds (e) {
+    wx.navigateTo({
+      url: '../speed/speed',
+    })
+  },
   // 点击品牌显示 sidebar
   sidebarShow(e){
     this.setData({
@@ -280,6 +302,23 @@ Page({
     this.setData({
       errPop:false,
       errText:'',
+    })
+  },
+  // 新能源选车
+  newToPg (e) {
+    switch (e.currentTarget.dataset.num) {
+      case '0':
+        wx.setStorageSync('sprdScres', 0)
+        break;
+      case '1':
+        wx.setStorageSync('sprdScres', 1)
+        break;
+      default:
+        wx.setStorageSync('sprdScres', 2)
+        break;
+    }
+    wx.switchTab({
+      url: '/pages/searchCar/searchCar'
     })
   },
   //进入条件选车

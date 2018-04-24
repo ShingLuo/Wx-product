@@ -7,7 +7,7 @@
 <import src="../../components/jointly/switchModel/switchModel.wxml"/>
 <import src="../../components/selectLocation/selectLocation.wxml"/>
 <view class="container">
-  <scroll-view class="model-wrapper" scroll-into-view="{{scrollInfo}}" scroll-y="true" enable-back-to-top="true" scroll-with-animation="true">
+  <scroll-view class="model-wrapper" scroll-into-view="{{scrollInfo}}" scroll-y="true" enable-back-to-top="true" bindscroll="scrollVc" scroll-with-animation="true">
     <view class="model" id="goTop">
       <!--车型图片-->
       <template is="picture" data="{{picture,truckImageData}}"/>
@@ -38,7 +38,7 @@
       <!--参数配置数据-->
       <template is="parameterConfig" data="{{parameterConfig,parameterData}}"/>
       <!--相近车型可选配置-->
-      <view id="examineSimilar" style="width:100%; height:2rpx;"></view>
+      <view id="examineSimilar"></view>
       <template is="correlativeTruck" wx:if="{{gatherTotal > 1}}" data="{{correlativeTruck,productId,examineSimliarData,optionCondition,compareState}}"/>
       <!--经销商推荐列表-->
       <template is="dealer" data="{{dealer,dealerList,locationInfo}}"/>
@@ -47,6 +47,12 @@
       <view style="height:20rpx;background-color:#f5f5f5"></view>
     </view>
   </scroll-view>
+  <view class="share-box" style="{{shareBtns?'':'bottom:120rpx'}}" catchtap="onShareAppMessage">
+    <text class="share-icon"></text>
+    <button class="share-text" open-type="share"
+    catchtap="onShareAppMessage"
+    plain="true">我要分享</button>
+  </view>
   <!--换车型弹层-->
   <template is="switchModel" data="{{switchModel,switchModelPop,switchModelData}}"/>  
   <!--错误提示-->
